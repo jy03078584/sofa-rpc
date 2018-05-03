@@ -65,43 +65,43 @@ public abstract class AbstractCluster extends Cluster {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(AbstractCluster.class);
+    private final static Logger        LOGGER        = LoggerFactory.getLogger(AbstractCluster.class);
     /**
      * 是否已启动(已建立连接)
      */
-    protected volatile boolean initialized = false;
+    protected volatile   boolean       initialized   = false;
     /**
      * 是否已经销毁（已经销毁不能再继续使用）
      */
-    protected volatile boolean destroyed = false;
+    protected volatile   boolean       destroyed     = false;
     /**
      * 当前Client正在发送的调用数量
      */
-    protected AtomicInteger countOfInvoke = new AtomicInteger(0);
+    protected            AtomicInteger countOfInvoke = new AtomicInteger(0);
     /**
      * 路由列表
      */
-    protected RouterChain      routerChain;
+    protected        RouterChain      routerChain;
     /**
      * 负载均衡接口
      */
-    protected LoadBalancer     loadBalancer;
+    protected        LoadBalancer     loadBalancer;
     /**
      * 地址保持器
      */
-    protected AddressHolder    addressHolder;
+    protected        AddressHolder    addressHolder;
     /**
      * 连接管理器
      */
-    protected ConnectionHolder connectionHolder;
+    protected        ConnectionHolder connectionHolder;
     /**
      * 过滤器链
      */
-    protected FilterChain      filterChain;
+    protected        FilterChain      filterChain;
     /**
      * 上一次连接，目前是记录整个接口的，是否需要方法级的？？
      */
-    private volatile ProviderInfo lastProviderInfo;
+    private volatile ProviderInfo     lastProviderInfo;
 
     /**
      * 构造函数

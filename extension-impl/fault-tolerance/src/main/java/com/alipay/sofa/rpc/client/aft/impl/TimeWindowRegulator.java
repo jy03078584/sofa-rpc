@@ -87,11 +87,11 @@ public class TimeWindowRegulator implements Regulator {
     /**
      * Listener for invocation stat change.
      */
-    private final InvocationStatListener listener = new TimeWindowRegulatorListener();
+    private final InvocationStatListener             listener      = new TimeWindowRegulatorListener();
     /**
      * 度量策略（创建计算模型, 对计算模型里的数据进行度量，选出正常和异常节点）
      */
-    private MeasureStrategy measureStrategy;
+    private MeasureStrategy    measureStrategy;
     /**
      * 计算策略（根据度量结果，判断是否需要执行降级或者恢复）
      */
@@ -99,15 +99,15 @@ public class TimeWindowRegulator implements Regulator {
     /**
      * 降级策略: 调整权重
      */
-    private DegradeStrategy weightDegradeStrategy;
+    private DegradeStrategy    weightDegradeStrategy;
     /**
      * 降级策略: 只打印日志
      */
-    private DegradeStrategy logDegradeStrategy;
+    private DegradeStrategy    logDegradeStrategy;
     /**
      * 恢复策略：调整权重
      */
-    private RecoverStrategy recoverStrategy;
+    private RecoverStrategy    recoverStrategy;
 
     @Override
     public void init() {

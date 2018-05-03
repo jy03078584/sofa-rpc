@@ -40,11 +40,12 @@ public class EventBus {
      * 是否允许携带上下文附件，关闭后只能传递"."开头的key，"_" 开头的Key将不被保持和传递。<br>
      * 在性能测试等场景可能关闭此传递功能。
      */
-    private static final boolean EVENT_BUS_ENABLE = RpcConfigs.getBooleanValue(RpcOptions.EVENT_BUS_ENABLE);
+    private static final boolean                                                                    EVENT_BUS_ENABLE = RpcConfigs
+            .getBooleanValue(RpcOptions.EVENT_BUS_ENABLE);
     /**
      * 某中事件的订阅者
      */
-    private final static ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>> SUBSCRIBER_MAP = new ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>>();
+    private final static ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>> SUBSCRIBER_MAP   = new ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>>();
 
     /**
      * 是否开启事件总线功能

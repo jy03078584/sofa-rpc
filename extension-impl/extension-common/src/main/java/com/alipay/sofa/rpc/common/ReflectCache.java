@@ -35,15 +35,15 @@ public class ReflectCache {
      * 方法对象缓存 {service:{方法名#(参数列表):Method}} <br>
      * 用于缓存参数列表，不是按接口，是按ServiceUniqueName
      */
-    private final static ConcurrentHashMap<String, Map<String, Method>> METHOD_CACHE = new ConcurrentHashMap<String, Map<String, Method>>();
+    private final static ConcurrentHashMap<String, Map<String, Method>> METHOD_CACHE            = new ConcurrentHashMap<String, Map<String, Method>>();
     /**
      * 应用对应的ClassLoader
      */
-    private static Map<String, ClassLoader> APPNAME_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
+    private static       Map<String, ClassLoader>                       APPNAME_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
     /**
      * 服务对应的ClassLoader
      */
-    private static Map<String, ClassLoader> SERVICE_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
+    private static       Map<String, ClassLoader>                       SERVICE_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
 
     /**
      * 注册服务所在的ClassLoader

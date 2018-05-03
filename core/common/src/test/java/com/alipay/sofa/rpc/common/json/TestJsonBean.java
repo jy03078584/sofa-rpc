@@ -25,22 +25,22 @@ import java.util.ArrayList;
  */
 public class TestJsonBean {
 
-    private static    String staticString;
+    private static    String                  staticString;
     @JSONField(alias = "Name", isRequired = true)
-    private String                  name;
+    private           String                  name;
     @JSONField(alias = "Sex")
-    private boolean                 sex;
-    private int                     age;
+    private           boolean                 sex;
+    private           int                     age;
     @JSONField(skipIfNull = true)
-    private ArrayList<TestJsonBean> friends;
+    private           ArrayList<TestJsonBean> friends;
     @JSONField(alias = "Remark")
-    private Object[]                remark;
+    private           Object[]                remark;
     @JSONField(skipIfNull = true)
-    private Status status;
-    private Long step;
-    private transient String transString;
+    private           Status                  status;
+    private           Long                    step;
+    private transient String                  transString;
     @JSONIgnore
-    private           String ignoreString;
+    private           String                  ignoreString;
 
     public String getName() {
         return name;

@@ -65,7 +65,8 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(DefaultConsumerBootstrap.class);
+    private final static   Logger                                   LOGGER        = LoggerFactory
+            .getLogger(DefaultConsumerBootstrap.class);
     /**
      * 代理实现类
      */

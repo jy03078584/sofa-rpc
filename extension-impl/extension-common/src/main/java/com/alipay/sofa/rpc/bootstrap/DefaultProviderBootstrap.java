@@ -51,11 +51,12 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(DefaultProviderBootstrap.class);
+    private final static Logger                                   LOGGER        = LoggerFactory
+            .getLogger(DefaultProviderBootstrap.class);
     /**
      * 发布的服务配置
      */
-    protected final ConcurrentHashMap<String, AtomicInteger> EXPORTED_KEYS = new ConcurrentHashMap<String, AtomicInteger>();
+    protected final      ConcurrentHashMap<String, AtomicInteger> EXPORTED_KEYS = new ConcurrentHashMap<String, AtomicInteger>();
     /**
      * 是否已发布
      */

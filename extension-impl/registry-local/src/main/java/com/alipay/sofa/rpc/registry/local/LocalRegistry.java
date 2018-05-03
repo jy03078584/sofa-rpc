@@ -52,15 +52,16 @@ public class LocalRegistry extends Registry {
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(LocalRegistry.class);
+    private static final Logger                            LOGGER          = LoggerFactory
+            .getLogger(LocalRegistry.class);
     /**
      * 内存里的服务列表 {service : [provider...]}
      */
-    protected Map<String, ProviderGroup> memoryCache = new ConcurrentHashMap<String, ProviderGroup>();
+    protected            Map<String, ProviderGroup>        memoryCache     = new ConcurrentHashMap<String, ProviderGroup>();
     /**
      * 订阅者通知列表（key为订阅者关键字，value为ConsumerConfig列表）
      */
-    protected Map<String, List<ConsumerConfig>> notifyListeners = new ConcurrentHashMap<String, List<ConsumerConfig>>();
+    protected            Map<String, List<ConsumerConfig>> notifyListeners = new ConcurrentHashMap<String, List<ConsumerConfig>>();
     /**
      * 定时加载
      */
@@ -73,7 +74,7 @@ public class LocalRegistry extends Registry {
      * 是否订阅通知（即扫描文件变化），默认为true
      * 如果FileRegistry是被动加载（例如作为注册中心备份的）的，建议false，防止重复通知
      */
-    private boolean subscribe = true;
+    private boolean subscribe  = true;
     /**
      * 最后一次扫描文件时间
      */

@@ -25,7 +25,7 @@ package com.alipay.sofa.rpc.codec.antpb;
 public final class EchoStrRes extends com.google.protobuf.GeneratedMessageV3 implements
                                                                              // @@protoc_insertion_point(message_implements:com.alipay.sofa.rpc.codec.antpb.EchoStrRes)
                                                                                      EchoStrResOrBuilder {
-    public static final int S_FIELD_NUMBER = 2;
+    public static final  int  S_FIELD_NUMBER   = 2;
     private static final long serialVersionUID = 0L;
     // @@protoc_insertion_point(class_scope:com.alipay.sofa.rpc.codec.antpb.EchoStrRes)
     private static final com.alipay.sofa.rpc.codec.antpb.EchoStrRes DEFAULT_INSTANCE;
@@ -45,6 +45,7 @@ public final class EchoStrRes extends com.google.protobuf.GeneratedMessageV3 imp
 
     private volatile Object s_;
     private byte memoizedIsInitialized = -1;
+
     // Use EchoStrRes.newBuilder() to construct.
     private EchoStrRes(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);

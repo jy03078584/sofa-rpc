@@ -31,15 +31,15 @@ public class JAXRSProviderManager {
     /**
      * The CGLIB class separator character "$$"
      */
-    public static final String CGLIB_CLASS_SEPARATOR = "$$";
+    public static final String      CGLIB_CLASS_SEPARATOR   = "$$";
     /**
      * 内置的jaxrs Provider类
      */
-    private static Set<Class> internalProviderClasses = Collections.synchronizedSet(new LinkedHashSet<Class>());
+    private static      Set<Class>  internalProviderClasses = Collections.synchronizedSet(new LinkedHashSet<Class>());
     /**
      * 自定义jaxrs Provider实例
      */
-    private static Set<Object> customProviderInstances = Collections.synchronizedSet(new LinkedHashSet<Object>());
+    private static      Set<Object> customProviderInstances = Collections.synchronizedSet(new LinkedHashSet<Object>());
 
     /**
      * 注册内置的jaxrs Provider类

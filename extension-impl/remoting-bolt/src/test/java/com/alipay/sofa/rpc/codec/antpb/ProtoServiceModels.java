@@ -20,11 +20,11 @@
 package com.alipay.sofa.rpc.codec.antpb;
 
 public final class ProtoServiceModels {
-    static final com.google.protobuf.Descriptors.Descriptor                internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrReq_descriptor;
-    static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrReq_fieldAccessorTable;
-    static final com.google.protobuf.Descriptors.Descriptor                internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrRes_descriptor;
-    static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrRes_fieldAccessorTable;
-    private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+    static final   com.google.protobuf.Descriptors.Descriptor                internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrReq_descriptor;
+    static final   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrReq_fieldAccessorTable;
+    static final   com.google.protobuf.Descriptors.Descriptor                internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrRes_descriptor;
+    static final   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrRes_fieldAccessorTable;
+    private static com.google.protobuf.Descriptors.FileDescriptor            descriptor;
 
     static {
         String[] descriptorData = { "\n\"com/alipay/test/ProtoService.proto\022!co"
@@ -55,6 +55,7 @@ public final class ProtoServiceModels {
                 internal_static_com_alipay_sofa_rpc_remoting_test_EchoStrRes_descriptor,
                 new String[] { "S", });
     }
+
     private ProtoServiceModels() {
     }
 

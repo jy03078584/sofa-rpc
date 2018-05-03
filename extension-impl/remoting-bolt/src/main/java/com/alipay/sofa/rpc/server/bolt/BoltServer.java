@@ -60,7 +60,7 @@ public class BoltServer implements Server {
     /**
      * 服务端配置
      */
-    protected ServerConfig serverConfig;
+    protected ServerConfig       serverConfig;
     /**
      * 业务线程池
      */

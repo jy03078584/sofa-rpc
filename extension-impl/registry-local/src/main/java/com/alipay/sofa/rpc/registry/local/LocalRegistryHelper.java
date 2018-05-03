@@ -56,8 +56,8 @@ public class LocalRegistryHelper {
     /**
      * 日志
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(LocalRegistryHelper.class);
-    private static String SEPARATORSTR = "\t";
+    private static final Logger LOGGER       = LoggerFactory.getLogger(LocalRegistryHelper.class);
+    private static       String SEPARATORSTR = "\t";
 
     /**
      * Check file's lastmodified.

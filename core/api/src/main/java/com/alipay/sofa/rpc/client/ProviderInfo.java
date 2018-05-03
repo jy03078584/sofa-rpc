@@ -33,17 +33,17 @@ import com.alipay.sofa.rpc.common.utils.StringUtils;
  */
 public class ProviderInfo implements Serializable {
 
-    private static final long serialVersionUID = -6438690329875954051L;
+    private static final    long                              serialVersionUID = -6438690329875954051L;
     /**
      * 静态属性，不会变的
      */
-    private final ConcurrentHashMap<String, String> staticAttrs = new ConcurrentHashMap<String, String>();
+    private final           ConcurrentHashMap<String, String> staticAttrs      = new ConcurrentHashMap<String, String>();
     /**
      * 动态属性，会动态变的 <br />
      * <p>
      * 例如动态权重，是否启用，预热标记等  invocationOptimizing
      */
-    private final transient ConcurrentHashMap<String, Object> dynamicAttrs = new ConcurrentHashMap<String, Object>();
+    private final transient ConcurrentHashMap<String, Object> dynamicAttrs     = new ConcurrentHashMap<String, Object>();
     /**
      * 原始地址
      */
@@ -72,14 +72,14 @@ public class ProviderInfo implements Serializable {
     /**
      * The rpc Version
      */
-    private int rpcVersion;
+    private int    rpcVersion;
     /**
      * 权重
      *
      * @see ProviderInfoAttrs#ATTR_WEIGHT 原始权重
      * @see ProviderInfoAttrs#ATTR_WARMUP_WEIGHT 预热权重
      */
-    private transient volatile int weight = RpcConfigs
+    private transient volatile int            weight = RpcConfigs
             .getIntValue(RpcOptions.PROVIDER_WEIGHT);
     /**
      * 服务状态

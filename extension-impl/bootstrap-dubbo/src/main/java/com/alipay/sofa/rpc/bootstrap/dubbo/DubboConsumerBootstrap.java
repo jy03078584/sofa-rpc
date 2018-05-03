@@ -44,11 +44,11 @@ public class DubboConsumerBootstrap<T> extends ConsumerBootstrap<T> {
     /**
      * 代理实现类
      */
-    protected transient volatile T proxyIns;
+    protected transient volatile T                  proxyIns;
     /**
      * Dubbo的配置
      */
-    private ReferenceConfig<T> referenceConfig;
+    private                      ReferenceConfig<T> referenceConfig;
 
     /**
      * 构造函数

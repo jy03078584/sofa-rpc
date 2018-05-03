@@ -75,11 +75,11 @@ public class RpcInternalContext implements Cloneable {
     /**
      * The Stopwatch
      */
-    private StopWatch stopWatch = new StopWatch();
+    private StopWatch           stopWatch   = new StopWatch();
     /**
      * The Provider side.
      */
-    private Boolean providerSide;
+    private Boolean      providerSide;
     /**
      * 要调用的服务端信息
      */

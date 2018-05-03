@@ -37,7 +37,7 @@ public class ServiceHorizontalRegulationStrategy implements RegulationStrategy {
      * Key（应用，服务）降级的不同ip列表
      */
     protected final ConcurrentHashMap<String, ConcurrentHashSet<String>> appServiceDegradeIps = new ConcurrentHashMap<String, ConcurrentHashSet<String>>();
-    private final Lock ipsLock = new ReentrantLock();
+    private final   Lock                                                 ipsLock              = new ReentrantLock();
 
     @Override
     public boolean isDegradeEffective(MeasureResultDetail measureResultDetail) {

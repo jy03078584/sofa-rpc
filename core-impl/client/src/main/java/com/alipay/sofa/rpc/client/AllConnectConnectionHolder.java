@@ -75,19 +75,19 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
     /**
      * 存活的客户端列表（保持了长连接，且一切正常的）
      */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> aliveConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> aliveConnections         = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
     /**
      * 存活但是亚健康节点（连续心跳超时，这种只发心跳，不发请求）
      */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> subHealthConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> subHealthConnections     = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
     /**
      * 失败待重试的客户端列表（连上后断开的）
      */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> retryConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> retryConnections         = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
     /**
      * 客户端变化provider的锁
      */
-    private Lock providerLock = new ReentrantLock();
+    private Lock                                             providerLock             = new ReentrantLock();
     /**
      * 重连线程
      */

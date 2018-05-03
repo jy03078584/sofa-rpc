@@ -53,11 +53,11 @@ public class ServiceHorizontalMeasureStrategy implements MeasureStrategy {
     /**
      * 如果配置的参与统计的窗口内最低调用次数不能小于1,限制
      */
-    private static final long LEGAL_LEAST_WINDOW_COUNT = 1L;
+    private static final long                                    LEGAL_LEAST_WINDOW_COUNT = 1L;
     /**
      * All measure model
      */
-    protected final ConcurrentHashMap<String, MeasureModel> appServiceMeasureModels = new ConcurrentHashMap<String, MeasureModel>();
+    protected final      ConcurrentHashMap<String, MeasureModel> appServiceMeasureModels  = new ConcurrentHashMap<String, MeasureModel>();
 
     /**
      * 对批量Invocation对应的InvocationStat进行一个快照

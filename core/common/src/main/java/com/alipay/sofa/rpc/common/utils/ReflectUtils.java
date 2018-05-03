@@ -36,7 +36,7 @@ public class ReflectUtils {
      * 方法对象缓存 {接口名#方法名#(参数列表):Method} <br>
      * 用于用户传了参数列表
      */
-    private final static ConcurrentHashMap<String, Method> METHOD_CACHE = new ConcurrentHashMap<String, Method>();
+    private final static ConcurrentHashMap<String, Method>  METHOD_CACHE           = new ConcurrentHashMap<String, Method>();
     /**
      * 方法对象缓存 {接口名#方法名:Method}<br>
      * 用于用户没传了参数列表

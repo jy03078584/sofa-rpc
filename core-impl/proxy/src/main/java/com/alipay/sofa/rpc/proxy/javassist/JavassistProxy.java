@@ -60,8 +60,8 @@ public class JavassistProxy implements Proxy {
     /**
      * Logger for this class
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(JavassistProxy.class);
-    private static AtomicInteger counter = new AtomicInteger();
+    private static final   Logger            LOGGER          = LoggerFactory.getLogger(JavassistProxy.class);
+    private static         AtomicInteger     counter         = new AtomicInteger();
 
     /**
      * Parse proxy invoker from proxy object

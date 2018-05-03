@@ -66,20 +66,20 @@ public class SofaNettyJaxrsServer implements EmbeddedJaxrsServer {
     protected ResteasyDeployment deployment = new SofaResteasyDeployment(); // CHANGE: 使用sofa的类
     protected String             root       = "";
     protected SecurityDomain domain;
-    protected boolean                    keepAlive           = false;                       // CHANGE:是否长连接
-    protected boolean                    telnet              = true;                        // CHANGE:是否允许telnet
-    protected boolean                    daemon              = true;                        // CHANGE:是否守护线程
-    private   EventLoopGroup eventLoopGroup;
-    private   EventLoopGroup eventExecutor;
+    protected boolean keepAlive = false;                       // CHANGE:是否长连接
+    protected boolean telnet    = true;                        // CHANGE:是否允许telnet
+    protected boolean daemon    = true;                        // CHANGE:是否守护线程
+    private EventLoopGroup eventLoopGroup;
+    private EventLoopGroup eventExecutor;
     private int ioWorkerCount       = SystemInfo.getCpuCores() * 2; // CHANGE:cpu计算修改
     private int executorThreadCount = 16;
     private SSLContext sslContext;
-    private   int                        maxRequestSize      = 1024 * 1024 * 10;
-    private   int                        backlog             = 128;
-    private   List<ChannelHandler>       channelHandlers     = Collections.emptyList();
-    private   Map<ChannelOption, Object> channelOptions      = Collections.emptyMap();
-    private   Map<ChannelOption, Object> childChannelOptions = Collections.emptyMap();
-    private   List<ChannelHandler>       httpChannelHandlers = Collections.emptyList();
+    private int                        maxRequestSize      = 1024 * 1024 * 10;
+    private int                        backlog             = 128;
+    private List<ChannelHandler>       channelHandlers     = Collections.emptyList();
+    private Map<ChannelOption, Object> channelOptions      = Collections.emptyMap();
+    private Map<ChannelOption, Object> childChannelOptions = Collections.emptyMap();
+    private List<ChannelHandler>       httpChannelHandlers = Collections.emptyList();
 
     public void setSSLContext(SSLContext sslContext) {
         this.sslContext = sslContext;

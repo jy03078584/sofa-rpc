@@ -73,7 +73,7 @@ public class BoltClientTransport extends ClientTransport {
     /**
      * Logger for this class
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(BoltClientTransport.class);
+    private static final   Logger    LOGGER     = LoggerFactory.getLogger(BoltClientTransport.class);
 
     static {
         RPC_CLIENT.init();

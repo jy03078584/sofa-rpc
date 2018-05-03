@@ -51,15 +51,16 @@ import com.alipay.sofa.rpc.registry.Registry;
 @Extension("mocktest")
 public class MockTestRegistry extends Registry {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MockTestRegistry.class);
+    private static final Logger                                                               LOGGER          = LoggerFactory
+            .getLogger(MockTestRegistry.class);
     /**
      * 订阅者通知列表（key为订阅者关键字，value为ConsumerConfig列表）
      */
-    protected ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>> notifyListeners = new ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>>();
+    protected            ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>> notifyListeners = new ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>>();
     /**
      * 内存里的服务列表 {service : [provider...]}
      */
-    protected ConcurrentHashMap<String, ProviderGroup> memoryCache = new ConcurrentHashMap<String, ProviderGroup>();
+    protected            ConcurrentHashMap<String, ProviderGroup>                             memoryCache     = new ConcurrentHashMap<String, ProviderGroup>();
 
     /**
      * 注册中心配置

@@ -31,14 +31,14 @@ import com.alipay.sofa.rpc.log.LoggerFactory;
 @Extension(value = "snappy", code = 2)
 public final class SnappyRpcCompressor implements Compressor {
 
-    static final int LITERAL            = 0;
-    static final int COPY_1_BYTE_OFFSET = 1; // 3 bit length + 3 bits of offset in opcode
-    static final int COPY_2_BYTE_OFFSET = 2;
-    static final int COPY_4_BYTE_OFFSET = 3;
+    static final         int    LITERAL            = 0;
+    static final         int    COPY_1_BYTE_OFFSET = 1; // 3 bit length + 3 bits of offset in opcode
+    static final         int    COPY_2_BYTE_OFFSET = 2;
+    static final         int    COPY_4_BYTE_OFFSET = 3;
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(SnappyRpcCompressor.class);
+    private final static Logger LOGGER             = LoggerFactory.getLogger(SnappyRpcCompressor.class);
 
     public SnappyRpcCompressor() {
         if (LOGGER.isInfoEnabled()) {

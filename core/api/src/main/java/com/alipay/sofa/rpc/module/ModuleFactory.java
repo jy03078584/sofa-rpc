@@ -39,11 +39,12 @@ public class ModuleFactory {
     /**
      * 已加载的模块
      */
-    static final ConcurrentHashMap<String, Module> INSTALLED_MODULES = new ConcurrentHashMap<String, Module>();
+    static final         ConcurrentHashMap<String, Module> INSTALLED_MODULES = new ConcurrentHashMap<String, Module>();
     /**
      * logger for this class
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModuleFactory.class);
+    private static final Logger                            LOGGER            = LoggerFactory
+            .getLogger(ModuleFactory.class);
 
     /**
      * parse module load config

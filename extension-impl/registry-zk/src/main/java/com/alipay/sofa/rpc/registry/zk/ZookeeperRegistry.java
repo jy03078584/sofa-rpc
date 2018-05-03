@@ -88,7 +88,7 @@ public class ZookeeperRegistry extends Registry {
     /**
      * 配置项：是否本地优先
      */
-    public final static String PARAM_PREFER_LOCAL_FILE = "preferLocalFile";
+    public final static  String                                       PARAM_PREFER_LOCAL_FILE = "preferLocalFile";
     /**
      * 配置项：是否使用临时节点。<br>
      * 如果使用临时节点：那么断开连接的时候，将zookeeper将自动消失。好处是如果服务端异常关闭，也不会有垃圾数据。<br>
@@ -96,24 +96,25 @@ public class ZookeeperRegistry extends Registry {
      * 如果使用永久节点：好处：网络闪断时不会影响服务端，而是由客户端进行自己判断长连接<br>
      * 坏处：服务端如果是异常关闭（无反注册），那么数据里就由垃圾节点，得由另外的哨兵程序进行判断
      */
-    public final static  String PARAM_CREATE_EPHEMERAL = "createEphemeral";
+    public final static  String                                       PARAM_CREATE_EPHEMERAL  = "createEphemeral";
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(ZookeeperRegistry.class);
+    private final static Logger                                       LOGGER                  = LoggerFactory
+            .getLogger(ZookeeperRegistry.class);
     /**
      * 服务被下线
      */
-    private final static byte[] PROVIDER_OFFLINE       = new byte[] { 0 };
+    private final static byte[]                                       PROVIDER_OFFLINE        = new byte[] { 0 };
     /**
      * 正常在线服务
      */
-    private final static byte[] PROVIDER_ONLINE        = new byte[] { 1 };
+    private final static byte[]                                       PROVIDER_ONLINE         = new byte[] { 1 };
     /**
      * 接口配置{接口配置路径：PathChildrenCache} <br>
      * 例如：{/sofa-rpc/com.alipay.sofa.rpc.example/configs ： PathChildrenCache }
      */
-    private static final ConcurrentHashMap<String, PathChildrenCache> INTERFACE_CONFIG_CACHE = new ConcurrentHashMap<String, PathChildrenCache>();
+    private static final ConcurrentHashMap<String, PathChildrenCache> INTERFACE_CONFIG_CACHE  = new ConcurrentHashMap<String, PathChildrenCache>();
     /**
      * Zookeeper zkClient
      */

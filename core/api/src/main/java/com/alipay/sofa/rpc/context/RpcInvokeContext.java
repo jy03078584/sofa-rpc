@@ -36,25 +36,26 @@ public class RpcInvokeContext {
     /**
      * 线程上下文变量
      */
-    protected static final ThreadLocal<RpcInvokeContext> LOCAL = new ThreadLocal<RpcInvokeContext>();
+    protected static final ThreadLocal<RpcInvokeContext> LOCAL          = new ThreadLocal<RpcInvokeContext>();
     /**
      * 是否开启上下文透传功能
      *
      * @since 5.1.2
      */
-    private static final boolean BAGGAGE_ENABLE = RpcConfigs.getBooleanValue(RpcOptions.INVOKE_BAGGAGE_ENABLE);
+    private static final   boolean                       BAGGAGE_ENABLE = RpcConfigs
+            .getBooleanValue(RpcOptions.INVOKE_BAGGAGE_ENABLE);
     /**
      * 用户自定义超时时间，单次调用生效
      */
-    protected Integer timeout;
+    protected Integer              timeout;
     /**
      * 用户自定义对方地址，单次调用生效
      */
-    protected String targetURL;
+    protected String               targetURL;
     /**
      * 用户自定义对方分组
      */
-    protected String targetGroup;
+    protected String               targetGroup;
     /**
      * 用户自定义Callback，单次调用生效
      */
@@ -62,23 +63,23 @@ public class RpcInvokeContext {
     /**
      * The Future.
      */
-    protected ResponseFuture<?> future;
+    protected ResponseFuture<?>    future;
     /**
      * 自定义属性
      */
-    protected ConcurrentMap<String, Object> map = new ConcurrentHashMap<String, Object>();
+    protected ConcurrentMap<String, Object> map             = new ConcurrentHashMap<String, Object>();
     /**
      * 请求上的透传数据
      *
      * @since 5.1.2
      */
-    protected Map<String, String> requestBaggage = BAGGAGE_ENABLE ? new HashMap<String, String>() : null;
+    protected Map<String, String>           requestBaggage  = BAGGAGE_ENABLE ? new HashMap<String, String>() : null;
     /**
      * 响应上的透传数据
      *
      * @since 5.1.2
      */
-    protected Map<String, String> responseBaggage = BAGGAGE_ENABLE ? new HashMap<String, String>() : null;
+    protected Map<String, String>           responseBaggage = BAGGAGE_ENABLE ? new HashMap<String, String>() : null;
 
     /**
      * 得到上下文，没有则初始化

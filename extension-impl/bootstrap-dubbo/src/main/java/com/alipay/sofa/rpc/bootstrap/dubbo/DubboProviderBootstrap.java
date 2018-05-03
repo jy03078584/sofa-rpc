@@ -45,11 +45,11 @@ public class DubboProviderBootstrap<T> extends ProviderBootstrap<T> {
     /**
      * 是否已发布
      */
-    protected transient volatile boolean exported;
+    protected transient volatile boolean          exported;
     /**
      * Dubbo的配置
      */
-    private ServiceConfig<T> serviceConfig;
+    private                      ServiceConfig<T> serviceConfig;
 
     /**
      * 构造函数

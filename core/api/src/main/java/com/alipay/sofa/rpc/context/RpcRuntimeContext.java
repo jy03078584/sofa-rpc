@@ -51,50 +51,50 @@ public class RpcRuntimeContext {
     /**
      * 当前进程Id
      */
-    public static final String PID = ManagementFactory
+    public static final  String                               PID                       = ManagementFactory
             .getRuntimeMXBean()
             .getName().split("@")[0];
     /**
      * 当前应用启动时间（用这个类加载时间为准）
      */
-    public static final long START_TIME = now();
+    public static final  long                                 START_TIME                = now();
     /**
      * 当前所在文件夹地址
      */
-    public static final String KEY_APPAPTH = "appPath";
+    public static final  String                               KEY_APPAPTH               = "appPath";
     /**
      * 应用Id
      */
-    public static final String APP_ID      = "sofa.app.id";
+    public static final  String                               APP_ID                    = "sofa.app.id";
     /**
      * 应用名称
      */
-    public static final String APP_NAME    = "sofa.app.name";
+    public static final  String                               APP_NAME                  = "sofa.app.name";
     /**
      * 应用实例Id
      */
-    public static final String INSTANCE_ID = "sofa.instance.id";
+    public static final  String                               INSTANCE_ID               = "sofa.instance.id";
     /**
      * 自动部署的appId
      */
-    public static final String KEY_APPID = "appId";
+    public static final  String                               KEY_APPID                 = "appId";
     /**
      * 自动部署的appName
      */
-    public static final String KEY_APPNAME = "appName";
+    public static final  String                               KEY_APPNAME               = "appName";
     /**
      * 自动部署的appInsId
      */
-    public static final String KEY_APPINSID = "appInsId";
+    public static final  String                               KEY_APPINSID              = "appInsId";
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory
+    private final static Logger                               LOGGER                    = LoggerFactory
             .getLogger(RpcRuntimeContext.class);
     /**
      * 上下文信息，例如instancekey，本机ip等信息
      */
-    private final static ConcurrentHashMap CONTEXT = new ConcurrentHashMap();
+    private final static ConcurrentHashMap                    CONTEXT                   = new ConcurrentHashMap();
     /**
      * 发布的服务配置
      */
@@ -106,7 +106,7 @@ public class RpcRuntimeContext {
     /**
      * 关闭资源的钩子
      */
-    private final static List<Destroyable.DestroyHook> DESTROY_HOOKS = new CopyOnWriteArrayList<Destroyable.DestroyHook>();
+    private final static List<Destroyable.DestroyHook>        DESTROY_HOOKS             = new CopyOnWriteArrayList<Destroyable.DestroyHook>();
 
     static {
         if (LOGGER.isInfoEnabled()) {

@@ -36,11 +36,11 @@ public class ScheduledService {
     /**
      * 固定频率执行，按执行开始时间计算间隔
      */
-    public static final int MODE_FIXEDRATE  = 0;
+    public static final    int                         MODE_FIXEDRATE        = 0;
     /**
      * 固定间隔执行，执行完成后才计算间隔
      */
-    public static final int MODE_FIXEDDELAY = 1;
+    public static final    int                         MODE_FIXEDDELAY       = 1;
     /**
      * 缓存了目前全部的定时任务， 用于重建
      */
@@ -49,15 +49,16 @@ public class ScheduledService {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(ScheduledService.class);
+    private final static   Logger                      LOGGER                = LoggerFactory
+            .getLogger(ScheduledService.class);
     /**
      * 正在重置标识
      */
-    protected static volatile boolean resetting;
+    protected static volatile boolean  resetting;
     /**
      * The Runnable.
      */
-    private final Runnable runnable;
+    private final             Runnable runnable;
 
     /**
      * The Initial delay.
@@ -78,7 +79,7 @@ public class ScheduledService {
      * 0:scheduleAtFixedRate
      * 1:scheduleWithFixedDelay
      */
-    private final int mode;
+    private final    int                      mode;
     /**
      * The Scheduled executor service.
      */
@@ -86,15 +87,15 @@ public class ScheduledService {
     /**
      * The Thread name
      */
-    private String threadName;
+    private          String                   threadName;
     /**
      * The Future.
      */
-    private volatile ScheduledFuture future;
+    private volatile ScheduledFuture          future;
     /**
      * The Started.
      */
-    private volatile boolean started;
+    private volatile boolean                  started;
 
     /**
      * Instantiates a new Scheduled service.

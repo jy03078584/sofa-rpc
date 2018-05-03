@@ -76,7 +76,7 @@ public class FilterChain implements Invoker {
     /**
      * 过滤器列表，从底至上排序
      */
-    private List<Filter> loadedFilters;
+    private List<Filter>  loadedFilters;
 
     /**
      * 构造执行链

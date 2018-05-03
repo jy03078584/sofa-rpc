@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class TestBean {
 
-    private static    String s2;
+    private static String s2;
     List<TestSubBean> subBeans;
-    private String  alias;
-    private int     heartbeat;
-    private boolean register;
-    private transient String t1;
+    private           String  alias;
+    private           int     heartbeat;
+    private           boolean register;
+    private transient String  t1;
 
     public String getAlias() {
         return alias;

@@ -56,7 +56,7 @@ public abstract class AbstractProxyClientTransport extends ClientTransport {
     /**
      * 代理类，例如cxf或resteasy生成的代理
      */
-    private Object proxy;
+    private Object  proxy;
     /**
      * 是否已连接（默认可连接，直到连不上）
      */

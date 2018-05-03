@@ -40,7 +40,7 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
     /**
      * 用户设置的超时时间
      */
-    private final int timeout;
+    private final   int         timeout;
     /**
      * Future生成时间
      */
@@ -54,12 +54,12 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
     /**
      * Future已发送时间
      */
-    private volatile long sentTime;
+    private volatile long   sentTime;
     /**
      * Future完成的时间
      */
-    private volatile long doneTime;
-    private short waiters;
+    private volatile long   doneTime;
+    private          short  waiters;
 
     /**
      * 构造函数

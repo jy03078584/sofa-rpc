@@ -46,21 +46,21 @@ public class NetUtils {
     /**
      * IPv4地址
      */
-    public static final Pattern IPV4_PATTERN = Pattern
+    public static final  Pattern IPV4_PATTERN     = Pattern
             .compile(
                     "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(NetUtils.class);
+    private final static Logger  LOGGER           = LoggerFactory.getLogger(NetUtils.class);
     /**
      * 最小端口
      */
-    private static final int MIN_PORT = 0;
+    private static final int     MIN_PORT         = 0;
     /**
      * 最大端口
      */
-    private static final int MAX_PORT = 65535;
+    private static final int     MAX_PORT         = 65535;
     /**
      * 本机地址正则
      */

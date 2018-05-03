@@ -48,7 +48,7 @@ public class ClientTransportFactory {
     /**
      * 长连接过滤器
      */
-    private final static ClientTransportHolder CLIENT_TRANSPORT_HOLDER = CHANNEL_REUSE ?
+    private final static    ClientTransportHolder                      CLIENT_TRANSPORT_HOLDER      = CHANNEL_REUSE ?
             new ReusableClientTransportHolder()
             :
             new NotReusableClientTransportHolder();

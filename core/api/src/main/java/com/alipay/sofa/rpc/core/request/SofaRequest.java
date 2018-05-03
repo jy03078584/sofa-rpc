@@ -43,23 +43,23 @@ public class SofaRequest extends RequestBase {
     /**
      * Extensional properties of request
      */
-    private Map<String, Object> requestProps;
+    private           Map<String, Object>  requestProps;
     /**
      * 方法对象(缓存一些，减少反射，服务端使用）
      */
-    private transient Method method;
+    private transient Method               method;
     /**
      * 接口名
      */
-    private transient String interfaceName;
+    private transient String               interfaceName;
     /**
      * 序列化工厂类型：决定是否泛化调用（客户端使用）
      */
-    private transient int serializeFactoryType;
+    private transient int                  serializeFactoryType;
     /**
      * 序列化类型（客户端使用）
      */
-    private transient byte serializeType;
+    private transient byte                 serializeType;
     /**
      * 调用类型（客户端使用）
      */
@@ -71,7 +71,7 @@ public class SofaRequest extends RequestBase {
     /**
      * 用户层请求超时，调用级别（客户端使用）
      */
-    private transient Integer timeout;
+    private transient Integer              timeout;
 
     //====================== 下面是非传递属性 ===============
 
