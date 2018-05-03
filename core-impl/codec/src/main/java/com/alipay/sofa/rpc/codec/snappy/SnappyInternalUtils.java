@@ -17,17 +17,15 @@
 package com.alipay.sofa.rpc.codec.snappy;
 
 final class SnappyInternalUtils {
-    private SnappyInternalUtils() {
-    }
-
     private static final Memory memory;
+    static final boolean HAS_UNSAFE = memory.fastAccessSupported();
 
     static {
         // Try to only load one implementation of Memory to assure the call sites are monomorphic (fast)
         Memory memoryInstance = null;
         try {
             Class<? extends Memory> unsafeMemoryClass = SnappyInternalUtils.class.getClassLoader()
-                .loadClass("org.iq80.snappy.UnsafeMemory").asSubclass(Memory.class);
+                    .loadClass("org.iq80.snappy.UnsafeMemory").asSubclass(Memory.class);
             Memory unsafeMemory = unsafeMemoryClass.newInstance();
             if (unsafeMemory.loadInt(new byte[4], 0) == 0) {
                 memoryInstance = unsafeMemory;
@@ -37,7 +35,7 @@ final class SnappyInternalUtils {
         if (memoryInstance == null) {
             try {
                 Class<? extends Memory> slowMemoryClass = SnappyInternalUtils.class.getClassLoader()
-                    .loadClass("com.alipay.sofa.rpc.codec.snappy.SlowMemory").asSubclass(Memory.class);
+                        .loadClass("com.alipay.sofa.rpc.codec.snappy.SlowMemory").asSubclass(Memory.class);
                 Memory slowMemory = slowMemoryClass.newInstance();
                 if (slowMemory.loadInt(new byte[4], 0) == 0) {
                     memoryInstance = slowMemory;
@@ -51,7 +49,8 @@ final class SnappyInternalUtils {
         memory = memoryInstance;
     }
 
-    static final boolean        HAS_UNSAFE = memory.fastAccessSupported();
+    private SnappyInternalUtils() {
+    }
 
     static boolean equals(byte[] left, int leftIndex, byte[] right, int rightIndex, int length) {
         checkPositionIndexes(leftIndex, leftIndex + length, left.length);

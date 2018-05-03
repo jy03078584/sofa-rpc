@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.bootstrap;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.client.Cluster;
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
-
-import java.util.List;
 
 /**
  * 集群服务端地址监听器

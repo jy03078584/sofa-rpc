@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.common.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
@@ -56,7 +56,7 @@ public class FileUtilsTest {
     @Test
     public void cleanDirectory() throws Exception {
         String filePath = System.getProperty("java.io.tmpdir") + File.separator
-            + "FileTest" + 1;
+                + "FileTest" + 1;
         FileUtils.string2File(new File(filePath, "xx.tmp"), "helloworld!");
         Assert.assertTrue(new File(filePath, "xx.tmp").exists());
 

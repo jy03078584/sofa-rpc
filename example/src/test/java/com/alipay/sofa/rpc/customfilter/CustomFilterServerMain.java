@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.customfilter;
 
+import java.util.Arrays;
+
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
@@ -25,8 +27,6 @@ import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-
-import java.util.Arrays;
 
 /**
  *
@@ -47,17 +47,17 @@ public class CustomFilterServerMain {
         ApplicationConfig application = new ApplicationConfig().setAppName("test-server");
 
         ServerConfig serverConfig = new ServerConfig()
-            .setPort(22000)
-            .setDaemon(false);
+                .setPort(22000)
+                .setDaemon(false);
 
         ProviderConfig<HelloService> providerConfig = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setApplication(application)
-            .setRef(new HelloServiceImpl())
-            .setServer(serverConfig)
-            .setFilter(Arrays.asList("customEcho"))
-            .setFilterRef(Arrays.asList(customEchoFilter2))
-            .setRegister(false);
+                .setInterfaceId(HelloService.class.getName())
+                .setApplication(application)
+                .setRef(new HelloServiceImpl())
+                .setServer(serverConfig)
+                .setFilter(Arrays.asList("customEcho"))
+                .setFilterRef(Arrays.asList(customEchoFilter2))
+                .setRegister(false);
 
         providerConfig.export();
 

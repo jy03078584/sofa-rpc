@@ -16,11 +16,7 @@
  */
 package com.alipay.sofa.rpc.codec.anthessian;
 
-import com.alipay.sofa.rpc.common.SofaConfigs;
-import com.alipay.sofa.rpc.common.SofaOptions;
-import com.alipay.sofa.rpc.common.utils.StringUtils;
-import com.alipay.sofa.rpc.log.Logger;
-import com.alipay.sofa.rpc.log.LoggerFactory;
+import static com.alipay.sofa.rpc.common.utils.IOUtils.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +25,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.alipay.sofa.rpc.common.utils.IOUtils.closeQuietly;
+import com.alipay.sofa.rpc.common.SofaConfigs;
+import com.alipay.sofa.rpc.common.SofaOptions;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
+import com.alipay.sofa.rpc.log.Logger;
+import com.alipay.sofa.rpc.log.LoggerFactory;
 
 /**
  * Load blacklist from file.
@@ -38,7 +38,7 @@ import static com.alipay.sofa.rpc.common.utils.IOUtils.closeQuietly;
  */
 public class BlackListFileLoader {
 
-    private static final Logger      LOGGER                    = LoggerFactory.getLogger(BlackListFileLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BlackListFileLoader.class);
 
     public static final List<String> SOFA_SERIALIZE_BLACK_LIST = loadFile("/sofa-rpc/serialize_blacklist.txt");
 
@@ -99,7 +99,7 @@ public class BlackListFileLoader {
 
     /**
      * Override blacklist with override string.
-     * 
+     *
      * @param originList Origin black list
      * @param overrideStr The override string
      */

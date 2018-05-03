@@ -26,12 +26,12 @@ public final class CodecUtils {
     /**
      * 空的Object数组，无参方法
      */
-    public static final Object[]   EMPTY_OBJECT_ARRAY = new Object[0];
+    public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     /**
      * 空的Class数组，无参方法
      */
-    public static final Class<?>[] EMPTY_CLASS_ARRAY  = new Class<?>[0];
+    public static final Class<?>[] EMPTY_CLASS_ARRAY = new Class<?>[0];
 
     /**
      * int 转 byte数组
@@ -56,9 +56,9 @@ public final class CodecUtils {
      */
     public static int bytesToInt(byte[] ary) {
         return (ary[3] & 0xFF)
-            | ((ary[2] << 8) & 0xFF00)
-            | ((ary[1] << 16) & 0xFF0000)
-            | ((ary[0] << 24) & 0xFF000000);
+                | ((ary[2] << 8) & 0xFF00)
+                | ((ary[1] << 16) & 0xFF0000)
+                | ((ary[0] << 24) & 0xFF000000);
     }
 
     /**
@@ -142,10 +142,10 @@ public final class CodecUtils {
      */
     public static String byteToBits(byte b) {
         return ""
-            + (byte) ((b >> 7) & 0x01) + (byte) ((b >> 6) & 0x1)
-            + (byte) ((b >> 5) & 0x01) + (byte) ((b >> 4) & 0x1)
-            + (byte) ((b >> 3) & 0x01) + (byte) ((b >> 2) & 0x1)
-            + (byte) ((b >> 1) & 0x01) + (byte) ((b >> 0) & 0x1);
+                + (byte) ((b >> 7) & 0x01) + (byte) ((b >> 6) & 0x1)
+                + (byte) ((b >> 5) & 0x01) + (byte) ((b >> 4) & 0x1)
+                + (byte) ((b >> 3) & 0x01) + (byte) ((b >> 2) & 0x1)
+                + (byte) ((b >> 1) & 0x01) + (byte) ((b >> 0) & 0x1);
     }
 
     /**

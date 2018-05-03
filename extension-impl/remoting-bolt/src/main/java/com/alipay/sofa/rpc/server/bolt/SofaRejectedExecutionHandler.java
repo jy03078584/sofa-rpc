@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.server.bolt;
 
-import com.alipay.sofa.rpc.log.LogCodes;
-import com.alipay.sofa.rpc.log.Logger;
-import com.alipay.sofa.rpc.log.LoggerFactory;
-
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
+
+import com.alipay.sofa.rpc.log.LogCodes;
+import com.alipay.sofa.rpc.log.Logger;
+import com.alipay.sofa.rpc.log.LoggerFactory;
 
 /**
  * RejectedExecutionHandler when thread pool is full.
@@ -37,9 +37,9 @@ public class SofaRejectedExecutionHandler implements RejectedExecutionHandler {
     public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
         if (LOGGER.isWarnEnabled()) {
             LOGGER.warn(LogCodes.getLog(LogCodes.ERROR_PROVIDER_TR_POOL_REJECTION, executor.getActiveCount(),
-                executor.getPoolSize(), executor.getLargestPoolSize(), executor
-                    .getCorePoolSize(), executor.getMaximumPoolSize(), executor.getQueue()
-                    .size(), executor.getQueue().remainingCapacity()));
+                    executor.getPoolSize(), executor.getLargestPoolSize(), executor
+                            .getCorePoolSize(), executor.getMaximumPoolSize(), executor.getQueue()
+                            .size(), executor.getQueue().remainingCapacity()));
         }
         throw new RejectedExecutionException();
     }

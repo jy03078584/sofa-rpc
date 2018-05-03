@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * Map data converter (flat/tree)
- * 
+ *
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
 public class ContextMapConverter {

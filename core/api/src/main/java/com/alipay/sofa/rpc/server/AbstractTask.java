@@ -40,12 +40,12 @@ public abstract class AbstractTask implements Runnable, Comparable<AbstractTask>
         return o.getPriority() - this.getPriority();
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
     public AbstractTask setPriority(int priority) {
         this.priority = priority;
         return this;
-    }
-
-    public int getPriority() {
-        return priority;
     }
 }

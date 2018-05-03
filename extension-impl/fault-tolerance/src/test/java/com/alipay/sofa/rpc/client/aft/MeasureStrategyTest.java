@@ -16,21 +16,22 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.client.aft.impl.ServiceExceptionInvocationStat;
 import com.alipay.sofa.rpc.client.aft.impl.ServiceHorizontalMeasureStrategy;
 import com.alipay.sofa.rpc.core.exception.RpcErrorType;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.exception.SofaTimeOutException;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 
+ *
  * @author <a href="mailto:lw111072@antfin.com">liangen</a>
  */
 public class MeasureStrategyTest extends FaultBaseTest {
@@ -403,7 +404,7 @@ public class MeasureStrategyTest extends FaultBaseTest {
 
         /**不同应用，同一服务*/
         InvocationStatDimension invocation3 = new InvocationStatDimension(ProviderInfo.valueOf("ip1"),
-            consumerConfigAnotherApp);
+                consumerConfigAnotherApp);
         InvocationStat invocationStat3 = new ServiceExceptionInvocationStat(invocation3);
         MeasureModel measureModel3 = measureStrategy.buildMeasureModel(invocationStat3);
         Assert.assertTrue(measureModel3 != null);
@@ -436,9 +437,9 @@ public class MeasureStrategyTest extends FaultBaseTest {
                 @Override
                 public void run() {
                     InvocationStatDimension invocation1 = new InvocationStatDimension(ProviderInfo.valueOf("ip1"),
-                        consumerConfig);
+                            consumerConfig);
                     MeasureModel measureModel1 = measureStrategy.buildMeasureModel(new ServiceExceptionInvocationStat(
-                        invocation1));
+                            invocation1));
                     if (measureModel1 == null) {
                         isNullCount.incrementAndGet();
                     }

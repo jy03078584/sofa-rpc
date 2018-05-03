@@ -16,16 +16,16 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.AbstractLoadBalancer;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.struct.PositiveAtomicCounter;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extension;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * 负载均衡轮询算法，按方法级进行轮询，互不影响
@@ -61,7 +61,7 @@ public class RoundRobinLoadBalancer extends AbstractLoadBalancer {
     private String getServiceKey(SofaRequest request) {
         StringBuilder builder = new StringBuilder();
         builder.append(request.getTargetAppName()).append("#")
-            .append(request.getMethodName());
+                .append(request.getMethodName());
         return builder.toString();
     }
 

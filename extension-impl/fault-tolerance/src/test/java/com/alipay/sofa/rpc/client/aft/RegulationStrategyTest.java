@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
-import com.alipay.sofa.rpc.client.aft.impl.ServiceHorizontalRegulationStrategy;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.alipay.sofa.rpc.client.ProviderInfo;
+import com.alipay.sofa.rpc.client.aft.impl.ServiceHorizontalRegulationStrategy;
 
 /**
  *

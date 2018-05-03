@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.rpc.registry.zk;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.curator.framework.recipes.cache.ChildData;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.RpcConstants;
@@ -24,13 +32,6 @@ import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-import org.apache.curator.framework.recipes.cache.ChildData;
-
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ZookeeperObserver for provider node.
@@ -42,8 +43,8 @@ public class ZookeeperProviderObserver extends AbstractZookeeperObserver {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger                                           LOGGER              = LoggerFactory
-                                                                                                  .getLogger(ZookeeperConfigObserver.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ZookeeperConfigObserver.class);
 
     /**
      * The Provider add listener map.
@@ -72,16 +73,16 @@ public class ZookeeperProviderObserver extends AbstractZookeeperObserver {
     }
 
     public void updateProvider(ConsumerConfig config, String providerPath, ChildData data)
-        throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         if (LOGGER.isInfoEnabled(config.getAppName())) {
             LOGGER.infoWithApp(config.getAppName(), "Receive update provider: path=[" + data.getPath() + "]"
-                + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
-                + ", stat=[" + data.getStat() + "]");
+                    + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
+                    + ", stat=[" + data.getStat() + "]");
         }
         List<ProviderInfoListener> providerInfoListeners = providerListenerMap.get(config);
         if (CommonUtils.isNotEmpty(providerInfoListeners)) {
             List<ProviderInfo> providerInfos = Arrays.asList(
-                ZookeeperRegistryHelper.convertUrlToProvider(providerPath, data));
+                    ZookeeperRegistryHelper.convertUrlToProvider(providerPath, data));
             for (ProviderInfoListener listener : providerInfoListeners) {
                 List<ProviderInfo> providerInfosForProtocol = filterByProtocol(config.getProtocol(), providerInfos);
                 listener.addProvider(new ProviderGroup(providerInfosForProtocol));
@@ -90,16 +91,16 @@ public class ZookeeperProviderObserver extends AbstractZookeeperObserver {
     }
 
     public void removeProvider(ConsumerConfig config, String providerPath, ChildData data)
-        throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         if (LOGGER.isInfoEnabled(config.getAppName())) {
             LOGGER.infoWithApp(config.getAppName(), "Receive remove provider: path=[" + data.getPath() + "]"
-                + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
-                + ", stat=[" + data.getStat() + "]");
+                    + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
+                    + ", stat=[" + data.getStat() + "]");
         }
         List<ProviderInfoListener> providerInfoListeners = providerListenerMap.get(config);
         if (CommonUtils.isNotEmpty(providerInfoListeners)) {
             List<ProviderInfo> providerInfos = Arrays.asList(
-                ZookeeperRegistryHelper.convertUrlToProvider(providerPath, data));
+                    ZookeeperRegistryHelper.convertUrlToProvider(providerPath, data));
             List<ProviderInfo> providerInfosForProtocol = filterByProtocol(config.getProtocol(), providerInfos);
             for (ProviderInfoListener listener : providerInfoListeners) {
                 listener.removeProvider(new ProviderGroup(providerInfosForProtocol));
@@ -108,16 +109,16 @@ public class ZookeeperProviderObserver extends AbstractZookeeperObserver {
     }
 
     public void addProvider(ConsumerConfig config, String providerPath, ChildData data)
-        throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         if (LOGGER.isInfoEnabled(config.getAppName())) {
             LOGGER.infoWithApp(config.getAppName(), "Receive add provider: path=[" + data.getPath() + "]"
-                + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
-                + ", stat=[" + data.getStat() + "]");
+                    + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
+                    + ", stat=[" + data.getStat() + "]");
         }
         List<ProviderInfoListener> providerInfoListeners = providerListenerMap.get(config);
         if (CommonUtils.isNotEmpty(providerInfoListeners)) {
             List<ProviderInfo> providerInfos = Arrays.asList(
-                ZookeeperRegistryHelper.convertUrlToProvider(providerPath, data));
+                    ZookeeperRegistryHelper.convertUrlToProvider(providerPath, data));
             for (ProviderInfoListener listener : providerInfoListeners) {
                 List<ProviderInfo> providerInfosForProtocol = filterByProtocol(config.getProtocol(), providerInfos);
                 listener.addProvider(new ProviderGroup(providerInfosForProtocol));

@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.common.json;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
@@ -70,20 +70,20 @@ public class JSONSerializerTest {
         Assert.assertEquals(map.size(), 0);
 
         String s = "{" +
-            "\"a\": null," +
-            "        \"b\":1," +
-            "        \"c\":9999999999," +
-            "        \"d\":1.0," +
-            "        \"e\":false," +
-            "        \"f\":\"c\"," +
-            "        \"g\":[]," +
-            "        \"h\":[1,2]," +
-            "        \"i\":[\"11\",\"22\"]," +
-            "        \"j\":{}," +
-            "        \"k\":{" +
-            "            \"11\":\"22\"" +
-            "        }" +
-            "}";
+                "\"a\": null," +
+                "        \"b\":1," +
+                "        \"c\":9999999999," +
+                "        \"d\":1.0," +
+                "        \"e\":false," +
+                "        \"f\":\"c\"," +
+                "        \"g\":[]," +
+                "        \"h\":[1,2]," +
+                "        \"i\":[\"11\",\"22\"]," +
+                "        \"j\":{}," +
+                "        \"k\":{" +
+                "            \"11\":\"22\"" +
+                "        }" +
+                "}";
         Map json = (Map) JSONSerializer.deserialize(s);
         Assert.assertNotNull(json);
         Assert.assertEquals(json.get("a"), null);
@@ -103,11 +103,11 @@ public class JSONSerializerTest {
     public void testDeserializeWithComment() {
 
         String s = "{" +
-            "\"a\": null, // 111\n" +
-            "        \"b\":1, /*2   // asdsad / das */\n" +
-            "        \"c\":1, /*2   // asdsad \n \r / das */\n" +
-            "        \"d\":9999999999" +
-            "}";
+                "\"a\": null, // 111\n" +
+                "        \"b\":1, /*2   // asdsad / das */\n" +
+                "        \"c\":1, /*2   // asdsad \n \r / das */\n" +
+                "        \"d\":9999999999" +
+                "}";
         System.out.println(s);
         Map json = (Map) JSONSerializer.deserialize(s);
         Assert.assertNotNull(json);

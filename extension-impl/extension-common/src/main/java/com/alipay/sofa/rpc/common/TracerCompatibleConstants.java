@@ -29,17 +29,17 @@ public class TracerCompatibleConstants {
     /**
      * TraceId 放在透传上下文中的 key
      */
-    public static final String TRACE_ID_KEY      = "sofaTraceId";
+    public static final String TRACE_ID_KEY = "sofaTraceId";
 
     /**
      * RpcId 放在透传上下文中的 key
      */
-    public static final String RPC_ID_KEY        = "sofaRpcId";
+    public static final String RPC_ID_KEY = "sofaRpcId";
 
     /**
      * penetrateAttributes 放在透传上下文中的 key
      */
-    public static final String PEN_ATTRS_KEY     = "sofaPenAttrs";
+    public static final String PEN_ATTRS_KEY = "sofaPenAttrs";
 
     /**
      * penetrateSystemAttr 放在透传上下文中的 key
@@ -49,26 +49,26 @@ public class TracerCompatibleConstants {
     /**
      * 调用方应用名放在透传上下文中的 key
      */
-    public static final String CALLER_APP_KEY    = "sofaCallerApp";
+    public static final String CALLER_APP_KEY = "sofaCallerApp";
 
     /**
      * 调用方逻辑 ZONE 放在透传上下文中的 key
      */
-    public static final String CALLER_ZONE_KEY   = "sofaCallerZone";
+    public static final String CALLER_ZONE_KEY = "sofaCallerZone";
 
     /**
      * 调用方 IDC 放在透传上下文中的 key
      */
-    public static final String CALLER_IDC_KEY    = "sofaCallerIdc";
+    public static final String CALLER_IDC_KEY = "sofaCallerIdc";
 
     /**
      * 调用方的IP地址
      */
-    public static final String CALLER_IP_KEY     = "sofaCallerIp";
+    public static final String CALLER_IP_KEY = "sofaCallerIp";
 
     /***
      * 兼容系统采样透传
      */
-    public static final String SAMPLING_MARK     = "samp";
+    public static final String SAMPLING_MARK = "samp";
 
 }

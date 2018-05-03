@@ -48,8 +48,8 @@ public class LogPrintDegradeStrategy implements DegradeStrategy {
             String ip = statDimension.getIp();
 
             LOGGER.infoWithApp(appName,
-                LogCodes.getLog(LogCodes.INFO_REGULATION_ABNORMAL, timeWindow, service, appName,
-                    windowCount, abnormalRate, averageAbnormalRate, ip));
+                    LogCodes.getLog(LogCodes.INFO_REGULATION_ABNORMAL, timeWindow, service, appName,
+                            windowCount, abnormalRate, averageAbnormalRate, ip));
         }
     }
 }

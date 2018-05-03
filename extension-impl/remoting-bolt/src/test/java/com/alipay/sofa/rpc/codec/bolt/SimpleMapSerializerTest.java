@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.codec.bolt;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *

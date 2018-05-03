@@ -16,6 +16,18 @@
  */
 package com.alipay.sofa.rpc.registry.zk;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
@@ -25,17 +37,6 @@ import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
 import com.alipay.sofa.rpc.registry.RegistryFactory;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -44,17 +45,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class ZookeeperRegistryTest {
 
-    private static RegistryConfig    registryConfig;
+    private static RegistryConfig registryConfig;
 
     private static ZookeeperRegistry registry;
 
     @BeforeClass
     public static void setUp() {
         registryConfig = new RegistryConfig()
-            .setProtocol("zookeeper")
-            .setSubscribe(true)
-            .setAddress("127.0.0.1:2181")
-            .setRegister(true);
+                .setProtocol("zookeeper")
+                .setSubscribe(true)
+                .setAddress("127.0.0.1:2181")
+                .setRegister(true);
 
         registry = (ZookeeperRegistry) RegistryFactory.getRegistry(registryConfig);
         registry.init();
@@ -73,34 +74,34 @@ public class ZookeeperRegistryTest {
         int timeoutPerSub = 1000;
 
         ServerConfig serverConfig = new ServerConfig()
-            .setProtocol("bolt")
-            .setHost("0.0.0.0")
-            .setPort(12200);
+                .setProtocol("bolt")
+                .setHost("0.0.0.0")
+                .setPort(12200);
 
         ProviderConfig<?> provider = new ProviderConfig();
         provider.setInterfaceId("com.alipay.xxx.TestService")
-            .setUniqueId("unique123Id")
-            .setApplication(new ApplicationConfig().setAppName("test-server"))
-            .setProxy("javassist")
-            .setRegister(true)
-            .setRegistry(registryConfig)
-            .setSerialization("hessian2")
-            .setServer(serverConfig)
-            .setWeight(222)
-            .setTimeout(3000);
+                .setUniqueId("unique123Id")
+                .setApplication(new ApplicationConfig().setAppName("test-server"))
+                .setProxy("javassist")
+                .setRegister(true)
+                .setRegistry(registryConfig)
+                .setSerialization("hessian2")
+                .setServer(serverConfig)
+                .setWeight(222)
+                .setTimeout(3000);
 
         // 注册
         registry.register(provider);
 
         ConsumerConfig<?> consumer = new ConsumerConfig();
         consumer.setInterfaceId("com.alipay.xxx.TestService")
-            .setUniqueId("unique123Id")
-            .setApplication(new ApplicationConfig().setAppName("test-server"))
-            .setProxy("javassist")
-            .setSubscribe(true)
-            .setSerialization("java")
-            .setInvokeType("sync")
-            .setTimeout(4444);
+                .setUniqueId("unique123Id")
+                .setApplication(new ApplicationConfig().setAppName("test-server"))
+                .setProxy("javassist")
+                .setSubscribe(true)
+                .setSerialization("java")
+                .setInvokeType("sync")
+                .setTimeout(4444);
 
         // 订阅
         CountDownLatch latch = new CountDownLatch(1);
@@ -115,12 +116,12 @@ public class ZookeeperRegistryTest {
         // 订阅 错误的uniqueId
         ConsumerConfig<?> consumerNoUniqueId = new ConsumerConfig();
         consumerNoUniqueId.setInterfaceId("com.alipay.xxx.TestService")
-            .setApplication(new ApplicationConfig().setAppName("test-server"))
-            .setProxy("javassist")
-            .setSubscribe(true)
-            .setSerialization("java")
-            .setInvokeType("sync")
-            .setTimeout(4444);
+                .setApplication(new ApplicationConfig().setAppName("test-server"))
+                .setProxy("javassist")
+                .setSubscribe(true)
+                .setSerialization("java")
+                .setInvokeType("sync")
+                .setTimeout(4444);
         latch = new CountDownLatch(1);
         providerInfoListener.setCountDownLatch(latch);
         consumerNoUniqueId.setProviderInfoListener(providerInfoListener);
@@ -140,9 +141,9 @@ public class ZookeeperRegistryTest {
         latch = new CountDownLatch(2);
         providerInfoListener.setCountDownLatch(latch);
         provider.getServer().add(new ServerConfig()
-            .setProtocol("bolt")
-            .setHost("0.0.0.0")
-            .setPort(12201));
+                .setProtocol("bolt")
+                .setHost("0.0.0.0")
+                .setPort(12201));
         registry.register(provider);
         latch.await(timeoutPerSub * 2, TimeUnit.MILLISECONDS);
         Assert.assertTrue(ps.size() == 2);
@@ -150,13 +151,13 @@ public class ZookeeperRegistryTest {
         // 重复订阅
         ConsumerConfig<?> consumer2 = new ConsumerConfig();
         consumer2.setInterfaceId("com.alipay.xxx.TestService")
-            .setUniqueId("unique123Id")
-            .setApplication(new ApplicationConfig().setAppName("test-server"))
-            .setProxy("javassist")
-            .setSubscribe(true)
-            .setSerialization("java")
-            .setInvokeType("sync")
-            .setTimeout(4444);
+                .setUniqueId("unique123Id")
+                .setApplication(new ApplicationConfig().setAppName("test-server"))
+                .setProxy("javassist")
+                .setSubscribe(true)
+                .setSerialization("java")
+                .setInvokeType("sync")
+                .setTimeout(4444);
         CountDownLatch latch2 = new CountDownLatch(1);
         MockProviderInfoListener providerInfoListener2 = new MockProviderInfoListener();
         providerInfoListener2.setCountDownLatch(latch2);
@@ -191,7 +192,7 @@ public class ZookeeperRegistryTest {
 
         ConcurrentHashMap<String, ProviderInfo> ps = new ConcurrentHashMap<String, ProviderInfo>();
 
-        private CountDownLatch                  countDownLatch;
+        private CountDownLatch countDownLatch;
 
         public void setCountDownLatch(CountDownLatch countDownLatch) {
             this.countDownLatch = countDownLatch;

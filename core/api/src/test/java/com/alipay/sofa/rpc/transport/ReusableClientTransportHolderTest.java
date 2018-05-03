@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.rpc.transport;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.alipay.sofa.rpc.client.ProviderInfo;
 
 /**
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
@@ -30,19 +31,19 @@ public class ReusableClientTransportHolderTest {
         ReusableClientTransportHolder holder = new ReusableClientTransportHolder();
         ClientTransportConfig config = new ClientTransportConfig();
         config.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12222))
-            .setContainer("test");
+                .setContainer("test");
 
         TestClientTransport clientTransport = (TestClientTransport) holder.getClientTransport(config);
 
         ClientTransportConfig config2 = new ClientTransportConfig();
         config2.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12222))
-            .setContainer("test");
+                .setContainer("test");
         TestClientTransport clientTransport2 = (TestClientTransport) holder.getClientTransport(config2);
         Assert.assertTrue(clientTransport == clientTransport2);
 
         ClientTransportConfig config3 = new ClientTransportConfig();
         config3.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12223))
-            .setContainer("test");
+                .setContainer("test");
         TestClientTransport clientTransport3 = (TestClientTransport) holder.getClientTransport(config3);
         Assert.assertFalse(clientTransport == clientTransport3);
 

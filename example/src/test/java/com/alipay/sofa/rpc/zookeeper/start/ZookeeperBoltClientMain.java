@@ -49,19 +49,19 @@ public class ZookeeperBoltClientMain {
          </dependency>
          */
         RegistryConfig registryConfig = new RegistryConfig()
-            .setProtocol("zookeeper")
-            .setAddress("127.0.0.1:2181");
+                .setProtocol("zookeeper")
+                .setAddress("127.0.0.1:2181");
 
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRegistry(registryConfig)
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setRegistry(registryConfig)
+                .setTimeout(3000);
         HelloService helloService = consumerConfig.refer();
 
         ConsumerConfig<EchoService> consumerConfig2 = new ConsumerConfig<EchoService>()
-            .setInterfaceId(EchoService.class.getName())
-            .setRegistry(registryConfig)
-            .setTimeout(3000);
+                .setInterfaceId(EchoService.class.getName())
+                .setRegistry(registryConfig)
+                .setTimeout(3000);
         EchoService echoService = consumerConfig2.refer();
 
         LOGGER.warn("started at pid {}", RpcRuntimeContext.PID);

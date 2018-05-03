@@ -58,8 +58,7 @@ public class SofaResourceMethodRegistry extends ResourceMethodRegistry {
     }
 
     @Override
-    protected void processMethod(ResourceFactory rf, String base, ResourceLocator method)
-    {
+    protected void processMethod(ResourceFactory rf, String base, ResourceLocator method) {
         ResteasyUriBuilder builder = new ResteasyUriBuilder();
         if (base != null) {
             builder.path(base);
@@ -81,18 +80,15 @@ public class SofaResourceMethodRegistry extends ResourceMethodRegistry {
         }
 
         InjectorFactory injectorFactory = providerFactory.getInjectorFactory();
-        if (method instanceof ResourceMethod)
-        {
+        if (method instanceof ResourceMethod) {
             ResourceMethodInvoker invoker = new SofaResourceMethodInvoker((ResourceMethod) method, injectorFactory, rf,
-                providerFactory); // CHANGE
+                    providerFactory); // CHANGE
             if (widerMatching) {
                 rootNode.addInvoker(fullpath, invoker);
             } else {
                 root.addInvoker(classExpression, fullpath, invoker);
             }
-        }
-        else
-        {
+        } else {
             ResourceLocatorInvoker locator = new ResourceLocatorInvoker(rf, injectorFactory, providerFactory, method);
             if (widerMatching) {
                 rootNode.addInvoker(fullpath, locator);

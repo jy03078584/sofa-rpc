@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.alipay.sofa.rpc.client.ProviderInfo;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
 
 /**
  *

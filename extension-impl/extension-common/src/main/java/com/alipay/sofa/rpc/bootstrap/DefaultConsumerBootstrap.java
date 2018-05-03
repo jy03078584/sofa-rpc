@@ -16,6 +16,16 @@
  */
 package com.alipay.sofa.rpc.bootstrap;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.client.ClientProxyInvoker;
 import com.alipay.sofa.rpc.client.Cluster;
 import com.alipay.sofa.rpc.client.ClusterFactory;
@@ -40,16 +50,6 @@ import com.alipay.sofa.rpc.proxy.ProxyFactory;
 import com.alipay.sofa.rpc.registry.Registry;
 import com.alipay.sofa.rpc.registry.RegistryFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Default consumer bootstrap.
  *
@@ -59,9 +59,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
 
     /**
+     * 发布的调用者配置（含计数器）
+     */
+    protected final static ConcurrentHashMap<String, AtomicInteger> REFERRED_KEYS = new ConcurrentHashMap<String, AtomicInteger>();
+    /**
      * slf4j Logger for this class
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(DefaultConsumerBootstrap.class);
+    /**
+     * 代理实现类
+     */
+    protected transient volatile T proxyIns;
+
+    /**
+     * 代理的Invoker对象
+     */
+    protected transient volatile Invoker proxyInvoker;
+
+    /**
+     * 调用类
+     */
+    protected transient volatile Cluster cluster;
+
+    /**
+     * 计数器
+     */
+    protected transient volatile CountDownLatch respondRegistries;
 
     /**
      * 构造函数
@@ -71,31 +94,6 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
     protected DefaultConsumerBootstrap(ConsumerConfig<T> consumerConfig) {
         super(consumerConfig);
     }
-
-    /**
-     * 代理实现类
-     */
-    protected transient volatile T                                  proxyIns;
-
-    /**
-     * 代理的Invoker对象
-     */
-    protected transient volatile Invoker                            proxyInvoker;
-
-    /**
-     * 调用类
-     */
-    protected transient volatile Cluster                            cluster;
-
-    /**
-     * 计数器
-     */
-    protected transient volatile CountDownLatch                     respondRegistries;
-
-    /**
-     * 发布的调用者配置（含计数器）
-     */
-    protected final static ConcurrentHashMap<String, AtomicInteger> REFERRED_KEYS = new ConcurrentHashMap<String, AtomicInteger>();
 
     @Override
     public T refer() {
@@ -127,14 +125,14 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                     cnt.decrementAndGet();
                     // 超过最大数量，直接抛出异常
                     throw new SofaRpcRuntimeException("Duplicate consumer config with key " + key
-                        + " has been referred more than " + maxProxyCount + " times!"
-                        + " Maybe it's wrong config, please check it."
-                        + " Ignore this if you did that on purpose!");
+                            + " has been referred more than " + maxProxyCount + " times!"
+                            + " Maybe it's wrong config, please check it."
+                            + " Ignore this if you did that on purpose!");
                 } else if (c > 1) {
                     if (LOGGER.isInfoEnabled(appName)) {
                         LOGGER.infoWithApp(appName, "Duplicate consumer config with key {} has been referred!"
-                            + " Maybe it's wrong config, please check it."
-                            + " Ignore this if you did that on purpose!", key);
+                                + " Maybe it's wrong config, please check it."
+                                + " Ignore this if you did that on purpose!", key);
                     }
                 }
             }
@@ -151,7 +149,7 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                 proxyInvoker = buildClientProxyInvoker(this);
                 // 创建代理类
                 proxyIns = (T) ProxyFactory.buildProxy(consumerConfig.getProxy(), consumerConfig.getProxyClass(),
-                    proxyInvoker);
+                        proxyInvoker);
             } catch (Exception e) {
                 if (cluster != null) {
                     cluster.destroy();
@@ -226,7 +224,7 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
         } catch (Exception e) {
             if (LOGGER.isWarnEnabled(appName)) {
                 LOGGER.warnWithApp(appName, "Catch exception when unrefer consumer config : " + key
-                    + ", but you can ignore if it's called by JVM shutdown hook", e);
+                        + ", but you can ignore if it's called by JVM shutdown hook", e);
             }
         }
         // 清除一些缓存
@@ -312,7 +310,7 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
         // 是否等待结果
         int addressWaitTime = consumerConfig.getAddressWait();
         int maxAddressWaitTime = SofaConfigs.getIntegerValue(consumerConfig.getAppName(),
-            SofaOptions.CONFIG_MAX_ADDRESS_WAIT_TIME, SofaOptions.MAX_ADDRESS_WAIT_TIME);
+                SofaOptions.CONFIG_MAX_ADDRESS_WAIT_TIME, SofaOptions.MAX_ADDRESS_WAIT_TIME);
         addressWaitTime = addressWaitTime < 0 ? maxAddressWaitTime : Math.min(addressWaitTime, maxAddressWaitTime);
 
         ProviderInfoListener listener = consumerConfig.getProviderInfoListener();
@@ -330,7 +328,7 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                 try {
                     if (respondRegistries != null) {
                         consumerConfig.setProviderInfoListener(new WrapperClusterProviderInfoListener(listener,
-                            respondRegistries));
+                                respondRegistries));
                     }
                     current = registry.subscribe(consumerConfig);
                 } finally {
@@ -362,8 +360,8 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                 String appName = consumerConfig.getAppName();
                 if (LOGGER.isWarnEnabled(appName)) {
                     LOGGER.warnWithApp(appName,
-                        "Catch exception when subscribe from registry: " + registryConfig.getId()
-                            + ", but you can ignore if it's called by JVM shutdown hook", e);
+                            "Catch exception when subscribe from registry: " + registryConfig.getId()
+                                    + ", but you can ignore if it's called by JVM shutdown hook", e);
                 }
             }
         }
@@ -391,13 +389,32 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                         String appName = consumerConfig.getAppName();
                         if (LOGGER.isWarnEnabled(appName)) {
                             LOGGER.warnWithApp(appName,
-                                "Catch exception when unSubscribe from registry: " + registryConfig.getId()
-                                    + ", but you can ignore if it's called by JVM shutdown hook", e);
+                                    "Catch exception when unSubscribe from registry: " + registryConfig.getId()
+                                            + ", but you can ignore if it's called by JVM shutdown hook", e);
                         }
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public Cluster getCluster() {
+        return cluster;
+    }
+
+    @Override
+    public T getProxyIns() {
+        return proxyIns;
+    }
+
+    /**
+     * 得到实现代理类Invoker
+     *
+     * @return 实现代理类Invoker proxy invoker
+     */
+    public Invoker getProxyInvoker() {
+        return proxyInvoker;
     }
 
     /**
@@ -416,7 +433,7 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
         /**
          * Has been respond
          */
-        private AtomicBoolean        hasRespond = new AtomicBoolean(false);
+        private AtomicBoolean hasRespond = new AtomicBoolean(false);
 
         public WrapperClusterProviderInfoListener(ProviderInfoListener providerInfoListener,
                                                   CountDownLatch respondRegistries) {
@@ -474,7 +491,7 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
             Map<String, String> oldValues = new HashMap<String, String>();
             boolean rerefer = false;
             try { // 检查是否有变化
-                  // 是否过滤map?
+                // 是否过滤map?
                 for (Map.Entry<String, String> entry : newValues.entrySet()) {
                     String newValue = entry.getValue();
                     String oldValue = consumerConfig.queryAttribute(entry.getKey());
@@ -549,24 +566,5 @@ public class DefaultConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                 }
             }
         }
-    }
-
-    @Override
-    public Cluster getCluster() {
-        return cluster;
-    }
-
-    @Override
-    public T getProxyIns() {
-        return proxyIns;
-    }
-
-    /**
-     * 得到实现代理类Invoker
-     *
-     * @return 实现代理类Invoker proxy invoker
-     */
-    public Invoker getProxyInvoker() {
-        return proxyInvoker;
     }
 }

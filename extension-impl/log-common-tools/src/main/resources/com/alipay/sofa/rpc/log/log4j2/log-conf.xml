@@ -48,7 +48,8 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="RPC-REGISTRY-APPENDER" fileName="${RPC_LOG_PATH}/rpc/${APP_NAME}/rpc-registry.log" append="true"
+        <RollingFile name="RPC-REGISTRY-APPENDER" fileName="${RPC_LOG_PATH}/rpc/${APP_NAME}/rpc-registry.log"
+                     append="true"
                      filePattern="${RPC_LOG_PATH}/rpc/${APP_NAME}/rpc-registry.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
@@ -84,7 +85,8 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="RPC-TRANSPORT-APPENDER" fileName="${RPC_LOG_PATH}/rpc/${APP_NAME}/rpc-transport.log" append="true"
+        <RollingFile name="RPC-TRANSPORT-APPENDER" fileName="${RPC_LOG_PATH}/rpc/${APP_NAME}/rpc-transport.log"
+                     append="true"
                      filePattern="${RPC_LOG_PATH}/rpc/${APP_NAME}/rpc-transport.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">

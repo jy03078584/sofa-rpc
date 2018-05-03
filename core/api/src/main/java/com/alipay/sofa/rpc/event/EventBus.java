@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.event;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import com.alipay.sofa.rpc.common.RpcConfigs;
 import com.alipay.sofa.rpc.common.RpcOptions;
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
@@ -24,9 +27,6 @@ import com.alipay.sofa.rpc.context.RpcInternalContext;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 /**
  * Simply event bus for internal event transport.
  *
@@ -34,13 +34,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class EventBus {
 
-    private static final Logger  LOGGER           = LoggerFactory.getLogger(EventBus.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventBus.class);
 
     /**
      * 是否允许携带上下文附件，关闭后只能传递"."开头的key，"_" 开头的Key将不被保持和传递。<br>
      * 在性能测试等场景可能关闭此传递功能。
      */
     private static final boolean EVENT_BUS_ENABLE = RpcConfigs.getBooleanValue(RpcOptions.EVENT_BUS_ENABLE);
+    /**
+     * 某中事件的订阅者
+     */
+    private final static ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>> SUBSCRIBER_MAP = new ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>>();
 
     /**
      * 是否开启事件总线功能
@@ -60,11 +64,6 @@ public class EventBus {
     public static boolean isEnable(Class<? extends Event> eventClass) {
         return EVENT_BUS_ENABLE && CommonUtils.isNotEmpty(SUBSCRIBER_MAP.get(eventClass));
     }
-
-    /**
-     * 某中事件的订阅者
-     */
-    private final static ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>> SUBSCRIBER_MAP = new ConcurrentHashMap<Class<? extends Event>, CopyOnWriteArraySet<Subscriber>>();
 
     /**
      * 注册一个订阅者
@@ -120,17 +119,17 @@ public class EventBus {
                 } else { // 异步
                     final RpcInternalContext context = RpcInternalContext.peekContext();
                     AsyncRuntime.getAsyncThreadPool().execute(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    RpcInternalContext.setContext(context);
-                                    handleEvent(subscriber, event);
-                                } catch (Exception e) {
-                                    RpcInternalContext.removeContext();
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        RpcInternalContext.setContext(context);
+                                        handleEvent(subscriber, event);
+                                    } catch (Exception e) {
+                                        RpcInternalContext.removeContext();
+                                    }
                                 }
-                            }
-                        });
+                            });
                 }
             }
         }

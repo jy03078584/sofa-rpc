@@ -16,6 +16,12 @@
  */
 package com.alipay.sofa.rpc.transport.rest;
 
+import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
+
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.ReflectCache;
 import com.alipay.sofa.rpc.common.utils.ClassUtils;
@@ -28,11 +34,6 @@ import com.alipay.sofa.rpc.event.EventBus;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.transport.AbstractProxyClientTransport;
 import com.alipay.sofa.rpc.transport.ClientTransportConfig;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-
-import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Rest proxy client transport
@@ -50,15 +51,15 @@ public class RestClientTransport extends AbstractProxyClientTransport {
         SofaResteasyClientBuilder builder = new SofaResteasyClientBuilder();
 
         ResteasyClient client = builder
-            .registerProvider().logProviders()
-            .establishConnectionTimeout(transportConfig.getConnectTimeout(), TimeUnit.MILLISECONDS)
-            .socketTimeout(transportConfig.getInvokeTimeout(), TimeUnit.MILLISECONDS)
-            .connectionPoolSize(transportConfig.getConnectionNum())// 连接池？
-            .build();
+                .registerProvider().logProviders()
+                .establishConnectionTimeout(transportConfig.getConnectTimeout(), TimeUnit.MILLISECONDS)
+                .socketTimeout(transportConfig.getInvokeTimeout(), TimeUnit.MILLISECONDS)
+                .connectionPoolSize(transportConfig.getConnectionNum())// 连接池？
+                .build();
 
         ProviderInfo provider = transportConfig.getProviderInfo();
         String url = "http://" + provider.getHost() + ":" + provider.getPort()
-            + StringUtils.CONTEXT_SEP + StringUtils.trimToEmpty(provider.getPath());
+                + StringUtils.CONTEXT_SEP + StringUtils.trimToEmpty(provider.getPath());
         ResteasyWebTarget target = client.target(url);
         return target.proxy(ClassUtils.forName(transportConfig.getConsumerConfig().getInterfaceId()));
     }
@@ -66,7 +67,7 @@ public class RestClientTransport extends AbstractProxyClientTransport {
     @Override
     protected Method getMethod(SofaRequest request) throws SofaRpcException {
         return ReflectCache.getOrInitServiceMethod(request.getTargetServiceUniqueName(), request.getMethodName(),
-            request.getMethodArgSigs(), true, request.getInterfaceName());
+                request.getMethodArgSigs(), true, request.getInterfaceName());
     }
 
     /**

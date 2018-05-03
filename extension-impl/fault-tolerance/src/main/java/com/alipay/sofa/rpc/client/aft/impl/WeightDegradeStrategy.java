@@ -60,10 +60,10 @@ public class WeightDegradeStrategy extends LogPrintDegradeStrategy {
         boolean success = ProviderInfoWeightManager.degradeWeight(providerInfo, degradeWeight);
         if (success && LOGGER.isInfoEnabled(appName)) {
             LOGGER.infoWithApp(appName, "the weight was degraded. serviceUniqueName:["
-                + statDimension.getService() + "],ip:["
-                + statDimension.getIp() + "],origin weight:["
-                + currentWeight + "],degraded weight:["
-                + degradeWeight + "].");
+                    + statDimension.getService() + "],ip:["
+                    + statDimension.getIp() + "],origin weight:["
+                    + currentWeight + "],degraded weight:["
+                    + degradeWeight + "].");
         }
     }
 }

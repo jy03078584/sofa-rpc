@@ -23,7 +23,7 @@ package com.alipay.sofa.rpc.test;
  */
 public class HelloServiceImpl implements HelloService {
 
-    private int    sleep;
+    private int sleep;
 
     private String result;
 

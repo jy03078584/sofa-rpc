@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.rpc.bootstrap;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
 import com.alipay.sofa.rpc.common.utils.ExceptionUtils;
 import com.alipay.sofa.rpc.common.utils.ReflectUtils;
@@ -34,13 +41,6 @@ import com.alipay.sofa.rpc.registry.RegistryFactory;
 import com.alipay.sofa.rpc.server.ProviderProxyInvoker;
 import com.alipay.sofa.rpc.server.Server;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Default provider bootstrap.
  *
@@ -52,6 +52,19 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
      * slf4j Logger for this class
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(DefaultProviderBootstrap.class);
+    /**
+     * 发布的服务配置
+     */
+    protected final ConcurrentHashMap<String, AtomicInteger> EXPORTED_KEYS = new ConcurrentHashMap<String, AtomicInteger>();
+    /**
+     * 是否已发布
+     */
+    protected transient volatile boolean exported;
+
+    /**
+     * 服务端Invoker对象
+     */
+    protected transient Invoker providerProxyInvoker;
 
     /**
      * 构造函数
@@ -61,21 +74,6 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
     protected DefaultProviderBootstrap(ProviderConfig<T> providerConfig) {
         super(providerConfig);
     }
-
-    /**
-     * 是否已发布
-     */
-    protected transient volatile boolean                     exported;
-
-    /**
-     * 服务端Invoker对象
-     */
-    protected transient Invoker                              providerProxyInvoker;
-
-    /**
-     * 发布的服务配置
-     */
-    protected final ConcurrentHashMap<String, AtomicInteger> EXPORTED_KEYS = new ConcurrentHashMap<String, AtomicInteger>();
 
     @Override
     public void export() {
@@ -122,14 +120,14 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                 cnt.decrementAndGet();
                 // 超过最大数量，直接抛出异常
                 throw new SofaRpcRuntimeException("Duplicate provider config with key " + key
-                    + " has been exported more than " + maxProxyCount + " times!"
-                    + " Maybe it's wrong config, please check it."
-                    + " Ignore this if you did that on purpose!");
+                        + " has been exported more than " + maxProxyCount + " times!"
+                        + " Maybe it's wrong config, please check it."
+                        + " Ignore this if you did that on purpose!");
             } else if (c > 1) {
                 if (LOGGER.isInfoEnabled(appName)) {
                     LOGGER.infoWithApp(appName, "Duplicate provider config with key {} has been exported!"
-                        + " Maybe it's wrong config, please check it."
-                        + " Ignore this if you did that on purpose!", key);
+                            + " Maybe it's wrong config, please check it."
+                            + " Ignore this if you did that on purpose!", key);
                 }
             }
         }
@@ -160,7 +158,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                     throw e;
                 } catch (Exception e) {
                     LOGGER.errorWithApp(appName, "Catch exception when register processor to server: "
-                        + serverConfig.getId(), e);
+                            + serverConfig.getId(), e);
                 }
             }
 
@@ -191,21 +189,21 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
         T ref = providerConfig.getRef();
         if (!proxyClass.isInstance(ref)) {
             throw ExceptionUtils.buildRuntime("provider.ref",
-                ref == null ? "null" : ref.getClass().getName(),
-                "This is not an instance of " + providerConfig.getInterfaceId()
-                    + " in provider config with key " + key + " !");
+                    ref == null ? "null" : ref.getClass().getName(),
+                    "This is not an instance of " + providerConfig.getInterfaceId()
+                            + " in provider config with key " + key + " !");
         }
         // server 不能为空
         if (CommonUtils.isEmpty(providerConfig.getServer())) {
             throw ExceptionUtils.buildRuntime("server", "NULL", "Value of \"server\" is not specified in provider" +
-                " config with key " + key + " !");
+                    " config with key " + key + " !");
         }
         checkMethods(proxyClass);
     }
 
     /**
      * 检查方法，例如方法名、多态（重载）方法
-     * 
+     *
      * @param itfClass 接口类
      */
     protected void checkMethods(Class<?> itfClass) {
@@ -216,7 +214,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                 // 重名的方法
                 if (LOGGER.isWarnEnabled(providerConfig.getAppName())) {
                     LOGGER.warnWithApp(providerConfig.getAppName(), "Method with same name \"" + itfClass.getName()
-                        + "." + methodName + "\" exists ! The usage of overloading method in rpc is deprecated.");
+                            + "." + methodName + "\" exists ! The usage of overloading method in rpc is deprecated.");
                 }
             }
             // 判断服务下方法的黑白名单
@@ -244,7 +242,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
             String appName = providerConfig.getAppName();
             if (LOGGER.isInfoEnabled(appName)) {
                 LOGGER.infoWithApp(appName, "Unexport provider config : {} {}", key, providerConfig.getId() != null
-                    ? "with bean id " + providerConfig.getId() : "");
+                        ? "with bean id " + providerConfig.getId() : "");
             }
 
             // 取消注册到注册中心
@@ -263,8 +261,8 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                         } catch (Exception e) {
                             if (LOGGER.isWarnEnabled(appName)) {
                                 LOGGER.warnWithApp(appName, "Catch exception when unRegister processor to server: " +
-                                    serverConfig.getId()
-                                    + ", but you can ignore if it's called by JVM shutdown hook", e);
+                                        serverConfig.getId()
+                                        + ", but you can ignore if it's called by JVM shutdown hook", e);
                             }
                         }
                     }
@@ -302,7 +300,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                         String appName = providerConfig.getAppName();
                         if (LOGGER.isWarnEnabled(appName)) {
                             LOGGER.warnWithApp(appName, "Catch exception when register to registry: "
-                                + registryConfig.getId(), e);
+                                    + registryConfig.getId(), e);
                         }
                     }
                 }
@@ -325,12 +323,39 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                         String appName = providerConfig.getAppName();
                         if (LOGGER.isWarnEnabled(appName)) {
                             LOGGER.warnWithApp(appName, "Catch exception when unRegister from registry: " +
-                                registryConfig.getId()
-                                + ", but you can ignore if it's called by JVM shutdown hook", e);
+                                    registryConfig.getId()
+                                    + ", but you can ignore if it's called by JVM shutdown hook", e);
                         }
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 接口可以按方法发布
+     *
+     * @param includeMethods 包含的方法列表
+     * @param excludeMethods 不包含的方法列表
+     * @param methodName     方法名
+     * @return 方法
+     */
+    protected boolean inList(String includeMethods, String excludeMethods, String methodName) {
+        //判断是否在白名单中
+        if (includeMethods != null && !StringUtils.ALL.equals(includeMethods)) {
+            includeMethods = includeMethods + ",";
+            boolean inWhite = includeMethods.contains(methodName + ",");
+            if (!inWhite) {
+                return false;
+            }
+        }
+        //判断是否在黑白单中
+        if (StringUtils.isBlank(excludeMethods)) {
+            return true;
+        } else {
+            excludeMethods = excludeMethods + ",";
+            boolean inBlack = excludeMethods.contains(methodName + ",");
+            return !inBlack;
         }
     }
 
@@ -353,7 +378,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
 
             // TODO 可能需要处理ServerConfig的配置变化
             try { // 检查是否有变化
-                  // 是否过滤map?
+                // 是否过滤map?
                 for (Map.Entry<String, String> entry : newValues.entrySet()) {
                     String newValue = entry.getValue();
                     String oldValue = providerConfig.queryAttribute(entry.getKey());
@@ -390,33 +415,6 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                 }
             }
 
-        }
-    }
-
-    /**
-     * 接口可以按方法发布
-     *
-     * @param includeMethods 包含的方法列表
-     * @param excludeMethods 不包含的方法列表
-     * @param methodName     方法名
-     * @return 方法
-     */
-    protected boolean inList(String includeMethods, String excludeMethods, String methodName) {
-        //判断是否在白名单中
-        if (includeMethods != null && !StringUtils.ALL.equals(includeMethods)) {
-            includeMethods = includeMethods + ",";
-            boolean inWhite = includeMethods.contains(methodName + ",");
-            if (!inWhite) {
-                return false;
-            }
-        }
-        //判断是否在黑白单中
-        if (StringUtils.isBlank(excludeMethods)) {
-            return true;
-        } else {
-            excludeMethods = excludeMethods + ",";
-            boolean inBlack = excludeMethods.contains(methodName + ",");
-            return !inBlack;
         }
     }
 }

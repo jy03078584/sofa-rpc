@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.codec.anthessian;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import com.alipay.hessian.generic.io.GenericArraySerializer;
 import com.alipay.hessian.generic.io.GenericClassDeserializer;
 import com.alipay.hessian.generic.io.GenericClassSerializer;
@@ -34,16 +37,13 @@ import com.caucho.hessian.io.Deserializer;
 import com.caucho.hessian.io.HessianProtocolException;
 import com.caucho.hessian.io.Serializer;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 /**
- * 
+ *
  * @author <a href="mailto:caojie.cj@antfin.com">CaoJie</a>
  */
 public class GenericSingleClassLoaderSofaSerializerFactory extends SingleClassLoaderSofaSerializerFactory {
 
-    private static final char                                ARRAY_PREFIX     = '[';
+    private static final char ARRAY_PREFIX = '[';
 
     private static final ConcurrentMap<String, Deserializer> DESERIALIZER_MAP = new ConcurrentHashMap<String, Deserializer>();
 

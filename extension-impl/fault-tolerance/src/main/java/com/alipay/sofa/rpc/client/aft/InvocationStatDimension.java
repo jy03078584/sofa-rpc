@@ -33,7 +33,7 @@ public class InvocationStatDimension {
     /**
      * One provider of service reference
      */
-    private final ProviderInfo   providerInfo;
+    private final ProviderInfo providerInfo;
 
     /**
      * Config of service reference
@@ -43,11 +43,11 @@ public class InvocationStatDimension {
     /**
      * cache value: dimensionKey
      */
-    private transient String     dimensionKey;
+    private transient String  dimensionKey;
     /**
      * cache value : originWeight
      */
-    private transient Integer    originWeight;
+    private transient Integer originWeight;
 
     /**
      * Instantiates a new Invocation stat dimension.
@@ -116,7 +116,7 @@ public class InvocationStatDimension {
                 originWeight = RpcConfigs.getIntValue(RpcOptions.PROVIDER_WEIGHT);
             } else {
                 originWeight = CommonUtils.parseInt(providerInfo.getStaticAttr(ProviderInfoAttrs.ATTR_WEIGHT),
-                    RpcConfigs.getIntValue(RpcOptions.PROVIDER_WEIGHT));
+                        RpcConfigs.getIntValue(RpcOptions.PROVIDER_WEIGHT));
             }
         }
         return originWeight;

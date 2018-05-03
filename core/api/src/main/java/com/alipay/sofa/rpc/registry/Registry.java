@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.registry;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.base.Destroyable;
 import com.alipay.sofa.rpc.base.Initializable;
 import com.alipay.sofa.rpc.client.ProviderGroup;
@@ -23,8 +25,6 @@ import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.ext.Extensible;
-
-import java.util.List;
 
 /**
  * Registry SPI

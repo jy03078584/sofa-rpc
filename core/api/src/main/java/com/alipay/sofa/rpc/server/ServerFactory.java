@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.rpc.server;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.common.RpcConfigs;
 import com.alipay.sofa.rpc.common.RpcOptions;
 import com.alipay.sofa.rpc.common.SystemInfo;
@@ -30,11 +35,6 @@ import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * Factory of server
  *
@@ -46,7 +46,7 @@ public final class ServerFactory {
      * slf4j Logger for this class
      */
     private final static Logger                            LOGGER     = LoggerFactory
-                                                                          .getLogger(ServerFactory.class);
+            .getLogger(ServerFactory.class);
     /**
      * 全部服务端
      */
@@ -66,10 +66,10 @@ public final class ServerFactory {
                 resolveServerConfig(serverConfig);
 
                 ExtensionClass<Server> ext = ExtensionLoaderFactory.getExtensionLoader(Server.class)
-                    .getExtensionClass(serverConfig.getProtocol());
+                        .getExtensionClass(serverConfig.getProtocol());
                 if (ext == null) {
                     throw ExceptionUtils.buildRuntime("server.protocol", serverConfig.getProtocol(),
-                        "Unsupported protocol of server!");
+                            "Unsupported protocol of server!");
                 }
                 server = ext.getExtInstance();
                 server.init(serverConfig);
@@ -108,7 +108,7 @@ public final class ServerFactory {
         if (serverConfig.isAdaptivePort()) {
             int oriPort = serverConfig.getPort();
             int port = NetUtils.getAvailablePort(boundHost, oriPort,
-                RpcConfigs.getIntValue(RpcOptions.SERVER_PORT_END));
+                    RpcConfigs.getIntValue(RpcOptions.SERVER_PORT_END));
             if (port != oriPort) {
                 if (LOGGER.isInfoEnabled()) {
                     LOGGER.info("Changed port from {} to {} because the config port is disabled", oriPort, port);

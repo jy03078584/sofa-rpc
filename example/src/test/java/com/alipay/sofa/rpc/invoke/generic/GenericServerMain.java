@@ -31,14 +31,14 @@ public class GenericServerMain {
         ApplicationConfig applicationConfig = new ApplicationConfig().setAppName("generic-server");
 
         ServerConfig serverConfig2 = new ServerConfig()
-            .setPort(22222)
-            .setDaemon(false);
+                .setPort(22222)
+                .setDaemon(false);
 
         ProviderConfig<TestGenericService> providerConfig = new ProviderConfig<TestGenericService>()
-            .setApplication(applicationConfig)
-            .setInterfaceId(TestGenericService.class.getName())
-            .setRef(new TestGenericServiceImpl())
-            .setServer(serverConfig2);
+                .setApplication(applicationConfig)
+                .setInterfaceId(TestGenericService.class.getName())
+                .setRef(new TestGenericServiceImpl())
+                .setServer(serverConfig2);
         providerConfig.export();
     }
 }

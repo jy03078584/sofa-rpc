@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.rpc.message.bolt;
 
-import com.alipay.sofa.rpc.context.RpcRuntimeContext;
-import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import com.alipay.sofa.rpc.message.ResponseFuture;
-
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import com.alipay.sofa.rpc.context.RpcRuntimeContext;
+import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
+import com.alipay.sofa.rpc.message.ResponseFuture;
 
 /**
  * Future of bolt.
@@ -37,33 +37,20 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
      * sofa请求
      */
     protected final SofaRequest request;
-
+    /**
+     * 用户设置的超时时间
+     */
+    private final int timeout;
+    /**
+     * Future生成时间
+     */
+    private final long genTime = RpcRuntimeContext.now();
     /**
      * 返回的结果。如果返回的是异常，那就是个CauseHolder对象
      *
      * @see CauseHolder
      */
-    private volatile Object     result;
-
-    /**
-     * 异常包装类
-     */
-    private static final class CauseHolder {
-        final Throwable cause;
-
-        private CauseHolder(Throwable cause) {
-            this.cause = cause;
-        }
-    }
-
-    /**
-     * 用户设置的超时时间
-     */
-    private final int     timeout;
-    /**
-     * Future生成时间
-     */
-    private final long    genTime = RpcRuntimeContext.now();
+    private volatile Object result;
     /**
      * Future已发送时间
      */
@@ -72,6 +59,7 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
      * Future完成的时间
      */
     private volatile long doneTime;
+    private short waiters;
 
     /**
      * 构造函数
@@ -133,7 +121,7 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
     }
 
     private boolean await(long timeout, TimeUnit unit)
-        throws InterruptedException {
+            throws InterruptedException {
         return await0(unit.toNanos(timeout), true);
     }
 
@@ -161,7 +149,7 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
                 //checkDeadLock(); need this check?
                 incWaiters();
                 try {
-                    for (;;) {
+                    for (; ; ) {
                         try {
                             wait(waitTime / 1000000, (int) (waitTime % 1000000));
                         } catch (InterruptedException e) {
@@ -191,8 +179,6 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
             }
         }
     }
-
-    private short waiters;
 
     private boolean hasWaiters() {
         return waiters > 0;
@@ -303,6 +289,17 @@ public class BoltResponseFuture<V> implements ResponseFuture<V> {
     @Override
     public ResponseFuture addListener(SofaResponseCallback sofaResponseCallback) {
         throw new UnsupportedOperationException("Not supported, Please use callback function");
+    }
+
+    /**
+     * 异常包装类
+     */
+    private static final class CauseHolder {
+        final Throwable cause;
+
+        private CauseHolder(Throwable cause) {
+            this.cause = cause;
+        }
     }
 
 }

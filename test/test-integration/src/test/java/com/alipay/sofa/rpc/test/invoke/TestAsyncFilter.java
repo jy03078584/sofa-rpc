@@ -36,7 +36,7 @@ public class TestAsyncFilter extends Filter {
 
     @Override
     public void onAsyncResponse(ConsumerConfig config, SofaRequest request, SofaResponse response, Throwable throwable)
-        throws SofaRpcException {
+            throws SofaRpcException {
         if (request.isAsync() && response != null) {
             response.setAppResponse(response.getAppResponse() + "append by async filter");
         }

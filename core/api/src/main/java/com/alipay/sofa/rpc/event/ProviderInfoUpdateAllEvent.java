@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.event;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
-
-import java.util.List;
 
 /**
  * ProviderInfoUpdateAllEvent

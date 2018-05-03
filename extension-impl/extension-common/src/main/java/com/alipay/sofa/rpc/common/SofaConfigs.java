@@ -16,14 +16,6 @@
  */
 package com.alipay.sofa.rpc.common;
 
-import com.alipay.sofa.rpc.base.Sortable;
-import com.alipay.sofa.rpc.common.struct.OrderedComparator;
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-import com.alipay.sofa.rpc.common.utils.StringUtils;
-import com.alipay.sofa.rpc.log.LogCodes;
-import com.alipay.sofa.rpc.log.Logger;
-import com.alipay.sofa.rpc.log.LoggerFactory;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +23,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import com.alipay.sofa.rpc.base.Sortable;
+import com.alipay.sofa.rpc.common.struct.OrderedComparator;
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
+import com.alipay.sofa.rpc.log.LogCodes;
+import com.alipay.sofa.rpc.log.Logger;
+import com.alipay.sofa.rpc.log.LoggerFactory;
 
 /**
  * Sofa RPC 与配置相关的工具类，不依赖于 Sofa 框架的配置 <br>
@@ -45,7 +45,7 @@ public final class SofaConfigs {
     /**
      * 日志
      */
-    private static final Logger                     LOGGER         = LoggerFactory.getLogger(SofaConfigs.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SofaConfigs.class);
 
     /**
      * 外部加载器
@@ -54,20 +54,20 @@ public final class SofaConfigs {
     /**
      * loader变化的锁
      */
-    private static ReentrantReadWriteLock           lock           = new ReentrantReadWriteLock();
+    private static       ReentrantReadWriteLock     lock           = new ReentrantReadWriteLock();
     /**
      * 读锁，允许并发读 
      */
-    private static Lock                             rLock          = lock.readLock();
+    private static       Lock                       rLock          = lock.readLock();
     /**
      * 写锁，写的时候不允许读 
      */
-    private static Lock                             wLock          = lock.writeLock();
+    private static       Lock                       wLock          = lock.writeLock();
 
     /**
      * rpc-config.properties
      */
-    private static Properties                       config;
+    private static Properties config;
 
     /**
      * 初始化 config/rpc-config.properties
@@ -82,7 +82,7 @@ public final class SofaConfigs {
                 InputStream ins = SofaConfigs.class.getClassLoader().getResourceAsStream(rpcConfig);
                 if (ins == null) {
                     ins = Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream(rpcConfig);
+                            .getResourceAsStream(rpcConfig);
                 }
 
                 config = new Properties();
@@ -189,7 +189,7 @@ public final class SofaConfigs {
         try {
             for (ExternalConfigLoader configLoader : CONFIG_LOADERS) {
                 ret = appName == null ? configLoader.getValue(key)
-                    : configLoader.getValue(appName, key);
+                        : configLoader.getValue(appName, key);
                 if (StringUtils.isNotEmpty(ret)) {
                     return ret;
                 }

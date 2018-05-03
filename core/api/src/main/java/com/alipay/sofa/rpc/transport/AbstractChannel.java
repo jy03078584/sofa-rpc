@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.rpc.transport;
 
-import com.alipay.sofa.rpc.common.annotation.Unstable;
-
 import java.net.InetSocketAddress;
+
+import com.alipay.sofa.rpc.common.annotation.Unstable;
 
 /**
  * AbstractChannel

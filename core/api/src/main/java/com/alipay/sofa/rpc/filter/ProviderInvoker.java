@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.filter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.context.RpcInternalContext;
@@ -24,9 +27,6 @@ import com.alipay.sofa.rpc.core.exception.RpcErrorType;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * 服务端调用业务实现类
@@ -91,7 +91,7 @@ public class ProviderInvoker<T> extends FilterInvoker {
             if (RpcInternalContext.isAttachmentEnable()) {
                 long endTime = RpcRuntimeContext.now();
                 RpcInternalContext.getContext().setAttachment(RpcConstants.INTERNAL_KEY_IMPL_ELAPSE,
-                    endTime - startTime);
+                        endTime - startTime);
             }
         }
 

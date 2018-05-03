@@ -16,22 +16,22 @@
  */
 package com.alipay.sofa.rpc.log.factory;
 
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-import com.alipay.sofa.common.log.SpaceId;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alipay.sofa.common.log.LoggerSpaceManager;
+import com.alipay.sofa.common.log.SpaceId;
+
 /**
  * 自定义 rpc 的打印日志工厂
- * 
+ *
  * @author <a href=mailto:guanchao.ygc@antfin.com>Guanchao Yang</a>
  */
 public class RpcLoggerFactory {
 
-    public static final String  RPC_LOG_SPACE = "com.alipay.sofa.rpc";
+    public static final String RPC_LOG_SPACE = "com.alipay.sofa.rpc";
 
-    private static final String APPNAME       = "appname";
+    private static final String APPNAME = "appname";
 
     /**
      * 获取日志对象

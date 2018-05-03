@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import org.junit.BeforeClass;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
-import org.junit.BeforeClass;
 
 /**
  *
@@ -33,25 +34,25 @@ public abstract class BaseRestTest extends ActivelyDestroyTest {
     @BeforeClass
     public static void before() {
         ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(60000)
-            .setPort(8803)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_REST);
+                .setStopTimeout(60000)
+                .setPort(8803)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_REST);
 
         ProviderConfig<RestService> providerConfig = new ProviderConfig<RestService>()
-            .setInterfaceId(RestService.class.getName())
-            .setRef(new RestServiceImpl())
-            .setServer(serverConfig)
-            .setBootstrap("rest")
-            .setRegister(false);
+                .setInterfaceId(RestService.class.getName())
+                .setRef(new RestServiceImpl())
+                .setServer(serverConfig)
+                .setBootstrap("rest")
+                .setRegister(false);
         providerConfig.export();
 
         ConsumerConfig<RestService> consumerConfig = new ConsumerConfig<RestService>()
-            .setInterfaceId(RestService.class.getName())
-            .setDirectUrl("rest://127.0.0.1:8803")
-            .setProtocol("rest")
-            .setBootstrap("rest")
-            .setTimeout(30000)
-            .setRegister(false);
+                .setInterfaceId(RestService.class.getName())
+                .setDirectUrl("rest://127.0.0.1:8803")
+                .setProtocol("rest")
+                .setBootstrap("rest")
+                .setTimeout(30000)
+                .setRegister(false);
         restService = consumerConfig.refer();
     }
 

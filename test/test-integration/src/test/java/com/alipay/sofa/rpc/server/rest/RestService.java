@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import java.net.URISyntaxException;
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.validation.constraints.Min;
 import javax.ws.rs.Consumes;
@@ -31,8 +34,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URISyntaxException;
-import java.util.List;
 
 /**
  *

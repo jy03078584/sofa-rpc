@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.codec.antpb;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.remoting.exception.CodecException;
 import com.alipay.remoting.exception.DeserializationException;
 import com.alipay.remoting.exception.SerializationException;
@@ -24,10 +28,6 @@ import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.common.RpcOptions;
 import com.alipay.sofa.rpc.common.utils.ClassUtils;
 import com.google.protobuf.MessageLite;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Protobuf serializer.
@@ -39,25 +39,25 @@ public class ProtobufSerializer {
     /**
      * Singleton instance
      */
-    private static final ProtobufSerializer  INSTANCE             = new ProtobufSerializer();
+    private static final ProtobufSerializer INSTANCE             = new ProtobufSerializer();
     /**
      * Encode method name
      */
-    private static final String              METHOD_TOBYTEARRAY   = "toByteArray";
+    private static final String             METHOD_TOBYTEARRAY   = "toByteArray";
     /**
      * Decode method name
      */
-    private static final String              METHOD_PARSEFROM     = "parseFrom";
+    private static final String             METHOD_PARSEFROM     = "parseFrom";
     /**
      * Support multiple classloader?
      */
-    private static final boolean             MULTIPLE_CLASSLOADER = RpcConfigs
-                                                                      .getBooleanValue(RpcOptions.MULTIPLE_CLASSLOADER_ENABLE);
+    private static final boolean            MULTIPLE_CLASSLOADER = RpcConfigs
+            .getBooleanValue(RpcOptions.MULTIPLE_CLASSLOADER_ENABLE);
 
     /**
      * Cache of parseFrom method
      */
-    private ConcurrentHashMap<Class, Method> parseFromMethodMap   = new ConcurrentHashMap<Class, Method>();
+    private ConcurrentHashMap<Class, Method> parseFromMethodMap = new ConcurrentHashMap<Class, Method>();
 
     /**
      * Cache of toByteArray method
@@ -67,12 +67,12 @@ public class ProtobufSerializer {
     /**
      * 请求参数类型缓存 {service+method:class}
      */
-    private ConcurrentHashMap<String, Class> requestClassCache    = new ConcurrentHashMap<String, Class>();
+    private ConcurrentHashMap<String, Class> requestClassCache = new ConcurrentHashMap<String, Class>();
 
     /**
      * 返回结果类型缓存 {service+method:class}
      */
-    private ConcurrentHashMap<String, Class> responseClassCache   = new ConcurrentHashMap<String, Class>();
+    private ConcurrentHashMap<String, Class> responseClassCache = new ConcurrentHashMap<String, Class>();
 
     /**
      * Can not be new instance.
@@ -109,7 +109,7 @@ public class ProtobufSerializer {
                     toByteArrayMethodMap.put(clazz, method);
                 } catch (Exception e) {
                     throw new SerializationException("Cannot found method " + clazz.getName()
-                        + ".toByteArray(), please check the generated code.", e);
+                            + ".toByteArray(), please check the generated code.", e);
                 }
             }
             try {
@@ -121,7 +121,7 @@ public class ProtobufSerializer {
             return ((String) object).getBytes(RpcConstants.DEFAULT_CHARSET);
         } else {
             throw new SerializationException("Unsupported class:" + object.getClass().getName()
-                + ", only support protobuf message");
+                    + ", only support protobuf message");
         }
     }
 
@@ -143,13 +143,13 @@ public class ProtobufSerializer {
                     method = clazz.getMethod(METHOD_PARSEFROM, byte[].class);
                     if (!Modifier.isStatic(method.getModifiers())) {
                         throw new DeserializationException("Cannot found static method " + clazz.getName()
-                            + ".parseFrom(byte[]), please check the generated code");
+                                + ".parseFrom(byte[]), please check the generated code");
                     }
                     method.setAccessible(true);
                     parseFromMethodMap.put(clazz, method);
                 } catch (NoSuchMethodException e) {
                     throw new DeserializationException("Cannot found method " + clazz.getName()
-                        + ".parseFrom(byte[]), please check the generated code", e);
+                            + ".parseFrom(byte[]), please check the generated code", e);
                 }
             }
             try {
@@ -161,7 +161,7 @@ public class ProtobufSerializer {
             return new String(bytes, RpcConstants.DEFAULT_CHARSET);
         } else {
             throw new DeserializationException("Unsupported class:" + clazz.getName()
-                + ", only support protobuf message");
+                    + ", only support protobuf message");
         }
     }
 
@@ -175,7 +175,7 @@ public class ProtobufSerializer {
      * @throws CodecException         其它序列化异常
      */
     public Class getReqClass(String service, String methodName, ClassLoader classLoader)
-        throws ClassNotFoundException, CodecException {
+            throws ClassNotFoundException, CodecException {
         if (classLoader == null) {
             classLoader = Thread.currentThread().getContextClassLoader();
         }
@@ -200,7 +200,7 @@ public class ProtobufSerializer {
      * @throws CodecException         其它序列化异常
      */
     public Class getResClass(String service, String methodName, ClassLoader classLoader)
-        throws ClassNotFoundException, CodecException {
+            throws ClassNotFoundException, CodecException {
         if (classLoader == null) {
             classLoader = Thread.currentThread().getContextClassLoader();
         }
@@ -248,17 +248,17 @@ public class ProtobufSerializer {
         }
         Class[] parameterTypes = pbMethod.getParameterTypes();
         if (parameterTypes == null
-            || parameterTypes.length != 1
-            || isProtoBufMessageObject(parameterTypes[0])) {
+                || parameterTypes.length != 1
+                || isProtoBufMessageObject(parameterTypes[0])) {
             throw new CodecException("class based protobuf: " + clazz.getName()
-                + ", only support one protobuf parameter!");
+                    + ", only support one protobuf parameter!");
         }
         Class reqClass = parameterTypes[0];
         requestClassCache.put(key, reqClass);
         Class resClass = pbMethod.getReturnType();
         if (resClass == void.class || !isProtoBufMessageClass(resClass)) {
             throw new CodecException("class based protobuf: " + clazz.getName()
-                + ", only support return protobuf message!");
+                    + ", only support return protobuf message!");
         }
         responseClassCache.put(key, resClass);
     }

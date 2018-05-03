@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.common.struct;
 
-import com.alipay.sofa.rpc.base.Sortable;
-
 import java.io.Serializable;
 import java.util.Comparator;
+
+import com.alipay.sofa.rpc.base.Sortable;
 
 /**
  * Default comparator of sortable.
@@ -54,6 +54,6 @@ public class OrderedComparator<T extends Sortable> implements Comparator<T>, Ser
     public int compare(T o1, T o2) {
         // order一样的情况下，顺序不变
         return order ? o1.getOrder() - o2.getOrder() :
-            o2.getOrder() - o1.getOrder();
+                o2.getOrder() - o1.getOrder();
     }
 }

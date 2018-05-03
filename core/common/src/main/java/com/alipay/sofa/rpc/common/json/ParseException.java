@@ -22,9 +22,9 @@ package com.alipay.sofa.rpc.common.json;
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
 public class ParseException extends RuntimeException {
-    private static final long serialVersionUID = 2560442967697088006L;
-    private int               position         = 0;
-    private String            jsonString       = "";
+    private static final long   serialVersionUID = 2560442967697088006L;
+    private              int    position         = 0;
+    private              String jsonString       = "";
 
     /**
      * Constructs a new json exception with the specified detail message.

@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.rpc.config;
 
+import static com.alipay.sofa.rpc.common.RpcConfigs.*;
+import static com.alipay.sofa.rpc.common.RpcOptions.*;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.common.utils.ExceptionUtils;
 import com.alipay.sofa.rpc.common.utils.NetUtils;
@@ -23,36 +30,6 @@ import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.listener.ChannelListener;
 import com.alipay.sofa.rpc.server.Server;
 import com.alipay.sofa.rpc.server.ServerFactory;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
-import static com.alipay.sofa.rpc.common.RpcConfigs.getBooleanValue;
-import static com.alipay.sofa.rpc.common.RpcConfigs.getIntValue;
-import static com.alipay.sofa.rpc.common.RpcConfigs.getStringValue;
-import static com.alipay.sofa.rpc.common.RpcOptions.DEFAULT_PROTOCOL;
-import static com.alipay.sofa.rpc.common.RpcOptions.DEFAULT_SERIALIZATION;
-import static com.alipay.sofa.rpc.common.RpcOptions.DEFAULT_TRANSPORT;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_ACCEPTS;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_CONTEXT_PATH;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_DAEMON;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_EPOLL;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_HOST;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_IOTHREADS;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_ALIVETIME;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_CORE;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_MAX;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_PRE_START;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_QUEUE;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_QUEUE_TYPE;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_POOL_TYPE;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_PORT_START;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_STOP_TIMEOUT;
-import static com.alipay.sofa.rpc.common.RpcOptions.SERVER_TELNET;
-import static com.alipay.sofa.rpc.common.RpcOptions.SEVER_ADAPTIVE_PORT;
-import static com.alipay.sofa.rpc.common.RpcOptions.SEVER_AUTO_START;
-import static com.alipay.sofa.rpc.common.RpcOptions.TRANSPORT_PAYLOAD_MAX;
 
 /**
  * 服务端配置
@@ -63,110 +40,110 @@ public class ServerConfig extends AbstractIdConfig implements Serializable {
     /**
      * The constant serialVersionUID.
      */
-    private static final long                 serialVersionUID = -574374673831680403L;
+    private static final long serialVersionUID = -574374673831680403L;
 
     /*------------- 参数配置项开始-----------------*/
     /**
      * 配置名称
      */
-    protected String                          protocol         = getStringValue(DEFAULT_PROTOCOL);
+    protected String protocol = getStringValue(DEFAULT_PROTOCOL);
 
     /**
      * 实际监听IP，与网卡对应
      */
-    protected String                          host             = getStringValue(SERVER_HOST);
+    protected String host = getStringValue(SERVER_HOST);
 
     /**
      * 监听端口
      */
-    protected int                             port             = getIntValue(SERVER_PORT_START);
+    protected int port = getIntValue(SERVER_PORT_START);
 
     /**
      * 基本路径
      */
-    protected String                          contextPath      = getStringValue(SERVER_CONTEXT_PATH);
+    protected String contextPath = getStringValue(SERVER_CONTEXT_PATH);
 
     /**
      * io线程池大小
      */
-    protected int                             ioThreads        = getIntValue(SERVER_IOTHREADS);
+    protected int ioThreads = getIntValue(SERVER_IOTHREADS);
 
     /**
      * 线程池类型
      */
-    protected String                          threadPoolType   = getStringValue(SERVER_POOL_TYPE);
+    protected String threadPoolType = getStringValue(SERVER_POOL_TYPE);
 
     /**
      * 业务线程池大小
      */
-    protected int                             coreThreads      = getIntValue(SERVER_POOL_CORE);
+    protected int coreThreads = getIntValue(SERVER_POOL_CORE);
 
     /**
      * 业务线程池大小
      */
-    protected int                             maxThreads       = getIntValue(SERVER_POOL_MAX);
+    protected int maxThreads = getIntValue(SERVER_POOL_MAX);
 
     /**
      * 是否允许telnet，针对自定义协议
      */
-    protected boolean                         telnet           = getBooleanValue(SERVER_TELNET);
+    protected boolean telnet = getBooleanValue(SERVER_TELNET);
 
     /**
      * 线程池类型，默认普通线程池
      */
-    protected String                          queueType        = getStringValue(SERVER_POOL_QUEUE_TYPE);
+    protected String queueType = getStringValue(SERVER_POOL_QUEUE_TYPE);
 
     /**
      * 业务线程池回收时间
      */
-    protected int                             queues           = getIntValue(SERVER_POOL_QUEUE);
+    protected int queues = getIntValue(SERVER_POOL_QUEUE);
 
     /**
      * 线程池回收时间
      */
-    protected int                             aliveTime        = getIntValue(SERVER_POOL_ALIVETIME);
+    protected int aliveTime = getIntValue(SERVER_POOL_ALIVETIME);
 
     /**
      * 线程池是否初始化核心线程
      */
-    protected boolean                         preStartCore     = getBooleanValue(SERVER_POOL_PRE_START);
+    protected boolean preStartCore = getBooleanValue(SERVER_POOL_PRE_START);
 
     /**
      * 服务端允许客户端建立的连接数
      */
-    protected int                             accepts          = getIntValue(SERVER_ACCEPTS);
+    protected int accepts = getIntValue(SERVER_ACCEPTS);
 
     /**
      * 最大数据包大小
      */
     @Deprecated
-    protected int                             payload          = getIntValue(TRANSPORT_PAYLOAD_MAX);
+    protected int payload = getIntValue(TRANSPORT_PAYLOAD_MAX);
 
     /**
      * 序列化方式
      */
-    protected String                          serialization    = getStringValue(DEFAULT_SERIALIZATION);
+    protected String serialization = getStringValue(DEFAULT_SERIALIZATION);
 
     /**
      * 事件分发规则。
      */
     @Deprecated
-    protected String                          dispatcher       = RpcConstants.DISPATCHER_MESSAGE;
+    protected String dispatcher = RpcConstants.DISPATCHER_MESSAGE;
 
     /**
      * The Parameters. 自定义参数
      */
-    protected Map<String, String>             parameters;
+    protected Map<String, String> parameters;
 
     /**
      * 镜像ip，例如监听地址是1.2.3.4，告诉注册中心的确是3.4.5.6
      */
-    protected String                          virtualHost;
+    protected String virtualHost;
 
     /**
      * 镜像端口
      */
-    protected Integer                         virtualPort;
+    protected Integer virtualPort;
 
     /**
      * 连接事件监听器实例，连接或者断开时触发
@@ -176,43 +153,43 @@ public class ServerConfig extends AbstractIdConfig implements Serializable {
     /**
      * 是否启动epoll
      */
-    protected boolean                         epoll            = getBooleanValue(SERVER_EPOLL);
+    protected boolean epoll = getBooleanValue(SERVER_EPOLL);
 
     /**
      * 是否hold住端口，true的话随主线程退出而退出，false的话则要主动退出
      */
-    protected boolean                         daemon           = getBooleanValue(SERVER_DAEMON);
+    protected boolean daemon = getBooleanValue(SERVER_DAEMON);
 
     /**
      * The Adaptive port.
      */
-    protected boolean                         adaptivePort     = getBooleanValue(SEVER_ADAPTIVE_PORT);
+    protected boolean adaptivePort = getBooleanValue(SEVER_ADAPTIVE_PORT);
 
     /**
      * 传输层
      */
-    protected String                          transport        = getStringValue(DEFAULT_TRANSPORT);
+    protected String transport = getStringValue(DEFAULT_TRANSPORT);
 
     /**
      * 是否自动启动
      */
-    protected boolean                         autoStart        = getBooleanValue(SEVER_AUTO_START);
+    protected boolean autoStart = getBooleanValue(SEVER_AUTO_START);
 
     /**
      * 服务端关闭超时时间
      */
-    protected int                             stopTimeout      = getIntValue(SERVER_STOP_TIMEOUT);
+    protected int stopTimeout = getIntValue(SERVER_STOP_TIMEOUT);
 
     /*------------- 参数配置项结束-----------------*/
     /**
      * 服务端对象
      */
-    private transient volatile Server         server;
+    private transient volatile Server server;
 
     /**
      * 绑定的地址。是某个网卡，还是全部地址
      */
-    private transient String                  boundHost;
+    private transient String boundHost;
 
     /**
      * 启动服务
@@ -298,7 +275,7 @@ public class ServerConfig extends AbstractIdConfig implements Serializable {
     public ServerConfig setPort(int port) {
         if (!NetUtils.isRandomPort(port) && NetUtils.isInvalidPort(port)) {
             throw ExceptionUtils.buildRuntime("server.port", port + "",
-                "port must between -1 and 65535 (-1 means random port)");
+                    "port must between -1 and 65535 (-1 means random port)");
         }
         this.port = port;
         return this;
@@ -798,6 +775,15 @@ public class ServerConfig extends AbstractIdConfig implements Serializable {
     }
 
     /**
+     * Gets bound host
+     *
+     * @return bound host
+     */
+    public String getBoundHost() {
+        return boundHost;
+    }
+
+    /**
      * Sets bound host.
      *
      * @param boundHost the bound host
@@ -806,15 +792,6 @@ public class ServerConfig extends AbstractIdConfig implements Serializable {
     public ServerConfig setBoundHost(String boundHost) {
         this.boundHost = boundHost;
         return this;
-    }
-
-    /**
-     * Gets bound host
-     *
-     * @return bound host
-     */
-    public String getBoundHost() {
-        return boundHost;
     }
 
     /**
@@ -830,7 +807,7 @@ public class ServerConfig extends AbstractIdConfig implements Serializable {
         result = prime * result + ((host == null) ? 0 : host.hashCode());
         result = prime * result + port;
         result = prime * result
-            + ((protocol == null) ? 0 : protocol.hashCode());
+                + ((protocol == null) ? 0 : protocol.hashCode());
         return result;
     }
 

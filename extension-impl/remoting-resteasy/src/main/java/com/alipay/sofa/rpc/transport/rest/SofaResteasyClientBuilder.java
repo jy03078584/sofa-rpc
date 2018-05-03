@@ -16,19 +16,20 @@
  */
 package com.alipay.sofa.rpc.transport.rest;
 
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-import com.alipay.sofa.rpc.config.JAXRSProviderManager;
-import com.alipay.sofa.rpc.log.Logger;
-import com.alipay.sofa.rpc.log.LoggerFactory;
+import java.util.Set;
+
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.spi.PropertyInjector;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
-import java.util.Set;
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
+import com.alipay.sofa.rpc.config.JAXRSProviderManager;
+import com.alipay.sofa.rpc.log.Logger;
+import com.alipay.sofa.rpc.log.LoggerFactory;
 
 /**
- * 
- * 
+ *
+ *
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
  * @author <a href="mailto:lw111072@antfin.com">liangen</a>
  */
@@ -58,8 +59,8 @@ public class SofaResteasyClientBuilder extends ResteasyClientBuilder {
         if (CommonUtils.isNotEmpty(customProviderInstances)) {
             for (Object provider : customProviderInstances) {
                 PropertyInjector propertyInjector = providerFactory.getInjectorFactory()
-                    .createPropertyInjector(
-                        JAXRSProviderManager.getTargetClass(provider), providerFactory);
+                        .createPropertyInjector(
+                                JAXRSProviderManager.getTargetClass(provider), providerFactory);
                 propertyInjector.inject(provider);
                 providerFactory.registerProviderInstance(provider);
             }

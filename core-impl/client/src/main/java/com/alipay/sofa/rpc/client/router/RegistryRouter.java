@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.client.router;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.AddressHolder;
 import com.alipay.sofa.rpc.client.ProviderInfo;
@@ -26,8 +28,6 @@ import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.filter.AutoActive;
-
-import java.util.List;
 
 /**
  * 从注册中心获取地址进行路由
@@ -44,7 +44,7 @@ public class RegistryRouter extends Router {
      *
      * @since 5.2.0
      */
-    public static final String  RPC_REGISTRY_ROUTER = "REGISTRY";
+    public static final String RPC_REGISTRY_ROUTER = "REGISTRY";
 
     /**
      * 服务消费者配置

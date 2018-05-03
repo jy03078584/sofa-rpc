@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.util.List;
+
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extensible;
-
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.List;
 
 /**
  * 负载均衡器：从一堆Provider列表里选出一个
@@ -42,7 +43,7 @@ public abstract class LoadBalancer {
     /**
      * 服务消费者配置
      */
-    protected final ConsumerConfig    consumerConfig;
+    protected final ConsumerConfig consumerConfig;
 
     /**
      * 构造函数
@@ -72,5 +73,5 @@ public abstract class LoadBalancer {
      * @throws SofaRpcException rpc异常
      */
     public abstract ProviderInfo select(SofaRequest request, List<ProviderInfo> providerInfos)
-        throws SofaRpcException;
+            throws SofaRpcException;
 }

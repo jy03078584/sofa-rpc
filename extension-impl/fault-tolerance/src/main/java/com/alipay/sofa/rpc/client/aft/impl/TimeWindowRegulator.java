@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.rpc.client.aft.impl;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.client.aft.DegradeStrategy;
 import com.alipay.sofa.rpc.client.aft.FaultToleranceConfigManager;
 import com.alipay.sofa.rpc.client.aft.InvocationStat;
@@ -37,14 +45,6 @@ import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * 按时间窗口进行调控
  *
@@ -54,64 +54,60 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TimeWindowRegulator implements Regulator {
 
     /** Logger for this class */
-    private static final Logger                      LOGGER             = LoggerFactory
-                                                                            .getLogger(TimeWindowRegulator.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(TimeWindowRegulator.class);
 
     /** Counter for measure schedule and calculate time window */
-    private final AtomicInteger                      measureCounter     = new AtomicInteger();
+    private final AtomicInteger measureCounter = new AtomicInteger();
 
     /**
      * 度量线程池
      */
-    private final ScheduledService                   measureScheduler   = new ScheduledService("SOFA-AFT-MEASURE",
-                                                                            ScheduledService.MODE_FIXEDRATE,
-                                                                            new MeasureRunnable(), 1, 1,
-                                                                            TimeUnit.SECONDS);
+    private final ScheduledService measureScheduler = new ScheduledService("SOFA-AFT-MEASURE",
+            ScheduledService.MODE_FIXEDRATE,
+            new MeasureRunnable(), 1, 1,
+            TimeUnit.SECONDS);
     /**
      * Is measure scheduler started
      */
-    private final AtomicBoolean                      measureStarted     = new AtomicBoolean();
+    private final AtomicBoolean    measureStarted   = new AtomicBoolean();
 
     /**
      * 计算线程池
      */
-    private final ExecutorService                    regulationExecutor = ThreadPoolUtils.newFixedThreadPool(2,
-                                                                            new LinkedBlockingQueue<Runnable>(16),
-                                                                            new NamedThreadFactory(
-                                                                                "SOFA-AFT-REGULATION"));
+    private final ExecutorService regulationExecutor = ThreadPoolUtils.newFixedThreadPool(2,
+            new LinkedBlockingQueue<Runnable>(16),
+            new NamedThreadFactory(
+                    "SOFA-AFT-REGULATION"));
 
     /**
      * 度量模型
      */
-    private final CopyOnWriteArrayList<MeasureModel> measureModels      = new CopyOnWriteArrayList<MeasureModel>();
-
-    /**
-     * 度量策略（创建计算模型, 对计算模型里的数据进行度量，选出正常和异常节点）
-     */
-    private MeasureStrategy                          measureStrategy;
-
-    /**
-     * 计算策略（根据度量结果，判断是否需要执行降级或者恢复） 
-     */
-    private RegulationStrategy                       regulationStrategy;
-
-    /**
-     * 降级策略: 调整权重 
-     */
-    private DegradeStrategy                          weightDegradeStrategy;
-    /**
-     * 降级策略: 只打印日志 
-     */
-    private DegradeStrategy                          logDegradeStrategy;
-    /**
-     * 恢复策略：调整权重 
-     */
-    private RecoverStrategy                          recoverStrategy;
-
+    private final CopyOnWriteArrayList<MeasureModel> measureModels = new CopyOnWriteArrayList<MeasureModel>();
     /**
      * Listener for invocation stat change.
      */
-    private final InvocationStatListener             listener           = new TimeWindowRegulatorListener();
+    private final InvocationStatListener listener = new TimeWindowRegulatorListener();
+    /**
+     * 度量策略（创建计算模型, 对计算模型里的数据进行度量，选出正常和异常节点）
+     */
+    private MeasureStrategy measureStrategy;
+    /**
+     * 计算策略（根据度量结果，判断是否需要执行降级或者恢复）
+     */
+    private RegulationStrategy regulationStrategy;
+    /**
+     * 降级策略: 调整权重
+     */
+    private DegradeStrategy weightDegradeStrategy;
+    /**
+     * 降级策略: 只打印日志
+     */
+    private DegradeStrategy logDegradeStrategy;
+    /**
+     * 恢复策略：调整权重
+     */
+    private RecoverStrategy recoverStrategy;
 
     @Override
     public void init() {
@@ -206,7 +202,7 @@ public class TimeWindowRegulator implements Regulator {
                     doRegulate(measureResultDetail);
                 } catch (Exception e) {
                     LOGGER.errorWithApp(measureResult.getMeasureModel().getAppName(),
-                        "Error when doRegulate: " + e.getMessage(), e);
+                            "Error when doRegulate: " + e.getMessage(), e);
                 }
             }
         }
@@ -230,8 +226,8 @@ public class TimeWindowRegulator implements Regulator {
                         String appName = measureResult.getMeasureModel().getAppName();
                         if (LOGGER.isInfoEnabled(appName)) {
                             LOGGER.infoWithApp(appName, LogCodes.getLog(LogCodes.INFO_REGULATION_ABNORMAL_NOT_DEGRADE,
-                                "Reach degrade number limit.", statDimension.getService(), statDimension.getIp(),
-                                statDimension.getAppName()));
+                                    "Reach degrade number limit.", statDimension.getService(), statDimension.getIp(),
+                                    statDimension.getAppName()));
                         }
                     }
                 } else if (measureState.equals(MeasureState.HEALTH)) {
@@ -248,8 +244,8 @@ public class TimeWindowRegulator implements Regulator {
                     String appName = measureResult.getMeasureModel().getAppName();
                     if (LOGGER.isInfoEnabled(appName)) {
                         LOGGER.infoWithApp(appName, LogCodes.getLog(LogCodes.INFO_REGULATION_ABNORMAL_NOT_DEGRADE,
-                            "Degrade switch is off", statDimension.getService(),
-                            statDimension.getIp(), statDimension.getAppName()));
+                                "Degrade switch is off", statDimension.getService(),
+                                statDimension.getIp(), statDimension.getAppName()));
                     }
                 }
             }
@@ -274,5 +270,7 @@ public class TimeWindowRegulator implements Regulator {
                 measureStrategy.removeMeasureModel(invocationStat);
             }
         }
-    };
+    }
+
+    ;
 }

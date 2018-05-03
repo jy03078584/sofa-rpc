@@ -16,13 +16,14 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import org.junit.Assert;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
-import org.junit.Assert;
 
 /**
  *

@@ -16,6 +16,19 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import static io.netty.handler.codec.http.HttpResponseStatus.*;
+import static io.netty.handler.codec.http.HttpVersion.*;
+
+import java.net.InetSocketAddress;
+
+import javax.ws.rs.core.HttpHeaders;
+
+import org.jboss.resteasy.logging.Logger;
+import org.jboss.resteasy.plugins.server.netty.NettyHttpRequest;
+import org.jboss.resteasy.plugins.server.netty.NettyHttpResponse;
+import org.jboss.resteasy.plugins.server.netty.RequestDispatcher;
+import org.jboss.resteasy.spi.Failure;
+
 import com.alipay.sofa.rpc.context.RpcInternalContext;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.event.EventBus;
@@ -28,19 +41,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.TooLongFrameException;
 import io.netty.handler.codec.http.DefaultHttpResponse;
 import io.netty.handler.codec.http.HttpResponse;
-import org.jboss.resteasy.logging.Logger;
-import org.jboss.resteasy.plugins.server.netty.NettyHttpRequest;
-import org.jboss.resteasy.plugins.server.netty.NettyHttpResponse;
-import org.jboss.resteasy.plugins.server.netty.RequestDispatcher;
-import org.jboss.resteasy.spi.Failure;
-
-import javax.ws.rs.core.HttpHeaders;
-import java.net.InetSocketAddress;
-
-import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
-import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
-import static io.netty.handler.codec.http.HttpResponseStatus.REQUEST_ENTITY_TOO_LARGE;
-import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 /**
  * 参考resteasy实现，增加了取远程地址的方法，包括vip或者nginx转发的情况
@@ -49,8 +49,8 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  * @see org.jboss.resteasy.plugins.server.netty.RequestHandler
  */
 public class SofaRestRequestHandler extends SimpleChannelInboundHandler {
+    private final static Logger logger = Logger.getLogger(SofaRestRequestHandler.class);
     protected final RequestDispatcher dispatcher;
-    private final static Logger       logger = Logger.getLogger(SofaRestRequestHandler.class);
 
     public SofaRestRequestHandler(RequestDispatcher dispatcher) {
         this.dispatcher = dispatcher;
@@ -94,7 +94,7 @@ public class SofaRestRequestHandler extends SimpleChannelInboundHandler {
                         RpcInternalContext.getContext().setRemoteAddress(remoteip, 0);
                     } else { // request取不到就从channel里取
                         RpcInternalContext.getContext().setRemoteAddress(
-                            (InetSocketAddress) ctx.channel().remoteAddress());
+                                (InetSocketAddress) ctx.channel().remoteAddress());
                     }
                     // 设置本地地址
                     RpcInternalContext.getContext().setLocalAddress((InetSocketAddress) ctx.channel().localAddress());
@@ -136,7 +136,7 @@ public class SofaRestRequestHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable e)
-        throws Exception {
+            throws Exception {
         // handle the case of to big requests.
         if (e.getCause() instanceof TooLongFrameException) {
             DefaultHttpResponse response = new DefaultHttpResponse(HTTP_1_1, REQUEST_ENTITY_TOO_LARGE);

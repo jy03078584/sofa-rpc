@@ -29,10 +29,13 @@ import java.util.Set;
 public class JAXRSProviderManager {
 
     /**
+     * The CGLIB class separator character "$$"
+     */
+    public static final String CGLIB_CLASS_SEPARATOR = "$$";
+    /**
      * 内置的jaxrs Provider类
      */
-    private static Set<Class>  internalProviderClasses = Collections.synchronizedSet(new LinkedHashSet<Class>());
-
+    private static Set<Class> internalProviderClasses = Collections.synchronizedSet(new LinkedHashSet<Class>());
     /**
      * 自定义jaxrs Provider实例
      */
@@ -85,11 +88,6 @@ public class JAXRSProviderManager {
     public static Set<Object> getCustomProviderInstances() {
         return customProviderInstances;
     }
-
-    /**
-     * The CGLIB class separator character "$$"
-     */
-    public static final String CGLIB_CLASS_SEPARATOR = "$$";
 
     /**
      * 拿到目标类型

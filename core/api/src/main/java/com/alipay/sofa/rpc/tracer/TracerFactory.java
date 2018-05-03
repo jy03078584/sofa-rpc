@@ -36,7 +36,7 @@ public final class TracerFactory {
     public synchronized static Tracer getTracer(String tracerName) {
         try {
             ExtensionClass<Tracer> ext = ExtensionLoaderFactory.getExtensionLoader(Tracer.class)
-                .getExtensionClass(tracerName);
+                    .getExtensionClass(tracerName);
             if (ext == null) {
                 throw ExceptionUtils.buildRuntime("tracer.name", tracerName);
             }

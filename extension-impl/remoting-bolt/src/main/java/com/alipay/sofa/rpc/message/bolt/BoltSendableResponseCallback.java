@@ -17,8 +17,8 @@
 package com.alipay.sofa.rpc.message.bolt;
 
 import com.alipay.remoting.AsyncContext;
-import com.alipay.sofa.rpc.context.BaggageResolver;
 import com.alipay.sofa.rpc.common.RpcConstants;
+import com.alipay.sofa.rpc.context.BaggageResolver;
 import com.alipay.sofa.rpc.context.RpcInternalContext;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
@@ -45,12 +45,12 @@ public abstract class BoltSendableResponseCallback<T> implements SendableRespons
     /**
      *
      */
-    protected SofaRequest  request;
+    protected SofaRequest request;
 
     /**
      * 是否已发送
      */
-    private boolean        sent;
+    private boolean sent;
 
     public BoltSendableResponseCallback() {
         init();

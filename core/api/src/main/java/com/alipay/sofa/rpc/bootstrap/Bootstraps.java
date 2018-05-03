@@ -36,9 +36,9 @@ public class Bootstraps {
      */
     public static <T> ProviderBootstrap<T> from(ProviderConfig<T> providerConfig) {
         ProviderBootstrap bootstrap = ExtensionLoaderFactory.getExtensionLoader(ProviderBootstrap.class)
-            .getExtension(providerConfig.getBootstrap(),
-                new Class[] { ProviderConfig.class },
-                new Object[] { providerConfig });
+                .getExtension(providerConfig.getBootstrap(),
+                        new Class[] { ProviderConfig.class },
+                        new Object[] { providerConfig });
         return (ProviderBootstrap<T>) bootstrap;
     }
 
@@ -51,9 +51,9 @@ public class Bootstraps {
      */
     public static <T> ConsumerBootstrap<T> from(ConsumerConfig<T> consumerConfig) {
         ConsumerBootstrap bootstrap = ExtensionLoaderFactory.getExtensionLoader(ConsumerBootstrap.class)
-            .getExtension(consumerConfig.getBootstrap(),
-                new Class[] { ConsumerConfig.class },
-                new Object[] { consumerConfig });
+                .getExtension(consumerConfig.getBootstrap(),
+                        new Class[] { ConsumerConfig.class },
+                        new Object[] { consumerConfig });
         return (ConsumerBootstrap<T>) bootstrap;
     }
 }

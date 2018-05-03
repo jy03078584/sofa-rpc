@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.customfilter;
 
+import java.util.Arrays;
+
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.context.RpcRuntimeContext;
@@ -23,8 +25,6 @@ import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.rpc.test.HelloService;
-
-import java.util.Arrays;
 
 /**
  *
@@ -45,13 +45,13 @@ public class CustomFilterClientMain {
         ApplicationConfig application = new ApplicationConfig().setAppName("test-client");
 
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setApplication(application)
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22000")
-            .setFilter(Arrays.asList("customEcho"))
-            .setFilterRef(Arrays.asList(customEchoFilter2))
-            .setRegister(false)
-            .setTimeout(3000);
+                .setApplication(application)
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22000")
+                .setFilter(Arrays.asList("customEcho"))
+                .setFilterRef(Arrays.asList(customEchoFilter2))
+                .setRegister(false)
+                .setTimeout(3000);
         HelloService helloService = consumerConfig.refer();
 
         LOGGER.warn("started at pid {}", RpcRuntimeContext.PID);

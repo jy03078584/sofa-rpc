@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.rpc.transport;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.utils.NetUtils;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * ClientTransport of same provider will be reused.
@@ -35,18 +35,23 @@ public class ReusableClientTransportHolder implements ClientTransportHolder {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger                                     LOGGER              = LoggerFactory
-                                                                                            .getLogger(ReusableClientTransportHolder.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ReusableClientTransportHolder.class);
 
     /**
      * 长连接复用时，共享长连接的连接池，一个服务端ip和端口同一协议只建立一个长连接，不管多少接口，共用长连接
      */
-    private final ConcurrentHashMap<String, ClientTransport>        clientTransportMap  = new ConcurrentHashMap<String, ClientTransport>();
+    private final ConcurrentHashMap<String, ClientTransport> clientTransportMap = new ConcurrentHashMap<String, ClientTransport>();
 
     /**
      * 长连接复用时，共享长连接的计数器
      */
     private final ConcurrentHashMap<ClientTransport, AtomicInteger> transportRefCounter = new ConcurrentHashMap<ClientTransport, AtomicInteger>();
+
+    private static String getAddr(ClientTransportConfig config) {
+        ProviderInfo providerInfo = config.getProviderInfo();
+        return providerInfo.getProtocolType() + "://" + providerInfo.getHost() + ":" + providerInfo.getPort();
+    }
 
     /**
      * 通过配置获取长连接
@@ -60,9 +65,9 @@ public class ReusableClientTransportHolder implements ClientTransportHolder {
         ClientTransport transport = clientTransportMap.get(key);
         if (transport == null) {
             transport = ExtensionLoaderFactory.getExtensionLoader(ClientTransport.class)
-                .getExtension(config.getContainer(),
-                    new Class[] { ClientTransportConfig.class },
-                    new Object[] { config });
+                    .getExtension(config.getContainer(),
+                            new Class[] { ClientTransportConfig.class },
+                            new Object[] { config });
             ClientTransport oldTransport = clientTransportMap.putIfAbsent(key, transport); // 保存唯一长连接
             if (oldTransport != null) {
                 if (LOGGER.isWarnEnabled()) {
@@ -84,11 +89,6 @@ public class ReusableClientTransportHolder implements ClientTransportHolder {
         return transport;
     }
 
-    private static String getAddr(ClientTransportConfig config) {
-        ProviderInfo providerInfo = config.getProviderInfo();
-        return providerInfo.getProtocolType() + "://" + providerInfo.getHost() + ":" + providerInfo.getPort();
-    }
-
     @Override
     public boolean removeClientTransport(ClientTransport clientTransport) {
         if (clientTransport == null) {
@@ -102,8 +102,8 @@ public class ReusableClientTransportHolder implements ClientTransportHolder {
             int currentCount = integer.decrementAndGet(); // 当前连接引用数
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Client transport {} of {} , current ref count is: {}", clientTransport,
-                    NetUtils.channelToString(clientTransport.localAddress(), clientTransport.remoteAddress()),
-                    currentCount);
+                        NetUtils.channelToString(clientTransport.localAddress(), clientTransport.remoteAddress()),
+                        currentCount);
             }
             if (currentCount <= 0) { // 此长连接无任何引用，可以销毁
                 String key = getAddr(clientTransport.getConfig());

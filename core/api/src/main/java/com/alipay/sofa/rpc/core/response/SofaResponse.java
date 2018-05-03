@@ -27,22 +27,22 @@ import java.util.Map;
  */
 public final class SofaResponse implements Serializable {
 
-    static private final long   serialVersionUID = -4364536436151723421L;
+    static private final long serialVersionUID = -4364536436151723421L;
 
     /**
      * 框架异常
      */
-    private boolean             isError          = false;
+    private boolean isError = false;
 
     /**
      * 框架异常的消息
      */
-    private String              errorMsg;
+    private String errorMsg;
 
     /**
      * 业务返回或者业务异常
      */
-    private Object              appResponse;
+    private Object appResponse;
 
     /**
      * extensional properties

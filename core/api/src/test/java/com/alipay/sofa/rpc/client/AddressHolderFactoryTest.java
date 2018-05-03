@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.bootstrap.Bootstraps;
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  *

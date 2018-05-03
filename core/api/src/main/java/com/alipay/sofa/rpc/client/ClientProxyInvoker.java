@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.context.RpcInternalContext;
@@ -26,8 +28,6 @@ import com.alipay.sofa.rpc.event.ClientEndInvokeEvent;
 import com.alipay.sofa.rpc.event.ClientStartInvokeEvent;
 import com.alipay.sofa.rpc.event.EventBus;
 import com.alipay.sofa.rpc.invoke.Invoker;
-
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 客户端引用代理Invoker，一个引用一个。线程安全
@@ -45,7 +45,7 @@ public class ClientProxyInvoker implements Invoker {
     /**
      *
      */
-    protected Cluster              cluster;
+    protected Cluster cluster;
 
     /**
      * 构造执行链

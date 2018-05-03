@@ -16,13 +16,14 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.common.RpcOptions;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
-import org.junit.Test;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 /**
  *

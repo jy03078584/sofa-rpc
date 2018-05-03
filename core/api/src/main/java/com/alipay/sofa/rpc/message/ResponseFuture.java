@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.message;
 
-import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
-
 import java.util.List;
 import java.util.concurrent.Future;
+
+import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 
 /**
  * 响应Future，可以调用get方法进行获取响应，也可以注入监听器，有结果或者都会通知

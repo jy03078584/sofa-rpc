@@ -16,13 +16,14 @@
  */
 package com.alipay.sofa.rpc.filter;
 
-import com.alipay.sofa.rpc.config.ConsumerConfig;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import com.alipay.sofa.rpc.core.response.SofaResponse;
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import com.alipay.sofa.rpc.config.ConsumerConfig;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
+import com.alipay.sofa.rpc.core.response.SofaResponse;
 
 /**
  *

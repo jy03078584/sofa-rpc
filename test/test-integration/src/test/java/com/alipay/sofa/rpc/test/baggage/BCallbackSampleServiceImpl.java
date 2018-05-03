@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.core.request.RequestBase;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -35,7 +35,7 @@ public class BCallbackSampleServiceImpl implements SampleService {
 
     private SampleService sampleServiceD;
 
-    private String        reqBaggage;
+    private String reqBaggage;
 
     public BCallbackSampleServiceImpl(SampleService sampleServiceC, SampleService sampleServiceD) {
         this.sampleServiceC = sampleServiceC;

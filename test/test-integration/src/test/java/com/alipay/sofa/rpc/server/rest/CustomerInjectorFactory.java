@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
-import org.jboss.resteasy.core.InjectorFactoryImpl;
-import org.jboss.resteasy.core.ValueInjector;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
+import static org.jboss.resteasy.util.FindAnnotation.*;
 
-import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Type;
 
-import static org.jboss.resteasy.util.FindAnnotation.findAnnotation;
+import javax.ws.rs.ext.Provider;
+
+import org.jboss.resteasy.core.InjectorFactoryImpl;
+import org.jboss.resteasy.core.ValueInjector;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 /**
  *
@@ -44,6 +45,6 @@ public class CustomerInjectorFactory extends InjectorFactoryImpl {
         }
 
         return super.createParameterExtractor(injectTargetClass, injectTarget, type, genericType, annotations,
-            useDefault, providerFactory);
+                useDefault, providerFactory);
     }
 }

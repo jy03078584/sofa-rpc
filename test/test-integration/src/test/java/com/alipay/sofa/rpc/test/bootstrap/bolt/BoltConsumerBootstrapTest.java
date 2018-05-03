@@ -16,6 +16,12 @@
  */
 package com.alipay.sofa.rpc.test.bootstrap.bolt;
 
+import java.util.Arrays;
+import java.util.Collections;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.Cluster;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -28,11 +34,6 @@ import com.alipay.sofa.rpc.proxy.jdk.JDKProxy;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  *
@@ -44,27 +45,27 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
     public void refer() throws Exception {
 
         ConsumerConfig<HelloService> consumerConfig0 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22221")
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22221")
+                .setTimeout(3000);
         consumerConfig0.refer();
 
         ConsumerConfig<HelloService> consumerConfig1 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22221")
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22221")
+                .setTimeout(3000);
         consumerConfig1.refer();
 
         ConsumerConfig<HelloService> consumerConfig2 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22221")
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22221")
+                .setTimeout(3000);
         consumerConfig2.refer();
 
         ConsumerConfig<HelloService> consumerConfig3 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22221")
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22221")
+                .setTimeout(3000);
         try {
             consumerConfig3.refer();
         } catch (Exception e) {
@@ -72,17 +73,17 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
         }
 
         ConsumerConfig<HelloService> consumerConfig4 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22221")
-            .setRepeatedReferLimit(4)
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22221")
+                .setRepeatedReferLimit(4)
+                .setTimeout(3000);
         consumerConfig4.refer();
 
         ConsumerConfig<HelloService> consumerConfig5 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22221")
-            .setRepeatedReferLimit(4)
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22221")
+                .setRepeatedReferLimit(4)
+                .setTimeout(3000);
         try {
             consumerConfig5.refer();
         } catch (Exception e) {
@@ -96,10 +97,10 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
         RegistryConfig registryConfig2 = new RegistryConfig().setProtocol("mocktestslow");
 
         ConsumerConfig<HelloService> consumerConfig3 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("mock")
-            .setRegistry(Arrays.asList(registryConfig, registryConfig2))
-            .setTimeout(3000).setAddressWait(-1);
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("mock")
+                .setRegistry(Arrays.asList(registryConfig, registryConfig2))
+                .setTimeout(3000).setAddressWait(-1);
         long start = System.currentTimeMillis();
         consumerConfig3.refer();
         long end = System.currentTimeMillis();
@@ -107,45 +108,45 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
         Assert.assertTrue((end - start) > 2000 && (end - start) < 4000);
         Assert.assertTrue(consumerConfig3.getConsumerBootstrap().isSubscribed());
         Assert.assertTrue(consumerConfig3.getConsumerBootstrap().getCluster()
-            .getAddressHolder().getAllProviderSize() == 0);
+                .getAddressHolder().getAllProviderSize() == 0);
 
         // 发布一个服务，每个请求要执行2秒
         ServerConfig serverConfig0 = new ServerConfig()
-            .setStopTimeout(0)
-            .setPort(22222)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(5).setMaxThreads(5);
+                .setStopTimeout(0)
+                .setPort(22222)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(5).setMaxThreads(5);
         ProviderConfig<HelloService> providerConfig0 = new ProviderConfig<HelloService>()
-            .setId("p-0")
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("mock")
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig0)
-            .setRepeatedExportLimit(5)
-            .setRegistry(registryConfig);
+                .setId("p-0")
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("mock")
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig0)
+                .setRepeatedExportLimit(5)
+                .setRegistry(registryConfig);
         providerConfig0.export();
 
         // 发布一个服务，每个请求要执行2秒
         ServerConfig serverConfig1 = new ServerConfig()
-            .setStopTimeout(0)
-            .setPort(22223)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(5).setMaxThreads(5);
+                .setStopTimeout(0)
+                .setPort(22223)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(5).setMaxThreads(5);
         ProviderConfig<HelloService> providerConfig1 = new ProviderConfig<HelloService>()
-            .setId("p-1")
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("mock")
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig1)
-            .setRepeatedExportLimit(5)
-            .setRegistry(registryConfig2);
+                .setId("p-1")
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("mock")
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig1)
+                .setRepeatedExportLimit(5)
+                .setRegistry(registryConfig2);
         providerConfig1.export();
 
         ConsumerConfig<HelloService> consumerConfig0 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("mock")
-            .setDirectUrl("bolt://127.0.0.1:22222")
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("mock")
+                .setDirectUrl("bolt://127.0.0.1:22222")
+                .setTimeout(3000);
         consumerConfig0.refer();
         Assert.assertTrue(consumerConfig0.getConsumerBootstrap().isSubscribed());
         consumerConfig0.refer();
@@ -154,10 +155,10 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
         consumerConfig0.unRefer();
 
         ConsumerConfig<HelloService> consumerConfig1 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("mock")
-            .setRegistry(Arrays.asList(registryConfig, registryConfig2))
-            .setTimeout(3000).setAddressWait(-1);
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("mock")
+                .setRegistry(Arrays.asList(registryConfig, registryConfig2))
+                .setTimeout(3000).setAddressWait(-1);
         start = System.currentTimeMillis();
         consumerConfig1.refer();
         end = System.currentTimeMillis();
@@ -165,16 +166,16 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
         Assert.assertTrue((end - start) > 2000 && (end - start) < 4000);
         Assert.assertTrue(consumerConfig1.getConsumerBootstrap().isSubscribed());
         Assert.assertTrue(consumerConfig1.getConsumerBootstrap().getCluster()
-            .getAddressHolder().getAllProviderSize() > 0);
+                .getAddressHolder().getAllProviderSize() > 0);
 
         Assert.assertTrue(consumerConfig3.getConsumerBootstrap().getCluster()
-            .getAddressHolder().getAllProviderSize() > 0);
+                .getAddressHolder().getAllProviderSize() > 0);
 
         ConsumerConfig<HelloService> consumerConfig2 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("mock")
-            .setRegistry(Arrays.asList(registryConfig, registryConfig2))
-            .setTimeout(3000).setAddressWait(1000);
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("mock")
+                .setRegistry(Arrays.asList(registryConfig, registryConfig2))
+                .setTimeout(3000).setAddressWait(1000);
         start = System.currentTimeMillis();
         consumerConfig2.refer();
         end = System.currentTimeMillis();
@@ -187,32 +188,32 @@ public class BoltConsumerBootstrapTest extends ActivelyDestroyTest {
         } catch (Exception e) {
         }
         Assert.assertTrue(consumerConfig2.getConsumerBootstrap().getCluster()
-            .getAddressHolder().getAllProviderSize() > 0);
+                .getAddressHolder().getAllProviderSize() > 0);
     }
 
     @Test
     public void testAttrUpdate() {
         // 发布一个服务
         ServerConfig serverConfig0 = new ServerConfig()
-            .setStopTimeout(0)
-            .setPort(22224)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(5).setMaxThreads(5);
+                .setStopTimeout(0)
+                .setPort(22224)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(5).setMaxThreads(5);
         ProviderConfig<HelloService> providerConfig0 = new ProviderConfig<HelloService>()
-            .setId("p-0")
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("attr")
-            .setRef(new HelloServiceImpl(1000))
-            .setServer(serverConfig0)
-            .setRepeatedExportLimit(5);
+                .setId("p-0")
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("attr")
+                .setRef(new HelloServiceImpl(1000))
+                .setServer(serverConfig0)
+                .setRepeatedExportLimit(5);
         providerConfig0.export();
 
         ConsumerConfig<HelloService> consumerConfig0 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("attr")
-            .setProxy("jdk")
-            .setDirectUrl("bolt://127.0.0.1:22224")
-            .setTimeout(500);
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("attr")
+                .setProxy("jdk")
+                .setDirectUrl("bolt://127.0.0.1:22224")
+                .setTimeout(500);
         HelloService proxy = consumerConfig0.refer();
         Invoker invoker = JDKProxy.parseInvoker(proxy);
         Cluster cluster = consumerConfig0.getConsumerBootstrap().getCluster();

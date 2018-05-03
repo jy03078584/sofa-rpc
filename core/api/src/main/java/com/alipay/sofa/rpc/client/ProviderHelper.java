@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.client;
 
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
 
 /**
  * Utils method of ProviderInfo or ProviderGroup

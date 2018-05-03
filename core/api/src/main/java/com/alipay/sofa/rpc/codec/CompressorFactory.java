@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.codec;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.ext.ExtensionClass;
 import com.alipay.sofa.rpc.ext.ExtensionLoader;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderListener;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Factory of Compressor
@@ -44,7 +44,7 @@ public final class CompressorFactory {
     /**
      * 扩展加载器
      */
-    private final static ExtensionLoader<Compressor>         EXTENSION_LOADER    = buildLoader();
+    private final static ExtensionLoader<Compressor> EXTENSION_LOADER = buildLoader();
 
     private static ExtensionLoader<Compressor> buildLoader() {
         return ExtensionLoaderFactory.getExtensionLoader(Compressor.class, new ExtensionLoaderListener<Compressor>() {

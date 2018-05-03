@@ -18,7 +18,7 @@ package com.alipay.sofa.rpc.common.struct;
 
 /**
  * MapDifference辅助类，表达一个Map.Entry里value的变化，包含变化前后的值
- * 
+ *
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  * @see MapDifference
  */

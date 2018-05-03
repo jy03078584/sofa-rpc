@@ -36,7 +36,7 @@ public class RpcContextManager {
         try {
             RpcInvokeContext invokeCtx = RpcInvokeContext.getContext();
             RpcReferenceContext referenceCtx = (RpcReferenceContext) invokeCtx
-                .get(RemotingConstants.INVOKE_CTX_RPC_REF_CTX);
+                    .get(RemotingConstants.INVOKE_CTX_RPC_REF_CTX);
             if (referenceCtx != null) {
                 String resultCode = (String) invokeCtx.get(RemotingConstants.INVOKE_CTX_RPC_RESULT_CODE);
                 if (resultCode != null) {

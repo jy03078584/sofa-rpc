@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.registry;
 
+import static com.alipay.sofa.rpc.client.ProviderInfoAttrs.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.SystemInfo;
@@ -23,20 +30,18 @@ import com.alipay.sofa.rpc.common.Version;
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
 import com.alipay.sofa.rpc.common.utils.NetUtils;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
-import com.alipay.sofa.rpc.config.*;
+import com.alipay.sofa.rpc.config.AbstractInterfaceConfig;
+import com.alipay.sofa.rpc.config.ConsumerConfig;
+import com.alipay.sofa.rpc.config.MethodConfig;
+import com.alipay.sofa.rpc.config.ProviderConfig;
+import com.alipay.sofa.rpc.config.RegistryConfig;
+import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.rpc.registry.Registry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static com.alipay.sofa.rpc.client.ProviderInfoAttrs.*;
 
 /**
  *
@@ -47,6 +52,14 @@ import static com.alipay.sofa.rpc.client.ProviderInfoAttrs.*;
 public class MockTestRegistry extends Registry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MockTestRegistry.class);
+    /**
+     * 订阅者通知列表（key为订阅者关键字，value为ConsumerConfig列表）
+     */
+    protected ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>> notifyListeners = new ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>>();
+    /**
+     * 内存里的服务列表 {service : [provider...]}
+     */
+    protected ConcurrentHashMap<String, ProviderGroup> memoryCache = new ConcurrentHashMap<String, ProviderGroup>();
 
     /**
      * 注册中心配置
@@ -58,14 +71,81 @@ public class MockTestRegistry extends Registry {
     }
 
     /**
-     * 订阅者通知列表（key为订阅者关键字，value为ConsumerConfig列表）
+     * Convert provider to url.
+     *
+     * @param providerConfig the ProviderConfig
+     * @return the url list
      */
-    protected ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>> notifyListeners = new ConcurrentHashMap<String, Map<ConsumerConfig, ProviderInfoListener>>();
+    public static String convertProviderToUrls(ProviderConfig providerConfig, ServerConfig server) {
+        StringBuilder sb = new StringBuilder(200);
+        String appName = providerConfig.getAppName();
+        String host = server.getVirtualHost(); // 虚拟ip
+        if (host == null) {
+            host = server.getHost();
+            if (NetUtils.isLocalHost(host) || NetUtils.isAnyHost(host)) {
+                host = SystemInfo.getLocalHost();
+            }
+        } else {
+            if (LOGGER.isWarnEnabled(appName)) {
+                LOGGER.warnWithApp(appName,
+                        "Virtual host is specified, host will be change from {} to {} when register",
+                        server.getHost(), host);
+            }
+        }
+        Integer port = server.getVirtualPort(); // 虚拟port
+        if (port == null) {
+            port = server.getPort();
+        } else {
+            if (LOGGER.isWarnEnabled(appName)) {
+                LOGGER.warnWithApp(appName,
+                        "Virtual port is specified, host will be change from {} to {} when register",
+                        server.getPort(), port);
+            }
+        }
+
+        String protocol = server.getProtocol();
+        sb.append(host).append(":").append(port).append(server.getContextPath());
+        sb.append("?").append(ATTR_RPC_VERSION).append("=").append(Version.RPC_VERSION);
+        sb.append(getKeyPairs(ATTR_SERIALIZATION, providerConfig.getSerialization()));
+        sb.append(getKeyPairs(ATTR_WEIGHT, providerConfig.getWeight()));
+        if (providerConfig.getTimeout() > 0) {
+            sb.append(getKeyPairs(ATTR_TIMEOUT, providerConfig.getTimeout()));
+        }
+        sb.append(getKeyPairs(ATTR_APP_NAME, appName));
+        sb.append(getKeyPairs(ATTR_WARMUP_TIME, providerConfig.getParameter(ATTR_WARMUP_TIME)));
+        sb.append(getKeyPairs(ATTR_WARMUP_WEIGHT, providerConfig.getParameter(ATTR_WARMUP_WEIGHT)));
+
+        Map<String, MethodConfig> methodConfigs = providerConfig.getMethods();
+        if (CommonUtils.isNotEmpty(methodConfigs)) {
+            for (Map.Entry<String, MethodConfig> entry : methodConfigs.entrySet()) {
+                String methodName = entry.getKey();
+                MethodConfig methodConfig = entry.getValue();
+                sb.append(getKeyPairs("." + methodName + "." + ATTR_TIMEOUT, methodConfig.getTimeout()));
+
+                // 方法级配置，只能放timeout
+                String key = "[" + methodName + "]";
+                String value = "[clientTimeout" + "#" + methodConfig.getTimeout() + "]";
+                sb.append(getKeyPairs(key, value));
+            }
+        }
+        sb.append(getKeyPairs(ATTR_START_TIME, RpcRuntimeContext.now()));
+        return sb.toString();
+    }
 
     /**
-     * 内存里的服务列表 {service : [provider...]}
+     * Gets key pairs.
+     *
+     * @param key   the key
+     * @param value the value
+     * @return the key pairs
      */
-    protected ConcurrentHashMap<String, ProviderGroup>                             memoryCache     = new ConcurrentHashMap<String, ProviderGroup>();
+    private static String getKeyPairs(String key, Object value) {
+        if (value != null) {
+            return "&" + key + "=" + value.toString();
+        } else {
+            return StringUtils.EMPTY;
+        }
+    }
 
     @Override
     public boolean start() {
@@ -183,82 +263,5 @@ public class MockTestRegistry extends Registry {
 
     protected ProviderGroup buildProviderGroup() {
         return new ProviderGroup("mocktest");
-    }
-
-    /**
-     * Convert provider to url.
-     *
-     * @param providerConfig the ProviderConfig
-     * @return the url list
-     */
-    public static String convertProviderToUrls(ProviderConfig providerConfig, ServerConfig server) {
-        StringBuilder sb = new StringBuilder(200);
-        String appName = providerConfig.getAppName();
-        String host = server.getVirtualHost(); // 虚拟ip
-        if (host == null) {
-            host = server.getHost();
-            if (NetUtils.isLocalHost(host) || NetUtils.isAnyHost(host)) {
-                host = SystemInfo.getLocalHost();
-            }
-        } else {
-            if (LOGGER.isWarnEnabled(appName)) {
-                LOGGER.warnWithApp(appName,
-                    "Virtual host is specified, host will be change from {} to {} when register",
-                    server.getHost(), host);
-            }
-        }
-        Integer port = server.getVirtualPort(); // 虚拟port
-        if (port == null) {
-            port = server.getPort();
-        } else {
-            if (LOGGER.isWarnEnabled(appName)) {
-                LOGGER.warnWithApp(appName,
-                    "Virtual port is specified, host will be change from {} to {} when register",
-                    server.getPort(), port);
-            }
-        }
-
-        String protocol = server.getProtocol();
-        sb.append(host).append(":").append(port).append(server.getContextPath());
-        sb.append("?").append(ATTR_RPC_VERSION).append("=").append(Version.RPC_VERSION);
-        sb.append(getKeyPairs(ATTR_SERIALIZATION, providerConfig.getSerialization()));
-        sb.append(getKeyPairs(ATTR_WEIGHT, providerConfig.getWeight()));
-        if (providerConfig.getTimeout() > 0) {
-            sb.append(getKeyPairs(ATTR_TIMEOUT, providerConfig.getTimeout()));
-        }
-        sb.append(getKeyPairs(ATTR_APP_NAME, appName));
-        sb.append(getKeyPairs(ATTR_WARMUP_TIME, providerConfig.getParameter(ATTR_WARMUP_TIME)));
-        sb.append(getKeyPairs(ATTR_WARMUP_WEIGHT, providerConfig.getParameter(ATTR_WARMUP_WEIGHT)));
-
-        Map<String, MethodConfig> methodConfigs = providerConfig.getMethods();
-        if (CommonUtils.isNotEmpty(methodConfigs)) {
-            for (Map.Entry<String, MethodConfig> entry : methodConfigs.entrySet()) {
-                String methodName = entry.getKey();
-                MethodConfig methodConfig = entry.getValue();
-                sb.append(getKeyPairs("." + methodName + "." + ATTR_TIMEOUT, methodConfig.getTimeout()));
-
-                // 方法级配置，只能放timeout 
-                String key = "[" + methodName + "]";
-                String value = "[clientTimeout" + "#" + methodConfig.getTimeout() + "]";
-                sb.append(getKeyPairs(key, value));
-            }
-        }
-        sb.append(getKeyPairs(ATTR_START_TIME, RpcRuntimeContext.now()));
-        return sb.toString();
-    }
-
-    /**
-     * Gets key pairs.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return the key pairs
-     */
-    private static String getKeyPairs(String key, Object value) {
-        if (value != null) {
-            return "&" + key + "=" + value.toString();
-        } else {
-            return StringUtils.EMPTY;
-        }
     }
 }

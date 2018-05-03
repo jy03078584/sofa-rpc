@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.log.LogCodes;
-
-import java.util.List;
 
 /**
  * Abstract load balancer.

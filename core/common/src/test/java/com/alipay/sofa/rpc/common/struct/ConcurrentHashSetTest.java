@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.common.struct;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ConcurrentHashSetTest {
 

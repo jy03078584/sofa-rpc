@@ -16,9 +16,6 @@
  */
 package com.alipay.sofa.rpc.common.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -26,6 +23,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *

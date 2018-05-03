@@ -32,7 +32,7 @@ public class ConfigUniqueNameGeneratorTest {
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueName(providerConfig), "com.xx:2.0");
 
         providerConfig = (ProviderConfig) new ProviderConfig().setInterfaceId("com.xx").setVersion("2.0")
-            .setUniqueId("ud");
+                .setUniqueId("ud");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueName(providerConfig), "com.xx:2.0:ud");
 
         ConsumerConfig consumerConfig = (ConsumerConfig) new ConsumerConfig().setInterfaceId("com.xx");
@@ -42,7 +42,7 @@ public class ConfigUniqueNameGeneratorTest {
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueName(consumerConfig), "com.xx:2.0");
 
         consumerConfig = (ConsumerConfig) new ConsumerConfig().setInterfaceId("com.xx").setVersion("2.0")
-            .setUniqueId("ud");
+                .setUniqueId("ud");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueName(consumerConfig), "com.xx:2.0:ud");
     }
 
@@ -52,35 +52,35 @@ public class ConfigUniqueNameGeneratorTest {
         Assert.assertEquals("com.xx:1.0", ConfigUniqueNameGenerator.getUniqueNameProtocol(providerConfig, null));
         Assert.assertEquals("com.xx:1.0", ConfigUniqueNameGenerator.getUniqueNameProtocol(providerConfig, ""));
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueNameProtocol(providerConfig, "bolt"),
-            "com.xx:1.0@bolt");
+                "com.xx:1.0@bolt");
 
         providerConfig = (ProviderConfig) new ProviderConfig().setInterfaceId("com.xx").setVersion("2.0");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueNameProtocol(providerConfig, "bolt"),
-            "com.xx:2.0@bolt");
+                "com.xx:2.0@bolt");
 
         providerConfig = (ProviderConfig) new ProviderConfig().setInterfaceId("com.xx").setVersion("2.0")
-            .setUniqueId("ud");
+                .setUniqueId("ud");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueNameProtocol(providerConfig, "bolt"),
-            "com.xx:2.0:ud@bolt");
+                "com.xx:2.0:ud@bolt");
     }
 
     @Test
     public void getUniqueNameProtocol1() throws Exception {
         ConsumerConfig consumerConfig = (ConsumerConfig) new ConsumerConfig().setProtocol("bolt")
-            .setInterfaceId("com.xx");
+                .setInterfaceId("com.xx");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueNameProtocol(consumerConfig),
-            "com.xx:1.0@bolt");
+                "com.xx:1.0@bolt");
 
         consumerConfig = (ConsumerConfig) new ConsumerConfig().setProtocol("bolt")
-            .setInterfaceId("com.xx").setVersion("2.0");
+                .setInterfaceId("com.xx").setVersion("2.0");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueNameProtocol(consumerConfig),
-            "com.xx:2.0@bolt");
+                "com.xx:2.0@bolt");
 
         consumerConfig = (ConsumerConfig) new ConsumerConfig().setProtocol("bolt")
-            .setInterfaceId("com.xx").setVersion("2.0")
-            .setUniqueId("ud");
+                .setInterfaceId("com.xx").setVersion("2.0")
+                .setUniqueId("ud");
         Assert.assertEquals(ConfigUniqueNameGenerator.getUniqueNameProtocol(consumerConfig),
-            "com.xx:2.0:ud@bolt");
+                "com.xx:2.0:ud@bolt");
     }
 
     @Test

@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.config;
 
-import com.alipay.sofa.rpc.context.RpcRuntimeContext;
-
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 
 /**
  * 默认配置带ID
@@ -29,12 +29,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class AbstractIdConfig<S extends AbstractIdConfig> implements Serializable {
 
-    private static final long          serialVersionUID = -1932911135229369183L;
+    private static final long serialVersionUID = -1932911135229369183L;
 
     /**
      * Id生成器
      */
-    private final static AtomicInteger ID_GENERATOR     = new AtomicInteger(0);
+    private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
 
     static {
         RpcRuntimeContext.now();
@@ -43,7 +43,7 @@ public abstract class AbstractIdConfig<S extends AbstractIdConfig> implements Se
     /**
      * config id 
      */
-    private String                     id;
+    private String id;
 
     /**
      * Gets id.

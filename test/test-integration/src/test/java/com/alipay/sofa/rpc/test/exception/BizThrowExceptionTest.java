@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.rpc.test.exception;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * <p></p>
@@ -39,24 +40,24 @@ public class BizThrowExceptionTest extends ActivelyDestroyTest {
 
         // 只有2个线程 执行
         ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(0)
-            .setPort(22222)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(5).setMaxThreads(5);
+                .setStopTimeout(0)
+                .setPort(22222)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(5).setMaxThreads(5);
 
         // 发布一个服务，每个请求要执行1秒
         ProviderConfig<TestExceptionService> providerConfig = new ProviderConfig<TestExceptionService>()
-            .setInterfaceId(TestExceptionService.class.getName())
-            .setRef(new TestExceptionServiceImpl())
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setInterfaceId(TestExceptionService.class.getName())
+                .setRef(new TestExceptionServiceImpl())
+                .setServer(serverConfig)
+                .setRegister(false);
         providerConfig.export();
 
         ConsumerConfig<TestExceptionService> consumerConfig = new ConsumerConfig<TestExceptionService>()
-            .setInterfaceId(TestExceptionService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22222")
-            .setTimeout(1000)
-            .setRegister(false);
+                .setInterfaceId(TestExceptionService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22222")
+                .setTimeout(1000)
+                .setRegister(false);
         final TestExceptionService service = consumerConfig.refer();
 
         try {

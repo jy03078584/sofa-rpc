@@ -16,14 +16,14 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.common.RpcConfigs;
 import com.alipay.sofa.rpc.common.RpcOptions;
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
-
-import java.io.Serializable;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 抽象的服务提供列表
@@ -33,68 +33,58 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ProviderInfo implements Serializable {
 
-    private static final long                                 serialVersionUID = -6438690329875954051L;
-
+    private static final long serialVersionUID = -6438690329875954051L;
+    /**
+     * 静态属性，不会变的
+     */
+    private final ConcurrentHashMap<String, String> staticAttrs = new ConcurrentHashMap<String, String>();
+    /**
+     * 动态属性，会动态变的 <br />
+     * <p>
+     * 例如动态权重，是否启用，预热标记等  invocationOptimizing
+     */
+    private final transient ConcurrentHashMap<String, Object> dynamicAttrs = new ConcurrentHashMap<String, Object>();
     /**
      * 原始地址
      */
-    private transient String                                  originUrl;
-
+    private transient String originUrl;
     /**
      * The Protocol type.
      */
-    private String                                            protocolType     = RpcConfigs
-                                                                                   .getStringValue(RpcOptions.DEFAULT_PROTOCOL);
+    private String protocolType = RpcConfigs
+            .getStringValue(RpcOptions.DEFAULT_PROTOCOL);
     /**
      * The Ip.
      */
-    private String                                            host;
-
+    private String host;
     /**
      * The Port.
      */
-    private int                                               port             = 80;
-
+    private int port = 80;
     /**
      * The path
      */
-    private String                                            path;
-
+    private String path;
     /**
      * 序列化方式，服务端指定，以服务端的为准
      */
-    private String                                            serializationType;
-
+    private String serializationType;
     /**
      * The rpc Version
      */
-    private int                                               rpcVersion;
-
+    private int rpcVersion;
     /**
      * 权重
      *
      * @see ProviderInfoAttrs#ATTR_WEIGHT 原始权重
      * @see ProviderInfoAttrs#ATTR_WARMUP_WEIGHT 预热权重
      */
-    private transient volatile int                            weight           = RpcConfigs
-                                                                                   .getIntValue(RpcOptions.PROVIDER_WEIGHT);
-
+    private transient volatile int weight = RpcConfigs
+            .getIntValue(RpcOptions.PROVIDER_WEIGHT);
     /**
      * 服务状态
      */
-    private transient volatile ProviderStatus                 status           = ProviderStatus.AVAILABLE;
-
-    /**
-     * 静态属性，不会变的
-     */
-    private final ConcurrentHashMap<String, String>           staticAttrs      = new ConcurrentHashMap<String, String>();
-
-    /**
-     * 动态属性，会动态变的 <br />
-     * <p>
-     * 例如动态权重，是否启用，预热标记等  invocationOptimizing
-     */
-    private final transient ConcurrentHashMap<String, Object> dynamicAttrs     = new ConcurrentHashMap<String, Object>();
+    private transient volatile ProviderStatus status = ProviderStatus.AVAILABLE;
 
     /**
      * Instantiates a new Provider.
@@ -182,10 +172,10 @@ public class ProviderInfo implements Serializable {
                             this.setWeight(weight);
                             this.setStaticAttr(ProviderInfoAttrs.ATTR_WEIGHT, String.valueOf(weight));
                         } else if (ProviderInfoAttrs.ATTR_RPC_VERSION.equals(kvpair[0]) &&
-                            StringUtils.isNotEmpty(kvpair[1])) {
+                                StringUtils.isNotEmpty(kvpair[1])) {
                             this.setRpcVersion(CommonUtils.parseInt(kvpair[1], getRpcVersion()));
                         } else if (ProviderInfoAttrs.ATTR_SERIALIZATION.equals(kvpair[0]) &&
-                            StringUtils.isNotEmpty(kvpair[1])) {
+                                StringUtils.isNotEmpty(kvpair[1])) {
                             this.setSerializationType(kvpair[1]);
                         } else {
                             this.staticAttrs.put(kvpair[0], kvpair[1]);
@@ -265,7 +255,7 @@ public class ProviderInfo implements Serializable {
             return false;
         }
         if (serializationType != null ? !serializationType.equals(that.serializationType)
-            : that.serializationType != null) {
+                : that.serializationType != null) {
             return false;
         }
         // return staticAttrs != null ? staticAttrs.equals(that.staticAttrs) : that.staticAttrs == null;

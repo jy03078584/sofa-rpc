@@ -16,15 +16,16 @@
  */
 package com.alipay.sofa.rpc.registry.zk;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.curator.framework.recipes.cache.ChildData;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.AbstractInterfaceConfig;
 import com.alipay.sofa.rpc.listener.ConfigListener;
-import org.apache.curator.framework.recipes.cache.ChildData;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ZookeeperObserver for config node.
@@ -36,8 +37,8 @@ public class ZookeeperConfigObserver extends AbstractZookeeperObserver {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger                                              LOGGER            = LoggerFactory
-                                                                                                   .getLogger(ZookeeperConfigObserver.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ZookeeperConfigObserver.class);
 
     /**
      * The Config listener map.
@@ -59,8 +60,8 @@ public class ZookeeperConfigObserver extends AbstractZookeeperObserver {
         } else {
             if (LOGGER.isInfoEnabled(config.getAppName())) {
                 LOGGER.info("Receive data: path=[" + data.getPath() + "]"
-                    + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
-                    + ", stat=[" + data.getStat() + "]");
+                        + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
+                        + ", stat=[" + data.getStat() + "]");
             }
         }
     }
@@ -74,8 +75,8 @@ public class ZookeeperConfigObserver extends AbstractZookeeperObserver {
         } else {
             if (LOGGER.isInfoEnabled(config.getAppName())) {
                 LOGGER.info("Receive data: path=[" + data.getPath() + "]"
-                    + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
-                    + ", stat=[" + data.getStat() + "]");
+                        + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
+                        + ", stat=[" + data.getStat() + "]");
             }
         }
     }
@@ -89,8 +90,8 @@ public class ZookeeperConfigObserver extends AbstractZookeeperObserver {
         } else {
             if (LOGGER.isInfoEnabled(config.getAppName())) {
                 LOGGER.info("Receive data: path=[" + data.getPath() + "]"
-                    + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
-                    + ", stat=[" + data.getStat() + "]");
+                        + ", data=[" + new String(data.getData(), RpcConstants.DEFAULT_CHARSET) + "]"
+                        + ", stat=[" + data.getStat() + "]");
             }
         }
     }

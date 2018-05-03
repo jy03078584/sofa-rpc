@@ -16,16 +16,16 @@
  */
 package com.alipay.sofa.rpc.common.struct;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
- * 
+ *
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
  */
 public class MapDifferenceTest {

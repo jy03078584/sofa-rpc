@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.rpc.test.invoke;
 
+import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
@@ -30,12 +37,6 @@ import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -50,25 +51,25 @@ public class AsyncCallbackTest extends ActivelyDestroyTest {
     public void testAll() {
 
         ServerConfig serverConfig2 = new ServerConfig()
-            .setPort(22222)
-            .setDaemon(false);
+                .setPort(22222)
+                .setDaemon(false);
 
         // C服务的服务端
         ProviderConfig<HelloService> CProvider = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(1000))
-            .setServer(serverConfig2);
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(1000))
+                .setServer(serverConfig2);
         CProvider.export();
 
         // B调C的客户端
         Filter filter = new TestAsyncFilter();
         ConsumerConfig<HelloService> BConsumer = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK)
-            .setTimeout(50000)
-            .setFilterRef(Arrays.asList(filter))
-            // .setOnReturn() // 不设置 调用级别设置
-            .setDirectUrl("bolt://127.0.0.1:22222");
+                .setInterfaceId(HelloService.class.getName())
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK)
+                .setTimeout(50000)
+                .setFilterRef(Arrays.asList(filter))
+                // .setOnReturn() // 不设置 调用级别设置
+                .setDirectUrl("bolt://127.0.0.1:22222");
         HelloService helloService = BConsumer.refer();
 
         final CountDownLatch latch = new CountDownLatch(1);

@@ -16,6 +16,12 @@
  */
 package com.alipay.sofa.rpc.context;
 
+import java.net.InetSocketAddress;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.RpcConfigs;
 import com.alipay.sofa.rpc.common.RpcConstants;
@@ -23,12 +29,6 @@ import com.alipay.sofa.rpc.common.RpcOptions;
 import com.alipay.sofa.rpc.common.struct.StopWatch;
 import com.alipay.sofa.rpc.common.utils.NetUtils;
 import com.alipay.sofa.rpc.message.ResponseFuture;
-
-import java.net.InetSocketAddress;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 基于ThreadLocal的内部使用的上下文传递。一般存在于：客户端请求线程、服务端业务线程池、客户端异步线程<br>
@@ -41,26 +41,54 @@ public class RpcInternalContext implements Cloneable {
      * 是否允许携带上下文附件，关闭后只能传递"."开头的key，"_" 开头的Key将不被保持和传递。<br>
      * 在性能测试等场景可能关闭此传递功能。
      */
-    private static final boolean                                ATTACHMENT_ENABLE = RpcConfigs
-                                                                                      .getBooleanValue(RpcOptions.CONTEXT_ATTACHMENT_ENABLE);
+    private static final boolean ATTACHMENT_ENABLE = RpcConfigs
+            .getBooleanValue(RpcOptions.CONTEXT_ATTACHMENT_ENABLE);
 
     /**
      * The constant LOCAL.
      */
-    private static final ThreadLocal<RpcInternalContext>        LOCAL             = new ThreadLocal<RpcInternalContext>();
+    private static final ThreadLocal<RpcInternalContext> LOCAL = new ThreadLocal<RpcInternalContext>();
 
     /**
      * The constant DEQUE_LOCAL.
      */
-    private static final ThreadLocal<Deque<RpcInternalContext>> DEQUE_LOCAL       = new ThreadLocal<Deque<RpcInternalContext>>();
+    private static final ThreadLocal<Deque<RpcInternalContext>> DEQUE_LOCAL = new ThreadLocal<Deque<RpcInternalContext>>();
+    /**
+     * The Future.
+     */
+    private ResponseFuture<?> future;
+    /**
+     * The Local address.
+     */
+    private InetSocketAddress localAddress;
+    /**
+     * The Remote address.
+     */
+    private InetSocketAddress remoteAddress;
+    /**
+     * 附带属性功能，遵循谁使用谁清理的原则。Key必须为 "_" 和 "."开头<br>
+     * 如果关闭了 {@link #ATTACHMENT_ENABLE} 功能，"_" 开头的Key将不被保持和传递。
+     *
+     * @see #ATTACHMENT_ENABLE
+     */
+    private Map<String, Object> attachments = new HashMap<String, Object>();
+    /**
+     * The Stopwatch
+     */
+    private StopWatch stopWatch = new StopWatch();
+    /**
+     * The Provider side.
+     */
+    private Boolean providerSide;
+    /**
+     * 要调用的服务端信息
+     */
+    private ProviderInfo providerInfo;
 
     /**
-     * 设置上下文
-     *
-     * @param context RPC内置上下文
+     * Instantiates a new Rpc context.
      */
-    public static void setContext(RpcInternalContext context) {
-        LOCAL.set(context);
+    protected RpcInternalContext() {
     }
 
     /**
@@ -75,6 +103,15 @@ public class RpcInternalContext implements Cloneable {
             LOCAL.set(context);
         }
         return context;
+    }
+
+    /**
+     * 设置上下文
+     *
+     * @param context RPC内置上下文
+     */
+    public static void setContext(RpcInternalContext context) {
+        LOCAL.set(context);
     }
 
     /**
@@ -140,48 +177,26 @@ public class RpcInternalContext implements Cloneable {
     }
 
     /**
-     * Instantiates a new Rpc context.
+     * 合法的内置key，以"_"或者"."开头
+     *
+     * @param key 参数key
+     * @return 是否合法
      */
-    protected RpcInternalContext() {
+    public static boolean isValidInternalParamKey(String key) {
+        char c = key.charAt(0);
+        return c == RpcConstants.INTERNAL_KEY_PREFIX || c == RpcConstants.HIDE_KEY_PREFIX;
     }
 
     /**
-     * The Future.
-     */
-    private ResponseFuture<?>   future;
-
-    /**
-     * The Local address.
-     */
-    private InetSocketAddress   localAddress;
-
-    /**
-     * The Remote address.
-     */
-    private InetSocketAddress   remoteAddress;
-
-    /**
-     * 附带属性功能，遵循谁使用谁清理的原则。Key必须为 "_" 和 "."开头<br>
-     * 如果关闭了 {@link #ATTACHMENT_ENABLE} 功能，"_" 开头的Key将不被保持和传递。
+     * 是否"."开头的隐藏key
      *
-     * @see #ATTACHMENT_ENABLE
+     * @param key 参数key
+     * @return 是否隐藏key
      */
-    private Map<String, Object> attachments = new HashMap<String, Object>();
-
-    /**
-     * The Stopwatch
-     */
-    private StopWatch           stopWatch   = new StopWatch();
-
-    /**
-     * The Provider side.
-     */
-    private Boolean             providerSide;
-
-    /**
-     * 要调用的服务端信息
-     */
-    private ProviderInfo        providerInfo;
+    static boolean isHiddenParamKey(String key) {
+        char c = key.charAt(0);
+        return c == RpcConstants.HIDE_KEY_PREFIX;
+    }
 
     /**
      * Is provider side.
@@ -237,17 +252,6 @@ public class RpcInternalContext implements Cloneable {
     /**
      * set local address.
      *
-     * @param address the address
-     * @return context local address
-     */
-    public RpcInternalContext setLocalAddress(InetSocketAddress address) {
-        this.localAddress = address;
-        return this;
-    }
-
-    /**
-     * set local address.
-     *
      * @param host the host
      * @param port the port
      * @return context local address
@@ -275,13 +279,13 @@ public class RpcInternalContext implements Cloneable {
     }
 
     /**
-     * set remote address.
+     * set local address.
      *
      * @param address the address
-     * @return context remote address
+     * @return context local address
      */
-    public RpcInternalContext setRemoteAddress(InetSocketAddress address) {
-        this.remoteAddress = address;
+    public RpcInternalContext setLocalAddress(InetSocketAddress address) {
+        this.localAddress = address;
         return this;
     }
 
@@ -311,6 +315,17 @@ public class RpcInternalContext implements Cloneable {
      */
     public InetSocketAddress getRemoteAddress() {
         return remoteAddress;
+    }
+
+    /**
+     * set remote address.
+     *
+     * @param address the address
+     * @return context remote address
+     */
+    public RpcInternalContext setRemoteAddress(InetSocketAddress address) {
+        this.remoteAddress = address;
+        return this;
     }
 
     /**
@@ -351,7 +366,7 @@ public class RpcInternalContext implements Cloneable {
         } else {
             if (!isValidInternalParamKey(key)) { // 打开附件传递功能，只能传 "_" 和 "." 开头的Key
                 throw new IllegalArgumentException("key must start with" + RpcConstants.INTERNAL_KEY_PREFIX
-                    + " or " + RpcConstants.HIDE_KEY_PREFIX);
+                        + " or " + RpcConstants.HIDE_KEY_PREFIX);
             }
         }
         if (value == null) {
@@ -423,9 +438,18 @@ public class RpcInternalContext implements Cloneable {
      */
     public void clear() {
         this.setRemoteAddress(null).setLocalAddress(null).setFuture(null).setProviderSide(false)
-            .setProviderInfo(null);
+                .setProviderInfo(null);
         this.attachments = new HashMap<String, Object>();
         this.stopWatch.reset();
+    }
+
+    /**
+     * Gets provider info.
+     *
+     * @return the provider info
+     */
+    public ProviderInfo getProviderInfo() {
+        return providerInfo;
     }
 
     /**
@@ -439,26 +463,17 @@ public class RpcInternalContext implements Cloneable {
         return this;
     }
 
-    /**
-     * Gets provider info.
-     *
-     * @return the provider info
-     */
-    public ProviderInfo getProviderInfo() {
-        return providerInfo;
-    }
-
     @Override
     public String toString() {
         return "RpcInternalContext{" +
-            "future=" + future +
-            ", localAddress=" + localAddress +
-            ", remoteAddress=" + remoteAddress +
-            ", attachments=" + attachments +
-            ", stopWatch=" + stopWatch +
-            ", providerSide=" + providerSide +
-            ", providerInfo=" + providerInfo +
-            '}';
+                "future=" + future +
+                ", localAddress=" + localAddress +
+                ", remoteAddress=" + remoteAddress +
+                ", attachments=" + attachments +
+                ", stopWatch=" + stopWatch +
+                ", providerSide=" + providerSide +
+                ", providerInfo=" + providerInfo +
+                '}';
     }
 
     @Override
@@ -476,27 +491,5 @@ public class RpcInternalContext implements Cloneable {
             context.attachments.putAll(this.attachments);
             return context;
         }
-    }
-
-    /**
-     * 合法的内置key，以"_"或者"."开头
-     *
-     * @param key 参数key
-     * @return 是否合法
-     */
-    public static boolean isValidInternalParamKey(String key) {
-        char c = key.charAt(0);
-        return c == RpcConstants.INTERNAL_KEY_PREFIX || c == RpcConstants.HIDE_KEY_PREFIX;
-    }
-
-    /**
-     * 是否"."开头的隐藏key
-     *
-     * @param key 参数key
-     * @return 是否隐藏key
-     */
-    static boolean isHiddenParamKey(String key) {
-        char c = key.charAt(0);
-        return c == RpcConstants.HIDE_KEY_PREFIX;
     }
 }

@@ -20,7 +20,7 @@ import com.alipay.sofa.rpc.ext.Extensible;
 
 /**
  * 权重恢复策略
- * 
+ *
  * @author <a href="mailto:lw111072@antfin.com">liangen</a>
  */
 @Extensible

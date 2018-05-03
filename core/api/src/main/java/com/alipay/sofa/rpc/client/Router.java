@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.util.List;
+
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.context.RpcInternalContext;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extensible;
-
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.List;
 
 /**
  * 路由器：从一堆Provider中筛选出一堆Provider

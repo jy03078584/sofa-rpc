@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.rpc.filter;
 
+import java.util.Arrays;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -24,10 +29,6 @@ import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
 
 /**
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
@@ -37,29 +38,29 @@ public class SyncFilterTest extends ActivelyDestroyTest {
     @Test
     public void test() {
         ServerConfig serverConfig2 = new ServerConfig()
-            .setPort(22222)
-            .setDaemon(false);
+                .setPort(22222)
+                .setDaemon(false);
 
         // ProviderConfig
         TestSyncFilter filter1 = new TestSyncFilter();
         ProviderConfig<HelloService> providerConfig = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(1000))
-            .setFilterRef(Arrays.asList((Filter) filter1))
-            .setApplication(new ApplicationConfig().setAppName("sss"))
-            .setServer(serverConfig2);
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(1000))
+                .setFilterRef(Arrays.asList((Filter) filter1))
+                .setApplication(new ApplicationConfig().setAppName("sss"))
+                .setServer(serverConfig2);
 
         providerConfig.export();
 
         // ConsumerConfig
         TestSyncFilter filter0 = new TestSyncFilter();
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setInvokeType(RpcConstants.INVOKER_TYPE_SYNC)
-            .setApplication(new ApplicationConfig().setAppName("ccc"))
-            .setTimeout(5000)
-            .setFilterRef(Arrays.asList((Filter) filter0))
-            .setDirectUrl("bolt://127.0.0.1:22222?appName=sss");
+                .setInterfaceId(HelloService.class.getName())
+                .setInvokeType(RpcConstants.INVOKER_TYPE_SYNC)
+                .setApplication(new ApplicationConfig().setAppName("ccc"))
+                .setTimeout(5000)
+                .setFilterRef(Arrays.asList((Filter) filter0))
+                .setDirectUrl("bolt://127.0.0.1:22222?appName=sss");
         HelloService helloService = consumerConfig.refer();
 
         try {

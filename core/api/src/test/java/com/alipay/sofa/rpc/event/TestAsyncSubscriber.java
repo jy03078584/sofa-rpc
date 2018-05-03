@@ -23,11 +23,11 @@ package com.alipay.sofa.rpc.event;
  */
 public class TestAsyncSubscriber extends Subscriber {
 
+    private String cache;
+
     TestAsyncSubscriber() {
         super(false);
     }
-
-    private String cache;
 
     @Override
     public void onEvent(Event event) {

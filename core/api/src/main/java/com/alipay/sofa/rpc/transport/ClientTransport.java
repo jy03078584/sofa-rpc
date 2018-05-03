@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.transport;
 
+import java.net.InetSocketAddress;
+
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.ext.Extensible;
 import com.alipay.sofa.rpc.message.ResponseFuture;
-
-import java.net.InetSocketAddress;
 
 /**
  * ClientTransport
@@ -78,18 +78,18 @@ public abstract class ClientTransport {
     public abstract boolean isAvailable();
 
     /**
-     * 设置长连接
-     *
-     * @param channel the channel
-     */
-    public abstract void setChannel(AbstractChannel channel);
-
-    /**
      * 得到长连接
      *
      * @return channel
      */
     public abstract AbstractChannel getChannel();
+
+    /**
+     * 设置长连接
+     *
+     * @param channel the channel
+     */
+    public abstract void setChannel(AbstractChannel channel);
 
     /**
      * 当前请求数

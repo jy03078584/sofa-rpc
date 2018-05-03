@@ -47,8 +47,8 @@ public class TestObj {
     @Override
     public String toString() {
         return "TestObj{" +
-            "str='" + str + '\'' +
-            ", num=" + num +
-            '}';
+                "str='" + str + '\'' +
+                ", num=" + num +
+                '}';
     }
 }

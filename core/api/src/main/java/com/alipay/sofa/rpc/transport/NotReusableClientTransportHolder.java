@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.transport;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ClientTransport of same provider will not be reused.
@@ -32,8 +32,8 @@ public class NotReusableClientTransportHolder implements ClientTransportHolder {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger                                             LOGGER        = LoggerFactory
-                                                                                              .getLogger(NotReusableClientTransportHolder.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(NotReusableClientTransportHolder.class);
 
     /**
      * 长连接不复用的时候，一个ClientTransportConfig对应一个ClientTransport
@@ -46,9 +46,9 @@ public class NotReusableClientTransportHolder implements ClientTransportHolder {
         ClientTransport transport = allTransports.get(config);
         if (transport == null) {
             transport = ExtensionLoaderFactory.getExtensionLoader(ClientTransport.class)
-                .getExtension(config.getContainer(),
-                    new Class[] { ClientTransportConfig.class },
-                    new Object[] { config });
+                    .getExtension(config.getContainer(),
+                            new Class[] { ClientTransportConfig.class },
+                            new Object[] { config });
             ClientTransport old = allTransports.putIfAbsent(config, transport); // 保存唯一长连接
             if (old != null) {
                 if (LOGGER.isWarnEnabled()) {

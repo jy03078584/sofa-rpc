@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import static org.junit.Assert.*;
+
+import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -26,13 +34,6 @@ import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.core.request.RequestBase;
-import org.junit.Assert;
-
-import java.util.Collections;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -75,8 +76,8 @@ public class BaggageCallbackTest extends BaggageBaseTest {
         referenceBeanC.setDirectUrl("localhost:12299");
         referenceBeanC.setTimeout(1000);
         MethodConfig methodConfigC = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
         referenceBeanC.setMethods(Collections.singletonList(methodConfigC));
         SampleService sampleServiceC = (SampleService) referenceBeanC.refer();
 
@@ -88,8 +89,8 @@ public class BaggageCallbackTest extends BaggageBaseTest {
         referenceBeanD.setDirectUrl("localhost:12299?p=1&v=4.0");
         referenceBeanD.setTimeout(1000);
         MethodConfig methodConfigD = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
         referenceBeanD.setMethods(Collections.singletonList(methodConfigD));
         SampleService sampleServiceD = (SampleService) referenceBeanD.refer();
 
@@ -115,8 +116,8 @@ public class BaggageCallbackTest extends BaggageBaseTest {
         referenceBeanA.setDirectUrl("localhost:12299");
         referenceBeanA.setTimeout(3000);
         MethodConfig methodConfigA = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
         methodConfigA.setOnReturn(new SofaResponseCallback() {
             @Override
             public void onAppResponse(Object appResponse, String methodName, RequestBase request) {

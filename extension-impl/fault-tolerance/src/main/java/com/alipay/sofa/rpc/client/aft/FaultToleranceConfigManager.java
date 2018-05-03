@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The type Fault tolerance config manager.
@@ -32,8 +32,8 @@ public class FaultToleranceConfigManager {
     /**
      * Logger for this class
      */
-    private static final Logger                                          LOGGER      = LoggerFactory
-                                                                                         .getLogger(FaultToleranceConfigManager.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(FaultToleranceConfigManager.class);
 
     /**
      * All fault-tolerance config of apps
@@ -43,12 +43,12 @@ public class FaultToleranceConfigManager {
     /**
      * Default fault-tolerance config
      */
-    private static final FaultToleranceConfig                            DEFAULT_CFG = new FaultToleranceConfig();
+    private static final FaultToleranceConfig DEFAULT_CFG = new FaultToleranceConfig();
 
     /**
-     * 
+     *
      */
-    private static volatile boolean                                      aftEnable   = false;
+    private static volatile boolean aftEnable = false;
 
     /**
      * Put app config.

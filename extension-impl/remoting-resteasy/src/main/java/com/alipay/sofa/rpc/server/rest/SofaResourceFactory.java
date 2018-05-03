@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import org.jboss.resteasy.plugins.server.resourcefactory.SingletonResource;
+
 import com.alipay.sofa.rpc.config.ConfigUniqueNameGenerator;
 import com.alipay.sofa.rpc.config.ProviderConfig;
-import org.jboss.resteasy.plugins.server.resourcefactory.SingletonResource;
 
 /**
  * SofaResourceFactory base on SingletonResource.

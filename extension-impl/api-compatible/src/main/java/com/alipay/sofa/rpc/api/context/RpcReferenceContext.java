@@ -23,34 +23,34 @@ package com.alipay.sofa.rpc.api.context;
  */
 public class RpcReferenceContext {
 
-    protected String         traceId;
-    protected String         rpcId;
+    protected String traceId;
+    protected String rpcId;
 
     /** service interface */
-    protected String         interfaceName;
+    protected String  interfaceName;
     /** service invoke method */
-    protected String         methodName;
+    protected String  methodName;
     /** uniqueId */
-    protected String         uniqueId;
+    protected String  uniqueId;
     /** unique service name */
-    protected String         serviceName;
+    protected String  serviceName;
     /** is generic service */
-    protected boolean        isGeneric;
+    protected boolean isGeneric;
 
     /** target appName */
-    protected String         targetAppName;
+    protected String targetAppName;
     /** target url */
-    protected String         targetUrl;
+    protected String targetUrl;
 
     /** RPC protocol, such as TR */
-    protected String         protocol;
+    protected String protocol;
     /** RPC invoke type, such as sync, oneway */
-    protected String         invokeType;
+    protected String invokeType;
     /** RPC route trace
      for example: TURL>CFS>RDM, it indicate route trace is: test-url to config server to random select */
-    protected String         routeRecord;
+    protected String routeRecord;
 
-    protected long           connEstablishedSpan;
+    protected long connEstablishedSpan;
 
     /** cost time (ms) */
     protected long           costTime;
@@ -59,15 +59,15 @@ public class RpcReferenceContext {
     protected ResultCodeEnum resultCode;
 
     /** request size */
-    protected long           requestSize;
+    protected long requestSize;
 
     /** response size */
-    protected long           responseSize;
+    protected long responseSize;
 
     /** client ip */
-    String                   clinetIP;
+    String clinetIP;
     /** rpc客户端端口号 */
-    int                      clientPort;
+    int    clientPort;
 
     public String getInterfaceName() {
         return interfaceName;

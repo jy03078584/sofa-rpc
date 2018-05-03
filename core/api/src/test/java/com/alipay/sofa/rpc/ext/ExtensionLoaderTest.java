@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.rpc.ext;
 
+import java.lang.reflect.Field;
+import java.net.URL;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.context.RpcRunningState;
 import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.rpc.protocol.Protocol;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.lang.reflect.Field;
-import java.net.URL;
 
 /**
  *

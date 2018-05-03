@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.asynchain;
 
+import java.util.Random;
+
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.request.RequestBase;
 import com.alipay.sofa.rpc.message.bolt.BoltSendableResponseCallback;
-
-import java.util.Random;
 
 /**
  *
@@ -29,9 +29,8 @@ import java.util.Random;
  */
 public class ServiceBImpl implements ServiceB {
 
+    ServiceC serviceC;
     private Random random = new Random();
-
-    ServiceC       serviceC;
 
     public ServiceBImpl(ServiceC serviceC) {
         this.serviceC = serviceC;

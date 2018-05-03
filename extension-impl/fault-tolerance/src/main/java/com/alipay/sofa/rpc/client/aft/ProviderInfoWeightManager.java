@@ -21,7 +21,7 @@ import com.alipay.sofa.rpc.client.ProviderStatus;
 
 /**
  * Weight manager of provider info.
- * 
+ *
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
  */
 public class ProviderInfoWeightManager {

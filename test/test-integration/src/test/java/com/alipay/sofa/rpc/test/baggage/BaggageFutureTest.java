@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import java.util.Collections;
+
+import org.junit.Assert;
+
 import com.alipay.sofa.rpc.api.future.SofaResponseFuture;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
@@ -24,9 +28,6 @@ import com.alipay.sofa.rpc.config.MethodConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
-import org.junit.Assert;
-
-import java.util.Collections;
 
 /**
  *
@@ -69,8 +70,8 @@ public class BaggageFutureTest extends BaggageBaseTest {
         referenceBeanC.setDirectUrl("localhost:12299");
         referenceBeanC.setTimeout(1000);
         MethodConfig methodConfigC = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE);
         referenceBeanC.setMethods(Collections.singletonList(methodConfigC));
         SampleService sampleServiceC = (SampleService) referenceBeanC.refer();
 
@@ -82,8 +83,8 @@ public class BaggageFutureTest extends BaggageBaseTest {
         referenceBeanD.setDirectUrl("localhost:12299?p=1&v=4.0");
         referenceBeanD.setTimeout(1000);
         MethodConfig methodConfigD = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE);
         referenceBeanD.setMethods(Collections.singletonList(methodConfigD));
         SampleService sampleServiceD = (SampleService) referenceBeanD.refer();
 
@@ -106,8 +107,8 @@ public class BaggageFutureTest extends BaggageBaseTest {
         referenceBeanA.setDirectUrl("localhost:12299");
         referenceBeanA.setTimeout(3000);
         MethodConfig methodConfigA = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE);
         referenceBeanA.setMethods(Collections.singletonList(methodConfigA));
         SampleService service = (SampleService) referenceBeanA.refer();
 

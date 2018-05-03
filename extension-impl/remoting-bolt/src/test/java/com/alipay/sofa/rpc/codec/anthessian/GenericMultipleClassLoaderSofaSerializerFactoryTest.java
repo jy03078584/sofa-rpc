@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.codec.anthessian;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.hessian.generic.io.GenericArraySerializer;
 import com.alipay.hessian.generic.io.GenericClassSerializer;
 import com.alipay.hessian.generic.io.GenericCollectionSerializer;
@@ -26,8 +29,6 @@ import com.alipay.hessian.generic.model.GenericClass;
 import com.alipay.hessian.generic.model.GenericCollection;
 import com.alipay.hessian.generic.model.GenericMap;
 import com.alipay.hessian.generic.model.GenericObject;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  *
@@ -41,7 +42,7 @@ public class GenericMultipleClassLoaderSofaSerializerFactoryTest {
         Assert.assertEquals(factory.getSerializer(GenericObject.class).getClass(), GenericObjectSerializer.class);
         Assert.assertEquals(factory.getSerializer(GenericArray.class).getClass(), GenericArraySerializer.class);
         Assert.assertEquals(factory.getSerializer(GenericCollection.class).getClass(),
-            GenericCollectionSerializer.class);
+                GenericCollectionSerializer.class);
         Assert.assertEquals(factory.getSerializer(GenericMap.class).getClass(), GenericMapSerializer.class);
         Assert.assertEquals(factory.getSerializer(GenericClass.class).getClass(), GenericClassSerializer.class);
     }

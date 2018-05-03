@@ -16,6 +16,15 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.client.aft.impl.ServiceExceptionInvocationStat;
 import com.alipay.sofa.rpc.common.RpcConstants;
@@ -26,14 +35,6 @@ import com.alipay.sofa.rpc.core.exception.SofaTimeOutException;
 import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.core.request.RequestBase;
 import com.alipay.sofa.rpc.message.ResponseFuture;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -268,7 +269,7 @@ public class InvocationStatDimensionStatTest extends FaultBaseServiceTest {
 
                     @Override
                     public String get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException,
-                        TimeoutException {
+                            TimeoutException {
                         return null;
                     }
                 });

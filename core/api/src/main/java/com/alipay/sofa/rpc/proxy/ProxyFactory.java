@@ -42,10 +42,10 @@ public final class ProxyFactory {
     public static <T> T buildProxy(String proxyType, Class<T> clazz, Invoker proxyInvoker) throws Exception {
         try {
             ExtensionClass<Proxy> ext = ExtensionLoaderFactory.getExtensionLoader(Proxy.class)
-                .getExtensionClass(proxyType);
+                    .getExtensionClass(proxyType);
             if (ext == null) {
                 throw ExceptionUtils.buildRuntime("consumer.proxy", proxyType,
-                    "Unsupported proxy of client!");
+                        "Unsupported proxy of client!");
             }
             Proxy proxy = ext.getExtInstance();
             return proxy.getProxy(clazz, proxyInvoker);
@@ -65,10 +65,10 @@ public final class ProxyFactory {
     public static Invoker getInvoker(Object proxyObject, String proxyType) {
         try {
             ExtensionClass<Proxy> ext = ExtensionLoaderFactory.getExtensionLoader(Proxy.class)
-                .getExtensionClass(proxyType);
+                    .getExtensionClass(proxyType);
             if (ext == null) {
                 throw ExceptionUtils.buildRuntime("consumer.proxy", proxyType,
-                    "Unsupported proxy of client!");
+                        "Unsupported proxy of client!");
             }
             Proxy proxy = ext.getExtInstance();
             return proxy.getInvoker(proxyObject);

@@ -16,14 +16,14 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
+import java.util.List;
+import java.util.Random;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.AbstractLoadBalancer;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extension;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * 负载均衡随机算法:全部列表按权重随机选择

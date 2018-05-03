@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.filter;
 
-import com.alipay.sofa.rpc.common.utils.StringUtils;
-import com.alipay.sofa.rpc.config.AbstractInterfaceConfig;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.alipay.sofa.rpc.common.utils.StringUtils;
+import com.alipay.sofa.rpc.config.AbstractInterfaceConfig;
 
 /**
  *  规则id的配置形式：a，b，!c，d
@@ -30,26 +30,26 @@ import java.util.List;
  *           !a，!b，!c   除a，b，c不生效外，其余都生效。
  *           a，!b，!c    除b，c不生效外，其余都生效。
  *           如果不进行配置，默认对所有服务生效。
- * 
+ *
  * @author <a href="mailto:lw111072@antfin.com">liangen</a>
  */
 public abstract class BeanIdMatchFilter extends Filter {
 
-    private static final String ID_SPLIT     = ",";
+    private static final String ID_SPLIT = ",";
 
-    private static final String ID_EXCLUDE   = "!";
+    private static final String ID_EXCLUDE = "!";
 
     /**
      * 拦截器id规则
      */
-    private String              idRule;
+    private String idRule;
 
-    private boolean             allEffective = true;
-    private List<String>        effectiveId;
-    private List<String>        excludeId;
+    private boolean allEffective = true;
+    private List<String> effectiveId;
+    private List<String> excludeId;
 
-    private boolean             formatComplete;
-    private Object              formatLock   = new Object();
+    private boolean formatComplete;
+    private Object formatLock = new Object();
 
     @Override
     public boolean needToLoad(FilterInvoker invoker) {

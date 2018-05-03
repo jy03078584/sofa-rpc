@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.rpc.test.server;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
@@ -24,12 +31,6 @@ import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 丢弃超时请求和超时响应的测试用例
@@ -42,22 +43,22 @@ public class DiscardTimeoutTest extends ActivelyDestroyTest {
     public void testAll() {
 
         ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(0).setPort(22222)
-            .setQueues(5).setCoreThreads(1).setMaxThreads(1);
+                .setStopTimeout(0).setPort(22222)
+                .setQueues(5).setCoreThreads(1).setMaxThreads(1);
 
         // 发布一个服务，每个请求要执行2秒
         ProviderConfig<HelloService> providerConfig = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig)
+                .setRegister(false);
         providerConfig.export();
 
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setTimeout(5000)
-            .setDirectUrl("bolt://127.0.0.1:22222")
-            .setRegister(false);
+                .setInterfaceId(HelloService.class.getName())
+                .setTimeout(5000)
+                .setDirectUrl("bolt://127.0.0.1:22222")
+                .setRegister(false);
 
         final HelloService helloService = consumerConfig.refer();
 

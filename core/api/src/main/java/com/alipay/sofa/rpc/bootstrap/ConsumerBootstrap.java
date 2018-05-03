@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.bootstrap;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.client.Cluster;
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.ext.Extensible;
-
-import java.util.List;
 
 /**
  * <p>引用服务的包装类，包括具体的启动后的对象</p>

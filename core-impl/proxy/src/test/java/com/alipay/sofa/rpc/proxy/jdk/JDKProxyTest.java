@@ -16,13 +16,14 @@
  */
 package com.alipay.sofa.rpc.proxy.jdk;
 
-import com.alipay.sofa.rpc.proxy.AbstractTestClass;
-import com.alipay.sofa.rpc.proxy.TestInterface;
-import com.alipay.sofa.rpc.proxy.TestInvoker;
+import java.lang.reflect.Proxy;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Proxy;
+import com.alipay.sofa.rpc.proxy.AbstractTestClass;
+import com.alipay.sofa.rpc.proxy.TestInterface;
+import com.alipay.sofa.rpc.proxy.TestInvoker;
 
 /**
  *

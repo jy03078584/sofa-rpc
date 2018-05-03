@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.filter;
 
+import java.util.Map;
+
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.common.annotation.JustForTest;
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
@@ -25,9 +29,6 @@ import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.invoke.Invoker;
-
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.Map;
 
 /**
  * <p>过滤器包装的Invoker对象，主要是隔离了filter和service的关系，这样的话filter也可以是单例</p>
@@ -40,12 +41,12 @@ public class FilterInvoker implements Invoker {
     /**
      * 下一层过滤器
      */
-    protected Filter                  nextFilter;
+    protected Filter nextFilter;
 
     /**
      * 下一层Invoker
      */
-    protected FilterInvoker           invoker;
+    protected FilterInvoker invoker;
 
     /**
      * 过滤器所在的接口，可能是provider或者consumer
@@ -58,7 +59,7 @@ public class FilterInvoker implements Invoker {
      * 例如是否开启validation配置，方法级是否开启配置。<br>
      * 像请求ip端口这种和invocation有关的上下文不在此map中。
      */
-    protected Map<String, Object>     configContext;
+    protected Map<String, Object> configContext;
 
     /**
      * 如果无需下一层过滤器
@@ -94,8 +95,8 @@ public class FilterInvoker implements Invoker {
             throw new SofaRpcException(RpcErrorType.SERVER_FILTER, "Next filter or invoker is null!");
         }
         return nextFilter == null ?
-            invoker.invoke(request) :
-            nextFilter.invoke(invoker, request);
+                invoker.invoke(request) :
+                nextFilter.invoke(invoker, request);
     }
 
     /**

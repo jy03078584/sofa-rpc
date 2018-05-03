@@ -16,10 +16,7 @@
  */
 package com.alipay.sofa.rpc.common.json;
 
-import com.alipay.sofa.rpc.common.utils.ClassUtils;
-import com.alipay.sofa.rpc.common.utils.CompatibleTypeUtils;
-import com.alipay.sofa.rpc.common.utils.DateUtils;
-import com.alipay.sofa.rpc.common.utils.StringUtils;
+import static com.alipay.sofa.rpc.common.json.JSON.*;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -34,7 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.alipay.sofa.rpc.common.json.JSON.getSerializeFields;
+import com.alipay.sofa.rpc.common.utils.ClassUtils;
+import com.alipay.sofa.rpc.common.utils.CompatibleTypeUtils;
+import com.alipay.sofa.rpc.common.utils.DateUtils;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
 
 /**
  * Bean serializer of json
@@ -124,14 +124,14 @@ public class BeanSerializer {
                 map.put(key, value);
             } catch (Exception e) {
                 throw new RuntimeException("Read bean filed " + beanClass.getName()
-                    + "." + field.getName() + " error! ", e);
+                        + "." + field.getName() + " error! ", e);
             }
         }
         if (addType) {
             String typeName = beanClass.getCanonicalName();
             if (!typeName.startsWith("java.")
-                && !typeName.startsWith("javax.")
-                && !typeName.startsWith("sun.")) {
+                    && !typeName.startsWith("javax.")
+                    && !typeName.startsWith("sun.")) {
                 map.put(JSON.CLASS_KEY, typeName);
             }
         }
@@ -343,7 +343,7 @@ public class BeanSerializer {
                 throw e;
             } catch (Exception e) {
                 throw new RuntimeException("Write bean filed " + realClass.getName()
-                    + "." + field.getName() + "error! ", e);
+                        + "." + field.getName() + "error! ", e);
             }
         }
         return (T) bean;

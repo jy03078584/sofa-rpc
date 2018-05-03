@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.client;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
@@ -141,8 +141,8 @@ public class ProviderGroupTest {
     @Test
     public void remove() throws Exception {
         ProviderGroup pg = new ProviderGroup("xxx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12201"),
-            ProviderInfo.valueOf("127.0.0.1:12202"),
-            ProviderInfo.valueOf("127.0.0.1:12203")));
+                ProviderInfo.valueOf("127.0.0.1:12202"),
+                ProviderInfo.valueOf("127.0.0.1:12203")));
         Assert.assertTrue(pg.size() == 3);
 
         pg.remove(null);
@@ -165,9 +165,9 @@ public class ProviderGroupTest {
     @Test
     public void removeAll() throws Exception {
         ProviderGroup pg = new ProviderGroup("xxx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12201"),
-            ProviderInfo.valueOf("127.0.0.1:12202"),
-            ProviderInfo.valueOf("127.0.0.1:12203"),
-            ProviderInfo.valueOf("127.0.0.1:12204")));
+                ProviderInfo.valueOf("127.0.0.1:12202"),
+                ProviderInfo.valueOf("127.0.0.1:12203"),
+                ProviderInfo.valueOf("127.0.0.1:12204")));
         Assert.assertTrue(pg.size() == 4);
 
         pg.removeAll(null);
@@ -177,19 +177,19 @@ public class ProviderGroupTest {
         Assert.assertTrue(pg.size() == 4);
         // 删没有的
         pg.removeAll(Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12205"),
-            ProviderInfo.valueOf("127.0.0.1:12206")));
+                ProviderInfo.valueOf("127.0.0.1:12206")));
         Assert.assertTrue(pg.size() == 4);
         // 删部分有的
         pg.removeAll(Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12204"),
-            ProviderInfo.valueOf("127.0.0.1:12205")));
+                ProviderInfo.valueOf("127.0.0.1:12205")));
         Assert.assertTrue(pg.size() == 3);
         // 删都有的
         pg.removeAll(Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12202"),
-            ProviderInfo.valueOf("127.0.0.1:12203")));
+                ProviderInfo.valueOf("127.0.0.1:12203")));
         Assert.assertTrue(pg.size() == 1);
         // 重复删
         pg.removeAll(Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12202"),
-            ProviderInfo.valueOf("127.0.0.1:12203")));
+                ProviderInfo.valueOf("127.0.0.1:12203")));
         Assert.assertTrue(pg.size() == 1);
     }
 }

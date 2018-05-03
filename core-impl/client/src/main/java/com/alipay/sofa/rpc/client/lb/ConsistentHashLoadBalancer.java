@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.AbstractLoadBalancer;
 import com.alipay.sofa.rpc.client.ProviderInfo;
@@ -24,14 +32,6 @@ import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extension;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 一致性hash算法，同样的请求（第一参数）会打到同样的节点
@@ -63,8 +63,8 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
         int hashcode = providerInfos.hashCode(); // 判断是否同样的服务列表
         Selector selector = selectorCache.get(key);
         if (selector == null // 原来没有
-            ||
-            selector.getHashCode() != hashcode) { // 或者服务列表已经变化
+                ||
+                selector.getHashCode() != hashcode) { // 或者服务列表已经变化
             selector = new Selector(interfaceId, method, providerInfos, hashcode);
             selectorCache.put(key, selector);
         }
@@ -79,17 +79,17 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
         /**
          * The Hashcode.
          */
-        private final int                         hashcode;
+        private final int hashcode;
 
         /**
          * The Interface id.
          */
-        private final String                      interfaceId;
+        private final String interfaceId;
 
         /**
          * The Method name.
          */
-        private final String                      method;
+        private final String method;
 
         /**
          * 虚拟节点
@@ -208,9 +208,9 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
          */
         private long hash(byte[] digest, int index) {
             long f = ((long) (digest[3 + index * 4] & 0xFF) << 24)
-                | ((long) (digest[2 + index * 4] & 0xFF) << 16)
-                | ((long) (digest[1 + index * 4] & 0xFF) << 8)
-                | (digest[index * 4] & 0xFF);
+                    | ((long) (digest[2 + index * 4] & 0xFF) << 16)
+                    | ((long) (digest[1 + index * 4] & 0xFF) << 8)
+                    | (digest[index * 4] & 0xFF);
             return f & 0xFFFFFFFFL;
         }
 

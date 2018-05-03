@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.rpc.invoke;
 
-import com.alipay.sofa.rpc.common.annotation.Unstable;
-
 import java.io.Closeable;
+
+import com.alipay.sofa.rpc.common.annotation.Unstable;
 
 /**
  * <p>面向用户的，回调的抽象类，实现通知方法，指定传递对象</p>

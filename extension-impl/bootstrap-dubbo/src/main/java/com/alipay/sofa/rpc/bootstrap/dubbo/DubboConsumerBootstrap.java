@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.bootstrap.dubbo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.Cluster;
@@ -29,10 +33,6 @@ import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
 import com.alipay.sofa.rpc.ext.Extension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Consumer bootstrap for dubbo
  *
@@ -42,14 +42,13 @@ import java.util.Map;
 public class DubboConsumerBootstrap<T> extends ConsumerBootstrap<T> {
 
     /**
-     * Dubbo的配置
-     */
-    private ReferenceConfig<T>     referenceConfig;
-
-    /**
      * 代理实现类
      */
     protected transient volatile T proxyIns;
+    /**
+     * Dubbo的配置
+     */
+    private ReferenceConfig<T> referenceConfig;
 
     /**
      * 构造函数
@@ -108,12 +107,12 @@ public class DubboConsumerBootstrap<T> extends ConsumerBootstrap<T> {
             for (RegistryConfig registryConfig : registryConfigs) {
                 // 生成并丢到缓存里
                 com.alibaba.dubbo.config.RegistryConfig dubboRegistryConfig = DubboSingleton.REGISTRY_MAP
-                    .get(registryConfig);
+                        .get(registryConfig);
                 if (dubboRegistryConfig == null) {
                     dubboRegistryConfig = new com.alibaba.dubbo.config.RegistryConfig();
                     copyRegistryFields(registryConfig, dubboRegistryConfig);
                     com.alibaba.dubbo.config.RegistryConfig old = DubboSingleton.REGISTRY_MAP.putIfAbsent(
-                        registryConfig, dubboRegistryConfig);
+                            registryConfig, dubboRegistryConfig);
                     if (old != null) {
                         dubboRegistryConfig = old;
                     }
@@ -157,7 +156,7 @@ public class DubboConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                 referenceConfig.setSent(false);
             }
             if (RpcConstants.INVOKER_TYPE_CALLBACK.equals(invokeType)
-                || RpcConstants.INVOKER_TYPE_FUTURE.equals(invokeType)) {
+                    || RpcConstants.INVOKER_TYPE_FUTURE.equals(invokeType)) {
                 referenceConfig.setAsync(true);
             }
         }
@@ -182,7 +181,7 @@ public class DubboConsumerBootstrap<T> extends ConsumerBootstrap<T> {
                         dubboMethodConfig.setReturn(false);
                     }
                     if (RpcConstants.INVOKER_TYPE_CALLBACK.equals(invokeType)
-                        || RpcConstants.INVOKER_TYPE_FUTURE.equals(invokeType)) {
+                            || RpcConstants.INVOKER_TYPE_FUTURE.equals(invokeType)) {
                         dubboMethodConfig.setAsync(true);
                     }
                 }

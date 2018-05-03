@@ -40,19 +40,19 @@ public class BoltClientMain {
         ApplicationConfig application = new ApplicationConfig().setAppName("test-client");
 
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setApplication(application)
-            .setInterfaceId(HelloService.class.getName())
-            .setDirectUrl("bolt://127.0.0.1:22000")
-            .setRegister(false)
-            .setTimeout(3000);
+                .setApplication(application)
+                .setInterfaceId(HelloService.class.getName())
+                .setDirectUrl("bolt://127.0.0.1:22000")
+                .setRegister(false)
+                .setTimeout(3000);
         HelloService helloService = consumerConfig.refer();
 
         ConsumerConfig<EchoService> consumerConfig2 = new ConsumerConfig<EchoService>()
-            .setInterfaceId(EchoService.class.getName())
-            .setApplication(application)
-            .setDirectUrl("bolt://127.0.0.1:22000")
-            .setRegister(false)
-            .setTimeout(3000);
+                .setInterfaceId(EchoService.class.getName())
+                .setApplication(application)
+                .setDirectUrl("bolt://127.0.0.1:22000")
+                .setRegister(false)
+                .setTimeout(3000);
         EchoService echoService = consumerConfig2.refer();
 
         consumerConfig2.unRefer();

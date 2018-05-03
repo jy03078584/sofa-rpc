@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
+import java.util.concurrent.Callable;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.concurrent.Callable;
+import com.alipay.sofa.rpc.client.ProviderInfo;
 
 /**
  *

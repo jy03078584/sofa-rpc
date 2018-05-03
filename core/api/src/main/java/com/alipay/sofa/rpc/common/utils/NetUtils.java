@@ -16,10 +16,6 @@
  */
 package com.alipay.sofa.rpc.common.utils;
 
-import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
-import com.alipay.sofa.rpc.log.Logger;
-import com.alipay.sofa.rpc.log.LoggerFactory;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -32,6 +28,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
+import com.alipay.sofa.rpc.log.Logger;
+import com.alipay.sofa.rpc.log.LoggerFactory;
+
 /**
  * 网络操作工具类
  *
@@ -40,18 +40,31 @@ import java.util.regex.Pattern;
 public class NetUtils {
 
     /**
+     * 任意地址
+     */
+    public static final  String  ANYHOST          = "0.0.0.0";
+    /**
+     * IPv4地址
+     */
+    public static final Pattern IPV4_PATTERN = Pattern
+            .compile(
+                    "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+    /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER   = LoggerFactory.getLogger(NetUtils.class);
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(NetUtils.class);
     /**
      * 最小端口
      */
-    private static final int    MIN_PORT = 0;
+    private static final int MIN_PORT = 0;
     /**
      * 最大端口
      */
-    private static final int    MAX_PORT = 65535;
+    private static final int MAX_PORT = 65535;
+    /**
+     * 本机地址正则
+     */
+    private static final Pattern LOCAL_IP_PATTERN = Pattern.compile("127(\\.\\d{1,3}){3}$");
 
     /**
      * 判断端口是否有效 0-65535
@@ -94,8 +107,8 @@ public class NetUtils {
      */
     public static int getAvailablePort(String host, int port, int maxPort) {
         if (isAnyHost(host)
-            || isLocalHost(host)
-            || isHostInNetworkCard(host)) {
+                || isLocalHost(host)
+                || isHostInNetworkCard(host)) {
             if (port < MIN_PORT) {
                 port = MIN_PORT;
             }
@@ -112,9 +125,9 @@ public class NetUtils {
                     // continue
                     if (LOGGER.isWarnEnabled()) {
                         LOGGER.warn("Can't bind to address [{}:{}], " +
-                            "Maybe 1) The port has been bound. " +
-                            "2) The network card of this host is not exists or disable. " +
-                            "3) The host is wrong.", host, i);
+                                "Maybe 1) The port has been bound. " +
+                                "2) The network card of this host is not exists or disable. " +
+                                "3) The host is wrong.", host, i);
                     }
                     if (LOGGER.isInfoEnabled()) {
                         LOGGER.info("Begin try next port(auto +1):{}", i + 1);
@@ -126,25 +139,9 @@ public class NetUtils {
             throw new SofaRpcRuntimeException("Can't bind to ANY port of " + host + ", please check config");
         } else {
             throw new SofaRpcRuntimeException("The host " + host
-                + " is not found in network cards, please check config");
+                    + " is not found in network cards, please check config");
         }
     }
-
-    /**
-     * 任意地址
-     */
-    public static final String   ANYHOST          = "0.0.0.0";
-    /**
-     * 本机地址正则
-     */
-    private static final Pattern LOCAL_IP_PATTERN = Pattern.compile("127(\\.\\d{1,3}){3}$");
-
-    /**
-     * IPv4地址
-     */
-    public static final Pattern  IPV4_PATTERN     = Pattern
-                                                      .compile(
-                                                      "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
 
     /**
      * 是否本地地址 127.x.x.x 或者 localhost
@@ -154,7 +151,7 @@ public class NetUtils {
      */
     public static boolean isLocalHost(String host) {
         return StringUtils.isNotBlank(host)
-            && (LOCAL_IP_PATTERN.matcher(host).matches() || "localhost".equalsIgnoreCase(host));
+                && (LOCAL_IP_PATTERN.matcher(host).matches() || "localhost".equalsIgnoreCase(host));
     }
 
     /**
@@ -175,7 +172,7 @@ public class NetUtils {
      */
     public static boolean isIPv4Host(String host) {
         return StringUtils.isNotBlank(host)
-            && IPV4_PATTERN.matcher(host).matches();
+                && IPV4_PATTERN.matcher(host).matches();
     }
 
     /**
@@ -186,8 +183,8 @@ public class NetUtils {
      */
     static boolean isInvalidLocalHost(String host) {
         return StringUtils.isBlank(host)
-            || isAnyHost(host)
-            || isLocalHost(host);
+                || isAnyHost(host)
+                || isLocalHost(host);
     }
 
     /**
@@ -202,9 +199,9 @@ public class NetUtils {
         }
         String name = address.getHostAddress();
         return (name != null
-            && !isAnyHost(name)
-            && !isLocalHost(name)
-            && isIPv4Host(name));
+                && !isAnyHost(name)
+                && !isLocalHost(name)
+                && isIPv4Host(name));
     }
 
     /**
@@ -312,7 +309,7 @@ public class NetUtils {
         } else {
             InetAddress inetAddress = address.getAddress();
             return inetAddress == null ? address.getHostName() :
-                inetAddress.getHostAddress();
+                    inetAddress.getHostAddress();
         }
     }
 
@@ -362,7 +359,7 @@ public class NetUtils {
             }
         } catch (Exception e) {
             LOGGER.warn("Can not connect to host {}, cause by :{}",
-                remoteAddress.toString(), e.getMessage());
+                    remoteAddress.toString(), e.getMessage());
         }
         return host;
     }
@@ -399,7 +396,7 @@ public class NetUtils {
             String[] ip = ips.get(j);
             try {
                 InetSocketAddress address = new InetSocketAddress(ip[0],
-                    Integer.parseInt(ip[1] == null ? defaultPort : ip[1]));
+                        Integer.parseInt(ip[1] == null ? defaultPort : ip[1]));
                 ads.add(address);
             } catch (Exception ignore) { //NOPMD
             }

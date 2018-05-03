@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.protocol.telnet;
 
+import java.util.Map;
+
 import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.protocol.TelnetHandler;
 import com.alipay.sofa.rpc.protocol.TelnetHandlerFactory;
 import com.alipay.sofa.rpc.transport.AbstractChannel;
-
-import java.util.Map;
 
 /**
  *
@@ -43,7 +43,7 @@ public class HelpTelnetHandler implements TelnetHandler {
             TelnetHandler handler = TelnetHandlerFactory.getHandler(message);
             if (handler != null) {
                 result.append(handler.getCommand()).append(LINE)
-                    .append(handler.getDescription()).append(LINE);
+                        .append(handler.getDescription()).append(LINE);
             } else {
                 result.append("Not found command : " + message);
             }

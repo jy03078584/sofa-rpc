@@ -16,6 +16,23 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.common.struct.ConcurrentHashSet;
 import com.alipay.sofa.rpc.common.struct.ListDifference;
@@ -34,23 +51,6 @@ import com.alipay.sofa.rpc.transport.ClientTransport;
 import com.alipay.sofa.rpc.transport.ClientTransportConfig;
 import com.alipay.sofa.rpc.transport.ClientTransportFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * 全部建立长连接，自动维护长连接
  *
@@ -67,7 +67,35 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
     /**
      * 服务消费者配置
      */
-    protected ConsumerConfig    consumerConfig;
+    protected ConsumerConfig consumerConfig;
+    /**
+     * 未初始化的（从未连接过，例如lazy=true）
+     */
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> uninitializedConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    /**
+     * 存活的客户端列表（保持了长连接，且一切正常的）
+     */
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> aliveConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    /**
+     * 存活但是亚健康节点（连续心跳超时，这种只发心跳，不发请求）
+     */
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> subHealthConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    /**
+     * 失败待重试的客户端列表（连上后断开的）
+     */
+    private ConcurrentHashMap<ProviderInfo, ClientTransport> retryConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
+    /**
+     * 客户端变化provider的锁
+     */
+    private Lock providerLock = new ReentrantLock();
+    /**
+     * 重连线程
+     */
+    private volatile ScheduledService reconThread;
+    /**
+     * 重试次数标记（针对每个Provider不一样）
+     */
+    private AtomicInteger reconnectFlag = new AtomicInteger();
 
     /**
      * 构造函数
@@ -78,31 +106,6 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
         super(consumerBootstrap);
         this.consumerConfig = consumerBootstrap.getConsumerConfig();
     }
-
-    /**
-     * 未初始化的（从未连接过，例如lazy=true）
-     */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> uninitializedConnections = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
-
-    /**
-     * 存活的客户端列表（保持了长连接，且一切正常的）
-     */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> aliveConnections         = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
-
-    /**
-     * 存活但是亚健康节点（连续心跳超时，这种只发心跳，不发请求）
-     */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> subHealthConnections     = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
-
-    /**
-     * 失败待重试的客户端列表（连上后断开的）
-     */
-    private ConcurrentHashMap<ProviderInfo, ClientTransport> retryConnections         = new ConcurrentHashMap<ProviderInfo, ClientTransport>();
-
-    /**
-     * 客户端变化provider的锁
-     */
-    private Lock                                             providerLock             = new ReentrantLock();
 
     /**
      * Gets retry connections.
@@ -283,7 +286,7 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
                             listener.onUnavailable(consumerConfig.getConsumerBootstrap().getProxyIns());
                         } catch (Exception e) {
                             LOGGER.errorWithApp(consumerConfig.getAppName(),
-                                "Failed to notify consumer state listener when state change to unavailable");
+                                    "Failed to notify consumer state listener when state change to unavailable");
                         }
                     }
                 }
@@ -309,7 +312,7 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
                             listener.onAvailable(consumerConfig.getConsumerBootstrap().getProxyIns());
                         } catch (Exception e) {
                             LOGGER.warnWithApp(consumerConfig.getAppName(),
-                                "Failed to notify consumer state listener when state change to available");
+                                    "Failed to notify consumer state listener when state change to available");
                         }
                     }
                 }
@@ -347,7 +350,7 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
                 if (CommonUtils.isNotEmpty(currentProviderList())) {
                     if (LOGGER.isInfoEnabled(consumerConfig.getAppName())) {
                         LOGGER.infoWithApp(consumerConfig.getAppName(),
-                            "Clear all providers, may be this consumer has been add to blacklist");
+                                "Clear all providers, may be this consumer has been add to blacklist");
                     }
                     closeAllClientTransports(null);
                 }
@@ -370,8 +373,8 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
         } catch (Exception e) {
             if (LOGGER.isErrorEnabled(consumerConfig.getAppName())) {
                 LOGGER.errorWithApp(consumerConfig.getAppName(), "update " + consumerConfig.getInterfaceId() +
-                    " provider (" + providerGroup
-                    + ") from list error:", e);
+                        " provider (" + providerGroup
+                        + ") from list error:", e);
             }
         }
     }
@@ -401,9 +404,9 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
             int threads = Math.min(10, providerSize); // 最大10个
             final CountDownLatch latch = new CountDownLatch(providerSize);
             ThreadPoolExecutor initPool = new ThreadPoolExecutor(threads, threads,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(providerInfoList.size()),
-                new NamedThreadFactory("CLI-CONN-" + interfaceId, true));
+                    0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<Runnable>(providerInfoList.size()),
+                    new NamedThreadFactory("CLI-CONN-" + interfaceId, true));
             int connectTimeout = consumerConfig.getConnectTimeout();
             for (final ProviderInfo providerInfo : providerInfoList) {
                 final ClientTransportConfig config = providerToClientConfig(providerInfo);
@@ -427,7 +430,7 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
 
             try {
                 int totalTimeout = ((providerSize % threads == 0) ? (providerSize / threads) : ((providerSize /
-                    threads) + 1)) * connectTimeout + 500;
+                        threads) + 1)) * connectTimeout + 500;
                 latch.await(totalTimeout, TimeUnit.MILLISECONDS); // 一直等到子线程都结束
             } catch (InterruptedException e) {
                 LOGGER.errorWithApp(appName, "Exception when add provider", e);
@@ -469,15 +472,15 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
                 ClientTransport transport = remove(providerInfo);
                 if (LOGGER.isInfoEnabled(appName)) {
                     LOGGER.infoWithApp(appName, "Remove provider of {}: {} from list success !", interfaceId,
-                        providerInfo);
+                            providerInfo);
                 }
                 if (transport != null) {
                     ClientTransportFactory.releaseTransport(transport, consumerConfig.getDisconnectTimeout());
                 }
             } catch (Exception e) {
                 LOGGER.errorWithApp(appName, "Remove provider of " + consumerConfig.getInterfaceId() + ": " +
-                    providerInfo
-                    + " from list error:", e);
+                        providerInfo
+                        + " from list error:", e);
             }
         }
     }
@@ -536,14 +539,14 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
      */
     protected ClientTransportConfig providerToClientConfig(ProviderInfo providerInfo) {
         return new ClientTransportConfig()
-            .setConsumerConfig(consumerConfig)
-            .setProviderInfo(providerInfo)
-            .setContainer(consumerConfig.getProtocol())
-            .setConnectTimeout(consumerConfig.getConnectTimeout())
-            .setInvokeTimeout(consumerConfig.getTimeout())
-            .setDisconnectTimeout(consumerConfig.getDisconnectTimeout())
-            .setConnectionNum(consumerConfig.getConnectionNum())
-            .setChannelListeners(consumerConfig.getOnConnect());
+                .setConsumerConfig(consumerConfig)
+                .setProviderInfo(providerInfo)
+                .setContainer(consumerConfig.getProtocol())
+                .setConnectTimeout(consumerConfig.getConnectTimeout())
+                .setInvokeTimeout(consumerConfig.getTimeout())
+                .setDisconnectTimeout(consumerConfig.getDisconnectTimeout())
+                .setConnectionNum(consumerConfig.getConnectionNum())
+                .setChannelListeners(consumerConfig.getOnConnect());
     }
 
     /**
@@ -642,9 +645,9 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
             int threads = Math.min(10, providerSize); // 最大10个
             final CountDownLatch latch = new CountDownLatch(providerSize);
             ThreadPoolExecutor closePool = new ThreadPoolExecutor(threads, threads,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(providerSize),
-                new NamedThreadFactory("CLI-DISCONN-" + consumerConfig.getInterfaceId(), true));
+                    0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<Runnable>(providerSize),
+                    new NamedThreadFactory("CLI-DISCONN-" + consumerConfig.getInterfaceId(), true));
             for (Map.Entry<ProviderInfo, ClientTransport> entry : all.entrySet()) {
                 final ProviderInfo providerInfo = entry.getKey();
                 final ClientTransport transport = entry.getValue();
@@ -656,7 +659,7 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
                         } catch (Exception e) {
                             if (LOGGER.isWarnEnabled(consumerConfig.getAppName())) {
                                 LOGGER.warnWithApp(consumerConfig.getAppName(),
-                                    "catch exception but ignore it when close alive client : {}", providerInfo);
+                                        "catch exception but ignore it when close alive client : {}", providerInfo);
                             }
                         } finally {
                             latch.countDown();
@@ -666,7 +669,7 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
             }
             try {
                 int totalTimeout = ((providerSize % threads == 0) ? (providerSize / threads) : ((providerSize /
-                    threads) + 1)) * timeout + 500;
+                        threads) + 1)) * timeout + 500;
                 latch.await(totalTimeout, TimeUnit.MILLISECONDS); // 一直等到
             } catch (InterruptedException e) {
                 LOGGER.errorWithApp(consumerConfig.getAppName(), "Exception when close transport", e);
@@ -686,8 +689,8 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
     protected void printSuccess(String interfaceId, ProviderInfo providerInfo, ClientTransport transport) {
         if (LOGGER.isInfoEnabled(consumerConfig.getAppName())) {
             LOGGER.infoWithApp(consumerConfig.getAppName(), "Connect to {} provider:{} success ! The connection is "
-                + NetUtils.connectToString(transport.remoteAddress(), transport.localAddress())
-                , interfaceId, providerInfo);
+                            + NetUtils.connectToString(transport.remoteAddress(), transport.localAddress())
+                    , interfaceId, providerInfo);
         }
     }
 
@@ -716,9 +719,9 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
         Throwable cause = e.getCause();
         if (LOGGER.isWarnEnabled(consumerConfig.getAppName())) {
             LOGGER.warnWithApp(
-                "Connect to {} provider:{} failure !! The exception is " + ExceptionUtils.toShortString(e, 1)
-                    + (cause != null ? ", cause by " + cause.getMessage() + "." : "."),
-                interfaceId, providerInfo);
+                    "Connect to {} provider:{} failure !! The exception is " + ExceptionUtils.toShortString(e, 1)
+                            + (cause != null ? ", cause by " + cause.getMessage() + "." : "."),
+                    interfaceId, providerInfo);
         }
     }
 
@@ -759,10 +762,10 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
             } else { // 可能在黑名单里，刚连上就断开了
                 if (LOGGER.isWarnEnabled(consumerConfig.getAppName())) {
                     LOGGER.warnWithApp(consumerConfig.getAppName(),
-                        "Connection has been closed after connected (in last 100ms)!" +
-                            " Maybe connectionNum of provider has been reached limit," +
-                            " or your host is in the blacklist of provider {}/{}",
-                        interfaceId, transport.getConfig().getProviderInfo());
+                            "Connection has been closed after connected (in last 100ms)!" +
+                                    " Maybe connectionNum of provider has been reached limit," +
+                                    " or your host is in the blacklist of provider {}/{}",
+                            interfaceId, transport.getConfig().getProviderInfo());
                 }
                 providerInfo.setDynamicAttr(ProviderInfoAttrs.ATTR_RC_PERIOD_COEFFICIENT, 5);
                 return false;
@@ -771,11 +774,6 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
             return false;
         }
     }
-
-    /**
-     * 重连线程
-     */
-    private volatile ScheduledService reconThread;
 
     /**
      * 启动重连+心跳线程
@@ -788,24 +786,19 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
         if (reconnect > 0) {
             reconnect = Math.max(reconnect, 2000); // 最小2000
             reconThread = new ScheduledService("CLI-RC-" + interfaceId, ScheduledService.MODE_FIXEDDELAY, new
-                Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            doReconnect();
-                        } catch (Throwable e) {
-                            LOGGER.errorWithApp(consumerConfig.getAppName(),
-                                "Exception when retry connect to provider", e);
+                    Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                doReconnect();
+                            } catch (Throwable e) {
+                                LOGGER.errorWithApp(consumerConfig.getAppName(),
+                                        "Exception when retry connect to provider", e);
+                            }
                         }
-                    }
-                }, reconnect, reconnect, TimeUnit.MILLISECONDS).start();
+                    }, reconnect, reconnect, TimeUnit.MILLISECONDS).start();
         }
     }
-
-    /**
-     * 重试次数标记（针对每个Provider不一样）
-     */
-    private AtomicInteger reconnectFlag = new AtomicInteger();
 
     /**
      * 重连断开和死亡的节点
@@ -824,10 +817,10 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
             }
         }
         for (Map.Entry<ProviderInfo, ClientTransport> entry : getRetryConnections()
-            .entrySet()) {
+                .entrySet()) {
             ProviderInfo providerInfo = entry.getKey();
             int providerPeriodCoefficient = CommonUtils.parseNum((Integer)
-                providerInfo.getDynamicAttr(ProviderInfoAttrs.ATTR_RC_PERIOD_COEFFICIENT), 1);
+                    providerInfo.getDynamicAttr(ProviderInfoAttrs.ATTR_RC_PERIOD_COEFFICIENT), 1);
             if (thisTime % providerPeriodCoefficient != 0) {
                 continue; // 如果命中重连周期，则进行重连
             }
@@ -845,12 +838,12 @@ public class AllConnectConnectionHolder extends ConnectionHolder {
                 if (print) {
                     if (LOGGER.isWarnEnabled(appName)) {
                         LOGGER.warnWithApp("Retry connect to {} provider:{} error ! The exception is " + e
-                            .getMessage(), interfaceId, providerInfo);
+                                .getMessage(), interfaceId, providerInfo);
                     }
                 } else {
                     if (LOGGER.isDebugEnabled(appName)) {
                         LOGGER.debugWithApp("Retry connect to {} provider:{} error ! The exception is " + e
-                            .getMessage(), interfaceId, providerInfo);
+                                .getMessage(), interfaceId, providerInfo);
                     }
                 }
             }

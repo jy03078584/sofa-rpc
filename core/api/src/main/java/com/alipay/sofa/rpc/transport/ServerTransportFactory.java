@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.transport;
 
-import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 
 /**
  * <p>服务端通讯层工厂类</p>
@@ -41,9 +41,9 @@ public class ServerTransportFactory {
      */
     public static ServerTransport getServerTransport(ServerTransportConfig serverConfig) {
         ServerTransport serverTransport = ExtensionLoaderFactory.getExtensionLoader(ServerTransport.class)
-            .getExtension(serverConfig.getContainer(),
-                new Class[] { ServerTransportConfig.class },
-                new Object[] { serverConfig });
+                .getExtension(serverConfig.getContainer(),
+                        new Class[] { ServerTransportConfig.class },
+                        new Object[] { serverConfig });
         if (serverTransport != null) {
             String key = Integer.toString(serverConfig.getPort());
             SERVER_TRANSPORT_MAP.put(key, serverTransport);

@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.rpc.registry.zk;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.curator.framework.recipes.cache.ChildData;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.client.ProviderInfoAttrs;
 import com.alipay.sofa.rpc.client.ProviderStatus;
@@ -30,12 +37,6 @@ import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.context.RpcRuntimeContext;
-import org.apache.curator.framework.recipes.cache.ChildData;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Helper for ZookeeperRegistry
@@ -64,26 +65,26 @@ public class ZookeeperRegistryHelper {
                     }
                 }
                 sb.append(server.getProtocol())
-                    .append("://")
-                    .append(host)
-                    .append(":")
-                    .append(server.getPort())
-                    .append(server.getContextPath())
-                    .append("?uniqueId=")
-                    .append(providerConfig.getUniqueId())
-                    .append(getKeyPairs("version", "1.0"))
-                    .append(getKeyPairs(RpcConstants.CONFIG_KEY_TIMEOUT, providerConfig.getTimeout()))
-                    .append(getKeyPairs("delay", providerConfig.getDelay()))
-                    .append(getKeyPairs("id", providerConfig.getId()))
-                    .append(getKeyPairs(RpcConstants.CONFIG_KEY_DYNAMIC, providerConfig.isDynamic()))
-                    .append(getKeyPairs(ProviderInfoAttrs.ATTR_WEIGHT, providerConfig.getWeight()))
-                    .append(getKeyPairs(ProviderInfoAttrs.ATTR_WARMUP_TIME,
-                        providerConfig.getParameter(ProviderInfoAttrs.ATTR_WARMUP_TIME)))
-                    .append(getKeyPairs(ProviderInfoAttrs.ATTR_WARMUP_WEIGHT,
-                        providerConfig.getParameter(ProviderInfoAttrs.ATTR_WARMUP_WEIGHT)))
-                    .append(getKeyPairs("accepts", server.getAccepts()))
-                    .append(getKeyPairs(ProviderInfoAttrs.ATTR_START_TIME, RpcRuntimeContext.now()))
-                    .append(getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, providerConfig.getAppName()));
+                        .append("://")
+                        .append(host)
+                        .append(":")
+                        .append(server.getPort())
+                        .append(server.getContextPath())
+                        .append("?uniqueId=")
+                        .append(providerConfig.getUniqueId())
+                        .append(getKeyPairs("version", "1.0"))
+                        .append(getKeyPairs(RpcConstants.CONFIG_KEY_TIMEOUT, providerConfig.getTimeout()))
+                        .append(getKeyPairs("delay", providerConfig.getDelay()))
+                        .append(getKeyPairs("id", providerConfig.getId()))
+                        .append(getKeyPairs(RpcConstants.CONFIG_KEY_DYNAMIC, providerConfig.isDynamic()))
+                        .append(getKeyPairs(ProviderInfoAttrs.ATTR_WEIGHT, providerConfig.getWeight()))
+                        .append(getKeyPairs(ProviderInfoAttrs.ATTR_WARMUP_TIME,
+                                providerConfig.getParameter(ProviderInfoAttrs.ATTR_WARMUP_TIME)))
+                        .append(getKeyPairs(ProviderInfoAttrs.ATTR_WARMUP_WEIGHT,
+                                providerConfig.getParameter(ProviderInfoAttrs.ATTR_WARMUP_WEIGHT)))
+                        .append(getKeyPairs("accepts", server.getAccepts()))
+                        .append(getKeyPairs(ProviderInfoAttrs.ATTR_START_TIME, RpcRuntimeContext.now()))
+                        .append(getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, providerConfig.getAppName()));
                 addCommonAttrs(sb);
                 urls.add(sb.toString());
             }
@@ -102,15 +103,15 @@ public class ZookeeperRegistryHelper {
         StringBuilder sb = new StringBuilder(200);
         String host = SystemInfo.getLocalHost();
         sb.append(consumerConfig.getProtocol()).append("://").append(host)
-            .append("?uniqueId=").append(consumerConfig.getUniqueId())
-            .append(getKeyPairs("version", "1.0"))
-            .append(getKeyPairs("pid", RpcRuntimeContext.PID))
-            .append(getKeyPairs(RpcConstants.CONFIG_KEY_TIMEOUT, consumerConfig.getTimeout()))
-            .append(getKeyPairs("id", consumerConfig.getId()))
-            .append(getKeyPairs(RpcConstants.CONFIG_KEY_GENERIC, consumerConfig.isGeneric()))
-            .append(getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, consumerConfig.getAppName()))
-            .append(getKeyPairs(RpcConstants.CONFIG_KEY_SERIALIZATION, consumerConfig.getSerialization()))
-            .append(getKeyPairs(ProviderInfoAttrs.ATTR_START_TIME, RpcRuntimeContext.now()));
+                .append("?uniqueId=").append(consumerConfig.getUniqueId())
+                .append(getKeyPairs("version", "1.0"))
+                .append(getKeyPairs("pid", RpcRuntimeContext.PID))
+                .append(getKeyPairs(RpcConstants.CONFIG_KEY_TIMEOUT, consumerConfig.getTimeout()))
+                .append(getKeyPairs("id", consumerConfig.getId()))
+                .append(getKeyPairs(RpcConstants.CONFIG_KEY_GENERIC, consumerConfig.isGeneric()))
+                .append(getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, consumerConfig.getAppName()))
+                .append(getKeyPairs(RpcConstants.CONFIG_KEY_SERIALIZATION, consumerConfig.getSerialization()))
+                .append(getKeyPairs(ProviderInfoAttrs.ATTR_START_TIME, RpcRuntimeContext.now()));
         addCommonAttrs(sb);
         return sb.toString();
     }
@@ -150,7 +151,7 @@ public class ZookeeperRegistryHelper {
      * @return the list
      */
     static List<ProviderInfo> convertUrlsToProviders(String providerPath, List<ChildData> currentData)
-        throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         List<ProviderInfo> providerInfos = new ArrayList<ProviderInfo>();
         if (CommonUtils.isEmpty(currentData)) {
             return providerInfos;
@@ -163,7 +164,7 @@ public class ZookeeperRegistryHelper {
     }
 
     static ProviderInfo convertUrlToProvider(String providerPath, ChildData childData)
-        throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         String url = childData.getPath().substring(providerPath.length() + 1); // 去掉头部
         url = URLDecoder.decode(url, "UTF-8");
         ProviderInfo providerInfo = ProviderInfo.valueOf(url);
@@ -187,11 +188,11 @@ public class ZookeeperRegistryHelper {
         String startTimeStr = providerInfo.getStaticAttr(ProviderInfoAttrs.ATTR_START_TIME);
 
         if (StringUtils.isNotBlank(warmupTimeStr) && StringUtils.isNotBlank(warmupWeightStr) &&
-            StringUtils.isNotBlank(startTimeStr)) {
+                StringUtils.isNotBlank(startTimeStr)) {
 
             long warmupTime = CommonUtils.parseLong(warmupTimeStr, 0);
             int warmupWeight = CommonUtils.parseInt(warmupWeightStr,
-                Integer.parseInt(providerInfo.getStaticAttr(ProviderInfoAttrs.ATTR_WEIGHT)));
+                    Integer.parseInt(providerInfo.getStaticAttr(ProviderInfoAttrs.ATTR_WEIGHT)));
             long startTime = CommonUtils.parseLong(startTimeStr, 0);
             long warmupEndTime = startTime + warmupTime;
 
@@ -224,7 +225,7 @@ public class ZookeeperRegistryHelper {
         List<ProviderInfo> result = new ArrayList<ProviderInfo>();
         for (ProviderInfo providerInfo : providerInfos) {
             if (providerInfo.getProtocolType().equalsIgnoreCase(protocol)
-                && StringUtils.equals(consumerConfig.getUniqueId(),
+                    && StringUtils.equals(consumerConfig.getUniqueId(),
                     providerInfo.getAttr(ProviderInfoAttrs.ATTR_UNIQUEID))) {
                 result.add(providerInfo);
             }

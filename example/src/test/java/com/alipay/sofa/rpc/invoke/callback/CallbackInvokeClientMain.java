@@ -46,12 +46,12 @@ public class CallbackInvokeClientMain {
         ApplicationConfig applicationConfig = new ApplicationConfig().setAppName("future-server");
 
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setApplication(applicationConfig)
-            .setInterfaceId(HelloService.class.getName())
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK)
-            .setTimeout(3000)
-            //.setOnReturn() // 不设置 调用级别设置
-            .setDirectUrl("bolt://127.0.0.1:22222?appName=future-server");
+                .setApplication(applicationConfig)
+                .setInterfaceId(HelloService.class.getName())
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK)
+                .setTimeout(3000)
+                //.setOnReturn() // 不设置 调用级别设置
+                .setDirectUrl("bolt://127.0.0.1:22222?appName=future-server");
         HelloService helloService = consumerConfig.refer();
 
         LOGGER.warn("started at pid {}", RpcRuntimeContext.PID);
@@ -59,24 +59,24 @@ public class CallbackInvokeClientMain {
         for (int i = 0; i < 100; i++) {
             try {
                 RpcInvokeContext.getContext().setResponseCallback(
-                    new SofaResponseCallback() {
-                        @Override
-                        public void onAppResponse(Object appResponse, String methodName, RequestBase request) {
-                            LOGGER.info("Invoke get result: {}", appResponse);
-                        }
+                        new SofaResponseCallback() {
+                            @Override
+                            public void onAppResponse(Object appResponse, String methodName, RequestBase request) {
+                                LOGGER.info("Invoke get result: {}", appResponse);
+                            }
 
-                        @Override
-                        public void onAppException(Throwable throwable, String methodName, RequestBase request) {
-                            LOGGER.info("Invoke get app exception: {}", throwable);
-                        }
+                            @Override
+                            public void onAppException(Throwable throwable, String methodName, RequestBase request) {
+                                LOGGER.info("Invoke get app exception: {}", throwable);
+                            }
 
-                        @Override
-                        public void onSofaException(SofaRpcException sofaException, String methodName,
-                                                    RequestBase request) {
-                            LOGGER.info("Invoke get sofa exception: {}", sofaException);
+                            @Override
+                            public void onSofaException(SofaRpcException sofaException, String methodName,
+                                                        RequestBase request) {
+                                LOGGER.info("Invoke get sofa exception: {}", sofaException);
+                            }
                         }
-                    }
-                    );
+                );
 
                 String s = helloService.sayHello("xxx", 22);
                 LOGGER.warn("{}", s);

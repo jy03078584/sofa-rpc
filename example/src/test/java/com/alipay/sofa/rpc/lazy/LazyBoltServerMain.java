@@ -41,20 +41,20 @@ public class LazyBoltServerMain {
     public static void main(String[] args) {
 
         ServerConfig serverConfig = new ServerConfig()
-            .setPort(22100)
-            .setDaemon(false);
+                .setPort(22100)
+                .setDaemon(false);
 
         ProviderConfig<HelloService> providerConfig = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl("result from 22100"))
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl("result from 22100"))
+                .setServer(serverConfig)
+                .setRegister(false);
 
         ProviderConfig<EchoService> providerConfig2 = new ProviderConfig<EchoService>()
-            .setInterfaceId(EchoService.class.getName())
-            .setRef(new EchoServiceImpl())
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setInterfaceId(EchoService.class.getName())
+                .setRef(new EchoServiceImpl())
+                .setServer(serverConfig)
+                .setRegister(false);
 
         providerConfig.export();
         providerConfig2.export();

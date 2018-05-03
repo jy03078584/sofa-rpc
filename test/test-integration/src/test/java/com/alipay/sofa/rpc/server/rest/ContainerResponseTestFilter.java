@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import java.io.IOException;
+
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 /**
  *
@@ -31,15 +32,15 @@ public class ContainerResponseTestFilter implements ContainerResponseFilter {
 
     private static String name = "X";
 
+    public static String getName() {
+        return name;
+    }
+
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
-        throws IOException {
+            throws IOException {
         System.out.println("服务端response filter生效");
         name = "C";
 
-    }
-
-    public static String getName() {
-        return name;
     }
 }

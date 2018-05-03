@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.common;
 
-import com.alipay.sofa.rpc.common.utils.ClassLoaderUtils;
-import com.alipay.sofa.rpc.common.utils.ClassUtils;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.rpc.common.utils.ClassLoaderUtils;
+import com.alipay.sofa.rpc.common.utils.ClassUtils;
 
 /**
  * 业务要支持多ClassLoader，需要缓存ClassLoader或者方法等相关信息
@@ -32,10 +32,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ReflectCache {
 
     /**
+     * 方法对象缓存 {service:{方法名#(参数列表):Method}} <br>
+     * 用于缓存参数列表，不是按接口，是按ServiceUniqueName
+     */
+    private final static ConcurrentHashMap<String, Map<String, Method>> METHOD_CACHE = new ConcurrentHashMap<String, Map<String, Method>>();
+    /**
      * 应用对应的ClassLoader
      */
     private static Map<String, ClassLoader> APPNAME_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
-
     /**
      * 服务对应的ClassLoader
      */
@@ -90,12 +94,6 @@ public class ReflectCache {
             return appClassLoader;
         }
     }
-
-    /**
-     * 方法对象缓存 {service:{方法名#(参数列表):Method}} <br>
-     * 用于缓存参数列表，不是按接口，是按ServiceUniqueName
-     */
-    private final static ConcurrentHashMap<String, Map<String, Method>> METHOD_CACHE = new ConcurrentHashMap<String, Map<String, Method>>();
 
     /**
      * 缓存服务的公共方法

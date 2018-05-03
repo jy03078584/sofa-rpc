@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.message.bolt;
 
+import java.util.concurrent.Executor;
+
 import com.alipay.remoting.InvokeCallback;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.RpcConstants;
@@ -33,8 +35,6 @@ import com.alipay.sofa.rpc.event.ClientEndInvokeEvent;
 import com.alipay.sofa.rpc.event.EventBus;
 import com.alipay.sofa.rpc.filter.FilterChain;
 
-import java.util.concurrent.Executor;
-
 /**
  * 为了使Future模式下，也能正常的记录相关信息，采用Callback模式进行包装
  *
@@ -45,27 +45,27 @@ public class BoltFutureInvokeCallback implements InvokeCallback {
     /**
      * 服务消费者配置
      */
-    protected final ConsumerConfig consumerConfig;
+    protected final ConsumerConfig     consumerConfig;
     /**
      * 服务提供者信息
      */
-    protected final ProviderInfo   providerInfo;
-    /**
-     * 请求对象
-     */
-    public BoltResponseFuture      rpcFuture;
+    protected final ProviderInfo       providerInfo;
     /**
      * 请求
      */
-    protected final SofaRequest    request;
+    protected final SofaRequest        request;
+    /**
+     * 请求对象
+     */
+    public          BoltResponseFuture rpcFuture;
     /**
      * 请求运行时的ClassLoader
      */
-    protected ClassLoader          classLoader;
+    protected       ClassLoader        classLoader;
     /**
      * 线程池
      */
-    protected RpcInternalContext   context;
+    protected       RpcInternalContext context;
 
     /**
      * Instantiates a new Bolt future invoke callback.
@@ -103,7 +103,7 @@ public class BoltFutureInvokeCallback implements InvokeCallback {
 
             if (EventBus.isEnable(ClientAsyncReceiveEvent.class)) {
                 EventBus.post(new ClientAsyncReceiveEvent(consumerConfig, providerInfo,
-                    request, response, null));
+                        request, response, null));
             }
 
             if (RpcInvokeContext.isBaggageEnable()) {
@@ -127,7 +127,7 @@ public class BoltFutureInvokeCallback implements InvokeCallback {
             Object appResp = response.getAppResponse();
             if (response.isError()) { // rpc层异常
                 SofaRpcException sofaRpcException = new SofaRpcException(
-                    RpcErrorType.SERVER_UNDECLARED_ERROR, response.getErrorMsg());
+                        RpcErrorType.SERVER_UNDECLARED_ERROR, response.getErrorMsg());
                 rpcFuture.setFailure(sofaRpcException);
             } else if (appResp instanceof Throwable) { // 业务层异常
                 throwable = (Throwable) appResp;
@@ -158,7 +158,7 @@ public class BoltFutureInvokeCallback implements InvokeCallback {
 
             if (EventBus.isEnable(ClientAsyncReceiveEvent.class)) {
                 EventBus.post(new ClientAsyncReceiveEvent(consumerConfig, providerInfo,
-                    request, null, e));
+                        request, null, e));
             }
 
             // do async filter after respond server

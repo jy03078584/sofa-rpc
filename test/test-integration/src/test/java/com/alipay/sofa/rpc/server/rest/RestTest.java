@@ -16,20 +16,21 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -42,31 +43,31 @@ public class RestTest extends ActivelyDestroyTest {
     public void testAll() throws InterruptedException {
         // 只有1个线程 执行
         ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(60000)
-            .setPort(8802)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_REST)
-            .setContextPath("/xyz");
+                .setStopTimeout(60000)
+                .setPort(8802)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_REST)
+                .setContextPath("/xyz");
         //.setQueues(100).setCoreThreads(1).setMaxThreads(2);
 
         // 发布一个服务，每个请求要执行1秒
         ProviderConfig<RestService> providerConfig = new ProviderConfig<RestService>()
-            .setInterfaceId(RestService.class.getName())
-            .setRef(new RestServiceImpl())
-            .setServer(serverConfig)
-            .setBootstrap("rest")
-            //.setParameter(RpcConstants.CONFIG_HIDDEN_KEY_WARNING, "false")
-            .setRegister(false);
+                .setInterfaceId(RestService.class.getName())
+                .setRef(new RestServiceImpl())
+                .setServer(serverConfig)
+                .setBootstrap("rest")
+                //.setParameter(RpcConstants.CONFIG_HIDDEN_KEY_WARNING, "false")
+                .setRegister(false);
         providerConfig.export();
 
         ConsumerConfig<RestService> consumerConfig = new ConsumerConfig<RestService>()
-            .setInterfaceId(RestService.class.getName())
-            .setDirectUrl(
-                "rest://127.0.0.1:8802/xyz?uniqueId=&version=1.0&timeout=0&delay=-1&id=rpc-cfg-0&dynamic=true&weight=100&accepts=100000&startTime=1523240755024&appName=test-server&pid=22385&language=java&rpcVer=50300")
-            .setProtocol("rest")
-            .setBootstrap("rest")
-            .setTimeout(30000)
-            .setConnectionNum(5)
-            .setRegister(false);
+                .setInterfaceId(RestService.class.getName())
+                .setDirectUrl(
+                        "rest://127.0.0.1:8802/xyz?uniqueId=&version=1.0&timeout=0&delay=-1&id=rpc-cfg-0&dynamic=true&weight=100&accepts=100000&startTime=1523240755024&appName=test-server&pid=22385&language=java&rpcVer=50300")
+                .setProtocol("rest")
+                .setBootstrap("rest")
+                .setTimeout(30000)
+                .setConnectionNum(5)
+                .setRegister(false);
         final RestService helloService = consumerConfig.refer();
 
         Assert.assertEquals(helloService.query(11), "hello world !null");

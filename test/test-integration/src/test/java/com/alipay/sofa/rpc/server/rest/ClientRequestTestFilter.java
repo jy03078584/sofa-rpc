@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import java.io.IOException;
+
 import javax.annotation.Priority;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 /**
  *
@@ -30,12 +31,16 @@ import java.io.IOException;
 @Priority(150)
 public class ClientRequestTestFilter implements ClientRequestFilter {
 
-    private static String name  = "X";
+    private static String name = "X";
 
     @CustomerAnnotation()
-    private static String code  = "x";
+    private static String code = "x";
 
     private static String code2 = "x";
+
+    public static String getName() {
+        return name + code + code2;
+    }
 
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
@@ -49,9 +54,5 @@ public class ClientRequestTestFilter implements ClientRequestFilter {
         this.code2 = code2;
         System.out.println("客户端customerAnnotion  code2:" + this.code2);
 
-    }
-
-    public static String getName() {
-        return name + code + code2;
     }
 }

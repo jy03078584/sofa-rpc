@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.codec;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.ext.ExtensionClass;
 import com.alipay.sofa.rpc.ext.ExtensionLoader;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderListener;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 序列化工厂
@@ -40,23 +40,23 @@ public final class SerializerFactory {
      * 除了托管给扩展加载器的工厂模式（保留alias：实例）外<br>
      * 还需要额外保留编码和实例的映射：{别名：编码}
      */
-    private final static ConcurrentHashMap<String, Byte>     TYPE_CODE_MAP       = new ConcurrentHashMap<String, Byte>();
+    private final static ConcurrentHashMap<String, Byte> TYPE_CODE_MAP = new ConcurrentHashMap<String, Byte>();
 
     /**
      * 扩展加载器
      */
-    private final static ExtensionLoader<Serializer>         EXTENSION_LOADER    = buildLoader();
+    private final static ExtensionLoader<Serializer> EXTENSION_LOADER = buildLoader();
 
     private static ExtensionLoader<Serializer> buildLoader() {
         return ExtensionLoaderFactory.getExtensionLoader(Serializer.class,
-            new ExtensionLoaderListener<Serializer>() {
-                @Override
-                public void onLoad(ExtensionClass<Serializer> extensionClass) {
-                    // 除了保留 tag：Serializer外， 需要保留 code：Serializer
-                    TYPE_SERIALIZER_MAP.put(extensionClass.getCode(), extensionClass.getExtInstance());
-                    TYPE_CODE_MAP.put(extensionClass.getAlias(), extensionClass.getCode());
-                }
-            });
+                new ExtensionLoaderListener<Serializer>() {
+                    @Override
+                    public void onLoad(ExtensionClass<Serializer> extensionClass) {
+                        // 除了保留 tag：Serializer外， 需要保留 code：Serializer
+                        TYPE_SERIALIZER_MAP.put(extensionClass.getCode(), extensionClass.getExtInstance());
+                        TYPE_CODE_MAP.put(extensionClass.getAlias(), extensionClass.getCode());
+                    }
+                });
     }
 
     /**

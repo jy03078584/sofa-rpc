@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import java.util.Arrays;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.core.exception.SofaTimeOutException;
@@ -27,10 +32,6 @@ import com.alipay.sofa.rpc.event.FaultToleranceSubscriber;
 import com.alipay.sofa.rpc.event.ProviderInfoRemoveEvent;
 import com.alipay.sofa.rpc.event.ProviderInfoUpdateAllEvent;
 import com.alipay.sofa.rpc.event.ProviderInfoUpdateEvent;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
 
 /**
  *
@@ -45,7 +46,7 @@ public class FaultToleranceSubscriberTest extends FaultBaseTest {
         FaultToleranceSubscriber subscriber = new FaultToleranceSubscriber();
 
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         InvocationStat stat = InvocationStatFactory.getInvocationStat(consumerConfig, providerInfo);
         Assert.assertNull(stat);
 
@@ -54,20 +55,20 @@ public class FaultToleranceSubscriberTest extends FaultBaseTest {
         FaultToleranceConfigManager.putAppConfig(APP_NAME1, config);
 
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         stat = InvocationStatFactory.getInvocationStat(consumerConfig, providerInfo);
         Assert.assertTrue(stat.getInvokeCount() == 1);
 
         subscriber.onEvent(new ClientAsyncReceiveEvent(consumerConfig, providerInfo,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         Assert.assertTrue(stat.getInvokeCount() == 2);
 
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo,
-            new SofaRequest(), null, new SofaTimeOutException("")));
+                new SofaRequest(), null, new SofaTimeOutException("")));
         Assert.assertTrue(stat.getExceptionCount() == 1);
 
         subscriber.onEvent(new ClientAsyncReceiveEvent(consumerConfig, providerInfo,
-            new SofaRequest(), null, new SofaTimeOutException("")));
+                new SofaRequest(), null, new SofaTimeOutException("")));
         Assert.assertTrue(stat.getExceptionCount() == 2);
 
         Assert.assertTrue(stat.getExceptionRate() == 0.5d);
@@ -87,45 +88,45 @@ public class FaultToleranceSubscriberTest extends FaultBaseTest {
         FaultToleranceSubscriber subscriber = new FaultToleranceSubscriber();
 
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo1,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo2,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo3,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo4,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
 
         Assert.assertTrue(InvocationStatFactory.ALL_STATS.size() == 4);
 
         subscriber.onEvent(new ProviderInfoRemoveEvent(consumerConfig,
-            new ProviderGroup("x", Arrays.asList(ProviderInfo.valueOf("127.0.0.1")))));
+                new ProviderGroup("x", Arrays.asList(ProviderInfo.valueOf("127.0.0.1")))));
         Assert.assertTrue(InvocationStatFactory.ALL_STATS.size() == 3);
 
         subscriber.onEvent(new ProviderInfoUpdateEvent(consumerConfig,
-            new ProviderGroup("x", Arrays.asList(
-                ProviderInfo.valueOf("127.0.0.2"),
-                ProviderInfo.valueOf("127.0.0.3"),
-                ProviderInfo.valueOf("127.0.0.4"))),
-            new ProviderGroup("x", Arrays.asList(
-                ProviderInfo.valueOf("127.0.0.2"),
-                ProviderInfo.valueOf("127.0.0.4"),
-                ProviderInfo.valueOf("127.0.0.5")))
-            ));
+                new ProviderGroup("x", Arrays.asList(
+                        ProviderInfo.valueOf("127.0.0.2"),
+                        ProviderInfo.valueOf("127.0.0.3"),
+                        ProviderInfo.valueOf("127.0.0.4"))),
+                new ProviderGroup("x", Arrays.asList(
+                        ProviderInfo.valueOf("127.0.0.2"),
+                        ProviderInfo.valueOf("127.0.0.4"),
+                        ProviderInfo.valueOf("127.0.0.5")))
+        ));
         Assert.assertTrue(InvocationStatFactory.ALL_STATS.size() == 2);
 
         subscriber.onEvent(new ClientSyncReceiveEvent(consumerConfig, providerInfo5,
-            new SofaRequest(), new SofaResponse(), null));
+                new SofaRequest(), new SofaResponse(), null));
         Assert.assertTrue(InvocationStatFactory.ALL_STATS.size() == 3);
 
         subscriber.onEvent(new ProviderInfoUpdateAllEvent(consumerConfig,
-            Arrays.asList(new ProviderGroup("x", Arrays.asList(
-                ProviderInfo.valueOf("127.0.0.2"),
-                ProviderInfo.valueOf("127.0.0.4"),
-                ProviderInfo.valueOf("127.0.0.5")))),
-            Arrays.asList(new ProviderGroup("x", Arrays.asList(
-                ProviderInfo.valueOf("127.0.0.1"),
-                ProviderInfo.valueOf("127.0.0.4"))))
-            ));
+                Arrays.asList(new ProviderGroup("x", Arrays.asList(
+                        ProviderInfo.valueOf("127.0.0.2"),
+                        ProviderInfo.valueOf("127.0.0.4"),
+                        ProviderInfo.valueOf("127.0.0.5")))),
+                Arrays.asList(new ProviderGroup("x", Arrays.asList(
+                        ProviderInfo.valueOf("127.0.0.1"),
+                        ProviderInfo.valueOf("127.0.0.4"))))
+        ));
         Assert.assertTrue(InvocationStatFactory.ALL_STATS.size() == 1);
     }
 

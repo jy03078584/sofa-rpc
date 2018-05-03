@@ -48,7 +48,7 @@ public class ProtobufSerializerTest {
         byte[] src = ProtobufSerializer.getInstance().encode(res);
 
         EchoStrRes res1 = (EchoStrRes) ProtobufSerializer.getInstance().decode(src,
-            EchoStrRes.class);
+                EchoStrRes.class);
         Assert.assertEquals(res1.getS(), res.getS());
 
         src = ProtobufSerializer.getInstance().encode("xxx");
@@ -60,16 +60,16 @@ public class ProtobufSerializerTest {
     @Test
     public void getReqClass() throws Exception {
         Class req = ProtobufSerializer.getInstance().getReqClass(
-            "com.alipay.sofa.rpc.codec.antpb.ProtoService", "echoStr", Thread.currentThread()
-                .getContextClassLoader());
+                "com.alipay.sofa.rpc.codec.antpb.ProtoService", "echoStr", Thread.currentThread()
+                        .getContextClassLoader());
         Assert.assertTrue(req == EchoStrReq.class);
     }
 
     @Test
     public void getResClass() throws Exception {
         Class res = ProtobufSerializer.getInstance().getResClass(
-            "com.alipay.sofa.rpc.codec.antpb.ProtoService", "echoStr", Thread.currentThread()
-                .getContextClassLoader());
+                "com.alipay.sofa.rpc.codec.antpb.ProtoService", "echoStr", Thread.currentThread()
+                        .getContextClassLoader());
         Assert.assertTrue(res == EchoStrRes.class);
     }
 

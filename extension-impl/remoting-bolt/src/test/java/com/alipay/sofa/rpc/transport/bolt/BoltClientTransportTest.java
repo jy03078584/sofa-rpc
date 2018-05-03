@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.rpc.transport.bolt;
 
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.transport.ClientTransportConfig;
-import org.junit.Test;
 
 /**
  *

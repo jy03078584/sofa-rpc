@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.client.aft.impl;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.alipay.sofa.rpc.client.aft.FaultToleranceConfigManager;
 import com.alipay.sofa.rpc.client.aft.InvocationStatDimension;
 import com.alipay.sofa.rpc.client.aft.MeasureResultDetail;
@@ -23,26 +27,23 @@ import com.alipay.sofa.rpc.client.aft.RegulationStrategy;
 import com.alipay.sofa.rpc.common.struct.ConcurrentHashSet;
 import com.alipay.sofa.rpc.ext.Extension;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * @author <a href="mailto:lw111072@antfin.com">liangen</a>
  */
 @Extension("serviceHorizontal")
 public class ServiceHorizontalRegulationStrategy implements RegulationStrategy {
 
+    /**
+     * Key（应用，服务）降级的不同ip列表
+     */
+    protected final ConcurrentHashMap<String, ConcurrentHashSet<String>> appServiceDegradeIps = new ConcurrentHashMap<String, ConcurrentHashSet<String>>();
+    private final Lock ipsLock = new ReentrantLock();
+
     @Override
     public boolean isDegradeEffective(MeasureResultDetail measureResultDetail) {
         InvocationStatDimension statDimension = measureResultDetail.getInvocationStatDimension();
         return FaultToleranceConfigManager.isDegradeEffective(statDimension.getAppName());
     }
-
-    /**
-     * Key（应用，服务）降级的不同ip列表
-     */
-    protected final ConcurrentHashMap<String, ConcurrentHashSet<String>> appServiceDegradeIps = new ConcurrentHashMap<String, ConcurrentHashSet<String>>();
 
     protected ConcurrentHashSet<String> getDegradeProviders(String key) {
         ConcurrentHashSet<String> ips = appServiceDegradeIps.get(key);
@@ -55,8 +56,6 @@ public class ServiceHorizontalRegulationStrategy implements RegulationStrategy {
         }
         return ips;
     }
-
-    private final Lock ipsLock = new ReentrantLock();
 
     @Override
     public boolean isReachMaxDegradeIpCount(MeasureResultDetail measureResultDetail) {

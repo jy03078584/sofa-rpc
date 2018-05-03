@@ -16,14 +16,16 @@
  */
 package com.alipay.sofa.rpc.rest;
 
-import com.alipay.sofa.rpc.api.context.RpcContextManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alipay.sofa.rpc.api.context.RpcContextManager;
 
 /**
  *
@@ -35,9 +37,9 @@ public class RestServiceImpl implements RestService {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger               LOGGER = LoggerFactory.getLogger(RestServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(RestServiceImpl.class);
 
-    private final static Map<Integer, String> db     = new ConcurrentHashMap<Integer, String>();
+    private final static Map<Integer, String> db = new ConcurrentHashMap<Integer, String>();
 
     @Override
     public String add(int code, String name) {

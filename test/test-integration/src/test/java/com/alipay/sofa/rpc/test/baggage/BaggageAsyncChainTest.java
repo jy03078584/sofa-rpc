@@ -16,6 +16,12 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -26,11 +32,6 @@ import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.core.request.RequestBase;
-import org.junit.Assert;
-
-import java.util.Collections;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -74,8 +75,8 @@ public class BaggageAsyncChainTest extends BaggageBaseTest {
         referenceBeanC.setDirectUrl("localhost:12299");
         referenceBeanC.setTimeout(1000);
         MethodConfig methodConfigC = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
         referenceBeanC.setMethods(Collections.singletonList(methodConfigC));
         SampleService sampleServiceC = (SampleService) referenceBeanC.refer();
 
@@ -110,8 +111,8 @@ public class BaggageAsyncChainTest extends BaggageBaseTest {
         referenceBeanA.setDirectUrl("localhost:12299");
         referenceBeanA.setTimeout(3000);
         MethodConfig methodConfigA = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_CALLBACK);
         methodConfigA.setOnReturn(new SofaResponseCallback() {
             @Override
             public void onAppResponse(Object appResponse, String methodName, RequestBase request) {

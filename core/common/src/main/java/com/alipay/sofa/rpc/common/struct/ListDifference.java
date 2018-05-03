@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.common.struct;
 
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
 
 /**
  * 比较两个list的不同，列出差异部分：包括左侧独有，右侧独有，双方都有

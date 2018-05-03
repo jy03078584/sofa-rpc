@@ -51,17 +51,17 @@ public class RestServerMain {
          */
 
         ServerConfig serverConfig = new ServerConfig()
-            .setProtocol("rest")
-            .setPort(8888)
-            .setDaemon(false);
+                .setProtocol("rest")
+                .setPort(8888)
+                .setDaemon(false);
 
         ProviderConfig<RestService> providerConfig = new ProviderConfig<RestService>()
-            .setInterfaceId(RestService.class.getName())
-            .setApplication(application)
-            .setRef(new RestServiceImpl())
-            .setBootstrap("rest")
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setInterfaceId(RestService.class.getName())
+                .setApplication(application)
+                .setRef(new RestServiceImpl())
+                .setBootstrap("rest")
+                .setServer(serverConfig)
+                .setRegister(false);
 
         providerConfig.export();
 

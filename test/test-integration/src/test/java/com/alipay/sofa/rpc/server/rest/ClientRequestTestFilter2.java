@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.rpc.server.rest;
 
+import java.io.IOException;
+
 import javax.annotation.Priority;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 /**
  *
@@ -32,13 +33,13 @@ public class ClientRequestTestFilter2 implements ClientRequestFilter {
 
     private static String name = "X";
 
+    public static String getName() {
+        return name;
+    }
+
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
         System.out.println("客户端request filter2生效");
         name = "A2";
-    }
-
-    public static String getName() {
-        return name;
     }
 }

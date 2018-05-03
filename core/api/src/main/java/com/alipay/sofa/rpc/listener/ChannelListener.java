@@ -21,7 +21,7 @@ import com.alipay.sofa.rpc.transport.AbstractChannel;
 
 /**
  * Listener of channel event
- * 
+ *
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
 @Unstable

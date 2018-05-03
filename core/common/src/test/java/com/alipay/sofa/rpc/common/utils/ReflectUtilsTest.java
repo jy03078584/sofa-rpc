@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.common.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ReflectUtilsTest {
     @Test
@@ -97,7 +97,7 @@ public class ReflectUtilsTest {
         Method method = ReflectUtils.getMethod(className, methodName, argsType1);
 
         Method method3 = ClassUtils.forName(className).getMethod(methodName,
-            ClassTypeUtils.getClasses(argsType1));
+                ClassTypeUtils.getClasses(argsType1));
         Assert.assertFalse(method == method3);
         Assert.assertTrue(method.equals(method3));
 
@@ -117,7 +117,7 @@ public class ReflectUtilsTest {
         }
         end = System.nanoTime();
         System.out.println("get method " + times / 10000 + "w times with no cache elaspe " + (end - start) / 1000 /
-            1000 + "ms");
+                1000 + "ms");
     }
 
 }

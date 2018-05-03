@@ -25,13 +25,13 @@ public class MeasureResultDetail {
     private final InvocationStatDimension invocationStatDimension;
     private final MeasureState            measureState;
 
-    private long                          timeWindow;
-    private long                          windowCount;
-    private long                          leastWindowCount;
-    private double                        abnormalRate;
-    private double                        averageAbnormalRate;
-    private double                        leastAbnormalRateMultiple;
-    private boolean                       recoveredOriginWeight;
+    private long    timeWindow;
+    private long    windowCount;
+    private long    leastWindowCount;
+    private double  abnormalRate;
+    private double  averageAbnormalRate;
+    private double  leastAbnormalRateMultiple;
+    private boolean recoveredOriginWeight;
 
     /**
      * Instantiates a new Measure result detail.

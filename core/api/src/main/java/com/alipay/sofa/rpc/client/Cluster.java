@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.alipay.sofa.rpc.base.Destroyable;
 import com.alipay.sofa.rpc.base.Initializable;
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
@@ -27,8 +29,6 @@ import com.alipay.sofa.rpc.ext.Extensible;
 import com.alipay.sofa.rpc.filter.FilterChain;
 import com.alipay.sofa.rpc.invoke.Invoker;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
-
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 客户端，封装了集群模式、长连接管理、服务路由、负载均衡等抽象类
@@ -47,7 +47,7 @@ public abstract class Cluster implements Invoker, ProviderInfoListener, Initiali
     /**
      * 配置
      */
-    protected final ConsumerConfig    consumerConfig;
+    protected final ConsumerConfig consumerConfig;
 
     /**
      * 构造函数

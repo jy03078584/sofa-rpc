@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.config;
 
-import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 
 /**
  * 方法级配置
@@ -29,64 +29,54 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MethodConfig implements Serializable {
 
-    private static final long      serialVersionUID = -8594337650648536897L;
+    private static final long serialVersionUID = -8594337650648536897L;
 
     /*-------------配置项开始----------------*/
     /**
-     * 方法名称，无法做到重载方法的配置
-     */
-    private String                 name;
-
-    /**
      * The Parameters. 自定义参数
      */
-    protected Map<String, String>  parameters;
-
+    protected Map<String, String> parameters;
     /**
      * The Timeout. 远程调用超时时间(毫秒)
      */
-    protected Integer              timeout;
-
+    protected Integer timeout;
     /**
      * The Retries. 失败后重试次数
      */
-    protected Integer              retries;
-
+    protected Integer retries;
     /**
      * 调用方式
      */
-    protected String               invokeType;
-
+    protected String invokeType;
     /**
      * The Validation. 是否jsr303验证
      */
-    protected Boolean              validation;
-
+    protected Boolean validation;
     /**
      * 返回值之前的listener
      */
     protected SofaResponseCallback onReturn;
-
     /**
      * 最大并发执行（不管服务端还是客户端）
      */
-    protected Integer              concurrents;
-
+    protected Integer concurrents;
     /**
      * 是否启用客户端缓存
      */
-    protected Boolean              cache;
-
+    protected Boolean cache;
     /**
      * 是否启动压缩
      */
-    protected String               compress;
-
+    protected String compress;
     /**
      * 目标参数（机房/分组）索引，第一个参数从0开始
      * // TODO 待实现
      */
-    protected Integer              dstParam;
+    protected Integer dstParam;
+    /**
+     * 方法名称，无法做到重载方法的配置
+     */
+    private String name;
 
     /*-------------配置项结束----------------*/
 
@@ -225,6 +215,15 @@ public class MethodConfig implements Serializable {
     }
 
     /**
+     * Gets validation.
+     *
+     * @return the validation
+     */
+    public Boolean getValidation() {
+        return validation;
+    }
+
+    /**
      * Sets validation.
      *
      * @param validation the validation
@@ -232,15 +231,6 @@ public class MethodConfig implements Serializable {
     public MethodConfig setValidation(Boolean validation) {
         this.validation = validation;
         return this;
-    }
-
-    /**
-     * Gets validation.
-     *
-     * @return the validation
-     */
-    public Boolean getValidation() {
-        return validation;
     }
 
     /**

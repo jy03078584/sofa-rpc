@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import java.util.Collections;
+
+import org.junit.Assert;
+
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -23,9 +27,6 @@ import com.alipay.sofa.rpc.config.MethodConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
-import org.junit.Assert;
-
-import java.util.Collections;
 
 /**
  *
@@ -97,8 +98,8 @@ public class BaggageOnewayTest extends BaggageBaseTest {
         referenceBeanA.setDirectUrl("localhost:12299");
         referenceBeanA.setTimeout(3000);
         MethodConfig methodConfigA = new MethodConfig()
-            .setName("hello")
-            .setInvokeType(RpcConstants.INVOKER_TYPE_ONEWAY);
+                .setName("hello")
+                .setInvokeType(RpcConstants.INVOKER_TYPE_ONEWAY);
         referenceBeanA.setMethods(Collections.singletonList(methodConfigA));
         SampleService service = (SampleService) referenceBeanA.refer();
 

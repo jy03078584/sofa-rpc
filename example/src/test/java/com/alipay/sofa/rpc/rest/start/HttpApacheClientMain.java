@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.rpc.rest.start;
 
-import com.alipay.sofa.rpc.common.json.JSON;
-import com.alipay.sofa.rpc.rest.ExampleObj;
+import java.nio.charset.Charset;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -27,7 +27,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
+import com.alipay.sofa.rpc.common.json.JSON;
+import com.alipay.sofa.rpc.rest.ExampleObj;
 
 /**
  *

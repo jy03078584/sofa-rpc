@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.client.router;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.AddressHolder;
 import com.alipay.sofa.rpc.client.ProviderInfo;
@@ -25,8 +27,6 @@ import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.filter.AutoActive;
-
-import java.util.List;
 
 /**
  * 直连路由，优先级最高，直连的情况下，就不走注册中心了
@@ -41,7 +41,7 @@ public class DirectUrlRouter extends Router {
     /**
      * 请求路径：直连
      */
-    public static final String  RPC_DIRECT_URL_ROUTER = "DIRECT";
+    public static final String RPC_DIRECT_URL_ROUTER = "DIRECT";
 
     /**
      * 服务消费者配置

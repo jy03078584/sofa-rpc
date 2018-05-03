@@ -25,6 +25,7 @@ import java.util.ArrayList;
  */
 public class TestJsonBean {
 
+    private static    String staticString;
     @JSONField(alias = "Name", isRequired = true)
     private String                  name;
     @JSONField(alias = "Sex")
@@ -34,27 +35,35 @@ public class TestJsonBean {
     private ArrayList<TestJsonBean> friends;
     @JSONField(alias = "Remark")
     private Object[]                remark;
-
     @JSONField(skipIfNull = true)
-    private Status                  status;
-
-    private Long                    step;
-
-    private static String           staticString;
-    private transient String        transString;
+    private Status status;
+    private Long step;
+    private transient String transString;
     @JSONIgnore
-    private String                  ignoreString;
+    private           String ignoreString;
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isSex() {
         return sex;
     }
 
+    public void setSex(boolean sex) {
+        this.sex = sex;
+    }
+
     public int getAge() {
         return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public ArrayList<TestJsonBean> getFriends() {
@@ -67,18 +76,6 @@ public class TestJsonBean {
 
     public Object[] getRemark() {
         return remark;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSex(boolean sex) {
-        this.sex = sex;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public void setRemark(Object[] remark) {

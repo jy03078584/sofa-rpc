@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.rpc.context;
 
-import com.alipay.sofa.rpc.common.RemotingConstants;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import com.alipay.sofa.rpc.core.response.SofaResponse;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.rpc.common.RemotingConstants;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
+import com.alipay.sofa.rpc.core.response.SofaResponse;
 
 /**
  *

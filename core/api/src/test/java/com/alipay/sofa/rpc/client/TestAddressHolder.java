@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.ext.Extension;
-
-import java.util.List;
 
 /**
  *

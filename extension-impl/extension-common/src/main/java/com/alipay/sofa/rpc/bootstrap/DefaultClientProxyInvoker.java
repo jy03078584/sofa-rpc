@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.bootstrap;
 
+import static com.alipay.sofa.rpc.common.RpcConstants.*;
+
 import com.alipay.sofa.rpc.client.ClientProxyInvoker;
 import com.alipay.sofa.rpc.client.Cluster;
 import com.alipay.sofa.rpc.common.RemotingConstants;
@@ -29,16 +31,6 @@ import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.message.ResponseFuture;
-
-import static com.alipay.sofa.rpc.common.RpcConstants.HIDDEN_KEY_INVOKE_CONTEXT;
-import static com.alipay.sofa.rpc.common.RpcConstants.HIDDEN_KEY_PINPOINT;
-import static com.alipay.sofa.rpc.common.RpcConstants.INTERNAL_KEY_APP_NAME;
-import static com.alipay.sofa.rpc.common.RpcConstants.INTERNAL_KEY_PROTOCOL_NAME;
-import static com.alipay.sofa.rpc.common.RpcConstants.INTERNAL_KEY_RESULT_CODE;
-import static com.alipay.sofa.rpc.common.RpcConstants.SERIALIZE_HESSIAN;
-import static com.alipay.sofa.rpc.common.RpcConstants.SERIALIZE_HESSIAN2;
-import static com.alipay.sofa.rpc.common.RpcConstants.SERIALIZE_JAVA;
-import static com.alipay.sofa.rpc.common.RpcConstants.SERIALIZE_PROTOBUF;
 
 /**
  * 默认调用端代理执行器
@@ -55,7 +47,7 @@ public class DefaultClientProxyInvoker extends ClientProxyInvoker {
     /**
      * 缓存序列化类型
      */
-    private Byte   serializeType;
+    private Byte serializeType;
 
     /**
      * 构造执行链
@@ -76,7 +68,7 @@ public class DefaultClientProxyInvoker extends ClientProxyInvoker {
     private Byte parseSerializeType(String serialization) {
         Byte serializeType;
         if (SERIALIZE_HESSIAN.equals(serialization)
-            || SERIALIZE_HESSIAN2.equals(serialization)) {
+                || SERIALIZE_HESSIAN2.equals(serialization)) {
             serializeType = RemotingConstants.SERIALIZE_CODE_HESSIAN;
         } else if (SERIALIZE_PROTOBUF.equals(serialization)) {
             serializeType = RemotingConstants.SERIALIZE_CODE_PROTOBUF;
@@ -111,7 +103,7 @@ public class DefaultClientProxyInvoker extends ClientProxyInvoker {
                 request.setSofaResponseCallback(responseCallback);
                 invokeCtx.setResponseCallback(null); // 一次性用完
                 invokeCtx.put(RemotingConstants.INVOKE_CTX_IS_ASYNC_CHAIN,
-                    isSendableResponseCallback(responseCallback));
+                        isSendableResponseCallback(responseCallback));
             }
             // 如果用户设置了调用级别超时时间
             Integer timeout = invokeCtx.getTimeout();

@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.rpc.bootstrap.dubbo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.common.SystemInfo;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -28,13 +36,6 @@ import com.alipay.sofa.rpc.context.RpcRunningState;
 import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author bystander
@@ -42,15 +43,20 @@ import java.util.List;
  */
 public class DubooServerTest {
 
+    @BeforeClass
+    public static void adBeforeClass() {
+        RpcRunningState.setUnitTestMode(true);
+    }
+
     @Test
     //同步调用,走配置中心
     public void testRegistrySync() {
         // 只有1个线程 执行
         ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(60000)
-            .setPort(20880)
-            .setProtocol("dubbo")
-            .setQueues(100).setCoreThreads(1).setMaxThreads(2).setHost(SystemInfo.getLocalHost());
+                .setStopTimeout(60000)
+                .setPort(20880)
+                .setProtocol("dubbo")
+                .setQueues(100).setCoreThreads(1).setMaxThreads(2).setHost(SystemInfo.getLocalHost());
 
         // 发布一个服务，每个请求要执行1秒
         ApplicationConfig serverApplacation = new ApplicationConfig();
@@ -59,43 +65,38 @@ public class DubooServerTest {
         RegistryConfig registryConfig;
 
         registryConfig = new RegistryConfig()
-            .setProtocol("zookeeper")
-            .setAddress("127.0.0.1:2181")
-            .setSubscribe(true)
-            .setRegister(true);
+                .setProtocol("zookeeper")
+                .setAddress("127.0.0.1:2181")
+                .setSubscribe(true)
+                .setRegister(true);
 
         registryConfigs.add(registryConfig);
         ProviderConfig<HelloService> providerConfig = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl())
-            .setServer(serverConfig)
-            //.setParameter(RpcConstants.CONFIG_HIDDEN_KEY_WARNING, "false")
-            .setRegister(true)
-            .setBootstrap("dubbo")
-            .setRegistry(registryConfigs)
-            .setApplication(serverApplacation);
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl())
+                .setServer(serverConfig)
+                //.setParameter(RpcConstants.CONFIG_HIDDEN_KEY_WARNING, "false")
+                .setRegister(true)
+                .setBootstrap("dubbo")
+                .setRegistry(registryConfigs)
+                .setApplication(serverApplacation);
         providerConfig.export();
 
         ApplicationConfig clientApplication = new ApplicationConfig();
         clientApplication.setAppName("client");
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setTimeout(30000)
-            .setRegister(true)
-            .setProtocol("dubbo")
-            .setBootstrap("dubbo")
-            .setApplication(clientApplication)
-            .setRegistry(registryConfigs)
-            .setInJVM(false);
+                .setInterfaceId(HelloService.class.getName())
+                .setTimeout(30000)
+                .setRegister(true)
+                .setProtocol("dubbo")
+                .setBootstrap("dubbo")
+                .setApplication(clientApplication)
+                .setRegistry(registryConfigs)
+                .setInJVM(false);
         final HelloService demoService = consumerConfig.refer();
 
         String result = demoService.sayHello("xxx", 22);
         Assert.assertNotNull(result);
-    }
-
-    @BeforeClass
-    public static void adBeforeClass() {
-        RpcRunningState.setUnitTestMode(true);
     }
 
     @After

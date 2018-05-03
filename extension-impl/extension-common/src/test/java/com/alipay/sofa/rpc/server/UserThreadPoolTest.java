@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.server;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *

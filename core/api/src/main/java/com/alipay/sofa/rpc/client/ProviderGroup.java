@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.client;
 
-import com.alipay.sofa.rpc.common.RpcConstants;
-import com.alipay.sofa.rpc.common.struct.ConcurrentHashSet;
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.alipay.sofa.rpc.common.RpcConstants;
+import com.alipay.sofa.rpc.common.struct.ConcurrentHashSet;
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
 
 /**
  * One provider group contains one list of some providers.
@@ -34,7 +34,7 @@ public class ProviderGroup {
     /**
      * 服务分组名称
      */
-    protected final String       name;
+    protected final String name;
 
     /**
      * 服务分组下服务端列表（缓存的是List，方便快速读取）
@@ -189,9 +189,9 @@ public class ProviderGroup {
     @Override
     public String toString() {
         return "ProviderGroup{" +
-            "name='" + name + '\'' +
-            ", providerInfos=" + providerInfos +
-            '}';
+                "name='" + name + '\'' +
+                ", providerInfos=" + providerInfos +
+                '}';
     }
 
 }

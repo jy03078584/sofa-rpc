@@ -29,7 +29,7 @@ public class BSampleServiceImpl implements SampleService {
 
     private SampleService sampleServiceD;
 
-    private String        reqBaggage;
+    private String reqBaggage;
 
     public BSampleServiceImpl(SampleService sampleServiceC, SampleService sampleServiceD) {
         this.sampleServiceC = sampleServiceC;

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.local.start;
 
+import java.io.File;
+
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.context.RpcRuntimeContext;
@@ -23,8 +25,6 @@ import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.rpc.test.EchoService;
 import com.alipay.sofa.rpc.test.HelloService;
-
-import java.io.File;
 
 /**
  *
@@ -41,21 +41,21 @@ public class LocalBoltClientMain {
     public static void main(String[] args) throws InterruptedException {
 
         String file = System.getProperty("user.home") + File.separator
-            + "localFileTest" + File.separator + "localRegistry.reg";
+                + "localFileTest" + File.separator + "localRegistry.reg";
 
         RegistryConfig registryConfig = new RegistryConfig().setProtocol("local")
-            .setFile(file);
+                .setFile(file);
 
         ConsumerConfig<HelloService> consumerConfig = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRegistry(registryConfig)
-            .setTimeout(3000);
+                .setInterfaceId(HelloService.class.getName())
+                .setRegistry(registryConfig)
+                .setTimeout(3000);
         HelloService helloService = consumerConfig.refer();
 
         ConsumerConfig<EchoService> consumerConfig2 = new ConsumerConfig<EchoService>()
-            .setInterfaceId(EchoService.class.getName())
-            .setRegistry(registryConfig)
-            .setTimeout(3000);
+                .setInterfaceId(EchoService.class.getName())
+                .setRegistry(registryConfig)
+                .setTimeout(3000);
         EchoService echoService = consumerConfig2.refer();
 
         LOGGER.warn("started at pid {}", RpcRuntimeContext.PID);

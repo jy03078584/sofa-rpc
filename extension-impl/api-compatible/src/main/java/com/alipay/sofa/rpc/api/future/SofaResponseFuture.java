@@ -16,16 +16,16 @@
  */
 package com.alipay.sofa.rpc.api.future;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.exception.RpcErrorType;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.exception.SofaTimeOutException;
 import com.alipay.sofa.rpc.log.LogCodes;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * This class can get the response through Future mechanism
@@ -60,7 +60,7 @@ public class SofaResponseFuture {
         Future future = context.getFuture();
         if (null == future) {
             throw new SofaRpcException(RpcErrorType.CLIENT_UNDECLARED_ERROR,
-                LogCodes.getLog(LogCodes.ERROR_RESPONSE_FUTURE_NULL, Thread.currentThread()));
+                    LogCodes.getLog(LogCodes.ERROR_RESPONSE_FUTURE_NULL, Thread.currentThread()));
         }
         try {
             if (clear) {
@@ -102,8 +102,8 @@ public class SofaResponseFuture {
         Future future = context.getFuture();
         if (future == null) {
             throw new SofaRpcException(RpcErrorType.CLIENT_UNDECLARED_ERROR,
-                LogCodes.getLog(LogCodes.ERROR_RESPONSE_FUTURE_NULL,
-                    Thread.currentThread()));
+                    LogCodes.getLog(LogCodes.ERROR_RESPONSE_FUTURE_NULL,
+                            Thread.currentThread()));
         }
         if (clear) {
             context.setFuture(null);

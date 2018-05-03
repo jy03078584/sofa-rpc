@@ -79,6 +79,6 @@ public interface GenericService {
      * @return 返回指定的T类型返回对象
      * @deprecated Use RpcInvokeContext instead of GenericContext
      */
-    @Deprecated
-    <T> T $genericInvoke(String methodName, String[] argTypes, Object[] args, Class<T> clazz, GenericContext context);
+    @Deprecated <T> T $genericInvoke(String methodName, String[] argTypes, Object[] args, Class<T> clazz,
+                                     GenericContext context);
 }

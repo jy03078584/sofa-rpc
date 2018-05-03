@@ -41,7 +41,7 @@ public class ServiceExceptionInvocationStat extends AbstractInvocationStat {
         if (t instanceof SofaRpcException) {
             SofaRpcException exception = (SofaRpcException) t;
             if (exception.getErrorType() == RpcErrorType.CLIENT_TIMEOUT
-                || exception.getErrorType() == RpcErrorType.SERVER_BUSY) {
+                    || exception.getErrorType() == RpcErrorType.SERVER_BUSY) {
                 return exceptionCount.incrementAndGet();
             }
         }

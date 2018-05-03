@@ -28,14 +28,13 @@ import java.util.List;
 public class MeasureResult {
 
     /**
-     * model for measure
-     */
-    private MeasureModel                    measureModel;
-
-    /**
      * the detail result of measure
      */
     private final List<MeasureResultDetail> measureResultDetails = new ArrayList<MeasureResultDetail>();
+    /**
+     * model for measure
+     */
+    private MeasureModel measureModel;
 
     /**
      * Add measure detail.

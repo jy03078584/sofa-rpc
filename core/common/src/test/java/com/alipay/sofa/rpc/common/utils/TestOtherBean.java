@@ -24,10 +24,10 @@ import java.util.List;
  */
 public class TestOtherBean {
 
-    private String    alias;
-    private int       heartbeat;
-    private boolean   register;
     List<TestSubBean> subBeans;
+    private String  alias;
+    private int     heartbeat;
+    private boolean register;
 
     public String getAlias() {
         return alias;

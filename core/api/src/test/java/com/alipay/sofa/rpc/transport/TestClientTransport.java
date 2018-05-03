@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.rpc.transport;
 
+import java.net.InetSocketAddress;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.message.ResponseFuture;
-
-import java.net.InetSocketAddress;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -34,15 +34,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Extension("test")
 public class TestClientTransport extends ClientTransport {
 
-    AbstractChannel       channel;
+    AbstractChannel channel;
 
-    private boolean       available;
+    private boolean available;
 
     private AtomicInteger currentRequest = new AtomicInteger(0);
-
-    public void setRequest(int request) {
-        currentRequest.set(request);
-    }
 
     /**
      * 客户端配置
@@ -52,10 +48,14 @@ public class TestClientTransport extends ClientTransport {
     protected TestClientTransport(ClientTransportConfig transportConfig) {
         super(transportConfig);
         channel = new TestChannel(InetSocketAddress.createUnresolved(transportConfig.getProviderInfo().getHost(),
-            transportConfig.getProviderInfo().getPort()),
-            InetSocketAddress.createUnresolved(transportConfig.getProviderInfo().getHost(),
-                new Random().nextInt(65535)));
+                transportConfig.getProviderInfo().getPort()),
+                InetSocketAddress.createUnresolved(transportConfig.getProviderInfo().getHost(),
+                        new Random().nextInt(65535)));
         available = true;
+    }
+
+    public void setRequest(int request) {
+        currentRequest.set(request);
     }
 
     @Override
@@ -79,13 +79,13 @@ public class TestClientTransport extends ClientTransport {
     }
 
     @Override
-    public void setChannel(AbstractChannel channel) {
-        this.channel = channel;
+    public AbstractChannel getChannel() {
+        return channel;
     }
 
     @Override
-    public AbstractChannel getChannel() {
-        return channel;
+    public void setChannel(AbstractChannel channel) {
+        this.channel = channel;
     }
 
     @Override

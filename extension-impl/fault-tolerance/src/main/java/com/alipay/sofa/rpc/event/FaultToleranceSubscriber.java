@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.client.ProviderHelper;
 import com.alipay.sofa.rpc.client.ProviderInfo;
@@ -23,9 +26,6 @@ import com.alipay.sofa.rpc.client.aft.FaultToleranceConfigManager;
 import com.alipay.sofa.rpc.client.aft.InvocationStat;
 import com.alipay.sofa.rpc.client.aft.InvocationStatFactory;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Subscriber client receive event for adaptive fault tolerance

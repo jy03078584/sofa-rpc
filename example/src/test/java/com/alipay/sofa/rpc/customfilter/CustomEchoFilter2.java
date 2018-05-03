@@ -47,7 +47,7 @@ public class CustomEchoFilter2 extends Filter {
     @Override
     public SofaResponse invoke(FilterInvoker invoker, SofaRequest request) throws SofaRpcException {
         LOGGER.info("echo2 request : {}, {}", request.getInterfaceName() + "." + request.getMethodName(),
-            request.getMethodArgs());
+                request.getMethodArgs());
 
         SofaResponse response = invoker.invoke(request);
 

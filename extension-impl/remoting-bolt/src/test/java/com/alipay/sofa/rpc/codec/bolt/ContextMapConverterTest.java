@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.rpc.codec.bolt;
 
-import com.alipay.sofa.rpc.common.RemotingConstants;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.rpc.common.RemotingConstants;
 
 /**
  *
@@ -77,12 +78,12 @@ public class ContextMapConverterTest {
 
         newContext = new HashMap();
         ContextMapConverter.treeCopyTo(RemotingConstants.RPC_REQUEST_BAGGAGE + ".", header, newContext,
-            true);
+                true);
         newRequestProps.put(RemotingConstants.RPC_REQUEST_BAGGAGE, newContext);
 
         newContext = new HashMap();
         ContextMapConverter.treeCopyTo(RemotingConstants.RPC_RESPONSE_BAGGAGE + ".", header,
-            newContext, true);
+                newContext, true);
         newRequestProps.put(RemotingConstants.RPC_RESPONSE_BAGGAGE, newContext);
 
         for (Map.Entry<String, Object> entry : newRequestProps.entrySet()) {

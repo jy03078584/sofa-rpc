@@ -26,24 +26,21 @@ import java.lang.ref.SoftReference;
  * @author tatu
  */
 class BufferRecycler {
-    private final static int                                          MIN_ENCODING_BUFFER = 4000;
-
-    private final static int                                          MIN_OUTPUT_BUFFER   = 8000;
-
     /**
      * This <code>ThreadLocal</code> contains a {@link SoftReference}
      * to a {@link BufferRecycler} used to provide a low-cost
      * buffer recycling for buffers we need for encoding, decoding.
      */
-    final protected static ThreadLocal<SoftReference<BufferRecycler>> recyclerRef         = new ThreadLocal<SoftReference<BufferRecycler>>();
+    final protected static ThreadLocal<SoftReference<BufferRecycler>> recyclerRef = new ThreadLocal<SoftReference<BufferRecycler>>();
+    private final static int MIN_ENCODING_BUFFER = 4000;
+    private final static int MIN_OUTPUT_BUFFER = 8000;
+    private byte[] inputBuffer;
+    private byte[] outputBuffer;
 
-    private byte[]                                                    inputBuffer;
-    private byte[]                                                    outputBuffer;
+    private byte[] decodingBuffer;
+    private byte[] encodingBuffer;
 
-    private byte[]                                                    decodingBuffer;
-    private byte[]                                                    encodingBuffer;
-
-    private short[]                                                   encodingHash;
+    private short[] encodingHash;
 
     /**
      * Accessor to get thread-local recycler instance

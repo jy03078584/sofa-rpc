@@ -18,7 +18,7 @@ package com.alipay.sofa.rpc.api.context;
 
 /**
  * SOFA RPC response result code
- * 
+ *
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
 public enum ResultCodeEnum {

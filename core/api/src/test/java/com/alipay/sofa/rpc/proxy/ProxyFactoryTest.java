@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.rpc.proxy;
 
-import com.alipay.sofa.rpc.invoke.Invoker;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.alipay.sofa.rpc.invoke.Invoker;
 
 /**
  *

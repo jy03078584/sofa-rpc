@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.rpc.common.struct;
 
-import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * two-way map, you can get key by value, or get value by key.
@@ -35,7 +36,7 @@ public class TwoWayMap<K, V> implements Map<K, V> {
 
     private ConcurrentHashMap<V, K> vkMap = new ConcurrentHashMap<V, K>();
 
-    private ReentrantLock           lock  = new ReentrantLock();
+    private ReentrantLock lock = new ReentrantLock();
 
     @Override
     public int size() {

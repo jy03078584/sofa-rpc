@@ -16,6 +16,12 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import org.junit.After;
+import org.junit.Before;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.AddressHolder;
 import com.alipay.sofa.rpc.client.ProviderGroup;
@@ -31,90 +37,21 @@ import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.module.FaultToleranceModule;
 import com.alipay.sofa.rpc.module.Module;
-import org.junit.After;
-import org.junit.Before;
-
-import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * @author bystander
  * @version $Id: FaultBaseTest.java, v 0.1 2017年11月16日 下午3:14 bystander Exp $
  */
 public abstract class FaultBaseTest {
-    public static final String                   APP_NAME1 = "testApp";
-    public static final String                   APP_NAME2 = "testAnotherApp";
+    public static final String APP_NAME1 = "testApp";
+    public static final String APP_NAME2 = "testAnotherApp";
 
     protected ServerConfig                       serverConfig;
     protected ConsumerConfig<FaultHelloService>  consumerConfig;
     protected ConsumerConfig<FaultHelloService2> consumerConfig2;
     protected ConsumerConfig<FaultHelloService>  consumerConfigAnotherApp;
 
-    protected ProviderConfig<FaultHelloService>  providerConfig;
-
-    @Before
-    public void init() {
-        // 只有1个线程 执行
-        ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(60000)
-            .setPort(12299)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(10).setMaxThreads(20);
-
-        ApplicationConfig providerAconfig = new ApplicationConfig();
-        providerAconfig.setAppName("testApp");
-
-        // 发布一个服务，每个请求要执行1秒
-        providerConfig = new ProviderConfig<FaultHelloService>()
-            .setInterfaceId(FaultHelloService.class.getName())
-            .setRef(new HelloServiceTimeOutImpl())
-            .setServer(serverConfig)
-            .setRegister(false)
-            .setApplication(providerAconfig);
-
-        ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setAppName(APP_NAME1);
-        consumerConfig = new ConsumerConfig<FaultHelloService>()
-            .setInterfaceId(FaultHelloService.class.getName())
-            .setTimeout(500)
-            .setDirectUrl("127.0.0.1:12299")
-            .setRegister(false)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setApplication(applicationConfig);
-
-        consumerConfig2 = new ConsumerConfig<FaultHelloService2>()
-            .setInterfaceId(FaultHelloService2.class.getName())
-            .setTimeout(500)
-            .setDirectUrl("127.0.0.1:12299")
-            .setRegister(false)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setApplication(applicationConfig);
-
-        consumerConfigAnotherApp = new ConsumerConfig<FaultHelloService>()
-            .setInterfaceId(FaultHelloService.class.getName())
-            .setDirectUrl("127.0.0.1:12299")
-            .setTimeout(500)
-            .setRegister(true)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setApplication(new ApplicationConfig().setAppName(APP_NAME2));
-
-        FaultToleranceModule module = (FaultToleranceModule) ExtensionLoaderFactory.getExtensionLoader(Module.class)
-            .getExtension("fault-tolerance");
-        module.getRegulator().init();
-
-    }
-
-    @After
-    public void destroy() {
-        FaultToleranceConfigManager.putAppConfig(APP_NAME1, null);
-        FaultToleranceConfigManager.putAppConfig(APP_NAME2, null);
-
-        InvocationStatFactory.destroy();
-
-        FaultToleranceModule module = (FaultToleranceModule) ExtensionLoaderFactory.getExtensionLoader(Module.class)
-            .getExtension("fault-tolerance");
-        module.getRegulator().destroy();
-    }
+    protected ProviderConfig<FaultHelloService> providerConfig;
 
     static ProviderInfo getProviderInfoByHost(ConsumerConfig consumerConfig, String host) {
         ConsumerBootstrap consumerBootStrap = consumerConfig.getConsumerBootstrap();
@@ -153,7 +90,7 @@ public abstract class FaultBaseTest {
      * because of subscriber is async, this get method will delay 100ms
      * @param invocationStat InvocationStat
      * @param expect expect count
-     * @return count 
+     * @return count
      */
     static long delayGetCount(final InvocationStat invocationStat, long expect) {
         return delayGet(new Callable<Long>() {
@@ -179,6 +116,70 @@ public abstract class FaultBaseTest {
             }
         }
         return result;
+    }
+
+    @Before
+    public void init() {
+        // 只有1个线程 执行
+        ServerConfig serverConfig = new ServerConfig()
+                .setStopTimeout(60000)
+                .setPort(12299)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(10).setMaxThreads(20);
+
+        ApplicationConfig providerAconfig = new ApplicationConfig();
+        providerAconfig.setAppName("testApp");
+
+        // 发布一个服务，每个请求要执行1秒
+        providerConfig = new ProviderConfig<FaultHelloService>()
+                .setInterfaceId(FaultHelloService.class.getName())
+                .setRef(new HelloServiceTimeOutImpl())
+                .setServer(serverConfig)
+                .setRegister(false)
+                .setApplication(providerAconfig);
+
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.setAppName(APP_NAME1);
+        consumerConfig = new ConsumerConfig<FaultHelloService>()
+                .setInterfaceId(FaultHelloService.class.getName())
+                .setTimeout(500)
+                .setDirectUrl("127.0.0.1:12299")
+                .setRegister(false)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setApplication(applicationConfig);
+
+        consumerConfig2 = new ConsumerConfig<FaultHelloService2>()
+                .setInterfaceId(FaultHelloService2.class.getName())
+                .setTimeout(500)
+                .setDirectUrl("127.0.0.1:12299")
+                .setRegister(false)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setApplication(applicationConfig);
+
+        consumerConfigAnotherApp = new ConsumerConfig<FaultHelloService>()
+                .setInterfaceId(FaultHelloService.class.getName())
+                .setDirectUrl("127.0.0.1:12299")
+                .setTimeout(500)
+                .setRegister(true)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setApplication(new ApplicationConfig().setAppName(APP_NAME2));
+
+        FaultToleranceModule module = (FaultToleranceModule) ExtensionLoaderFactory.getExtensionLoader(Module.class)
+                .getExtension("fault-tolerance");
+        module.getRegulator().init();
+
+    }
+
+    @After
+    public void destroy() {
+        FaultToleranceConfigManager.putAppConfig(APP_NAME1, null);
+        FaultToleranceConfigManager.putAppConfig(APP_NAME2, null);
+
+        InvocationStatFactory.destroy();
+
+        FaultToleranceModule module = (FaultToleranceModule) ExtensionLoaderFactory.getExtensionLoader(Module.class)
+                .getExtension("fault-tolerance");
+        module.getRegulator().destroy();
     }
 
 }

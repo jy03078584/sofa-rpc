@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.rpc.config;
 
-import com.alipay.sofa.rpc.server.UserThreadPool;
-
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.rpc.server.UserThreadPool;
 
 /**
  * 用户自定义线程管理器

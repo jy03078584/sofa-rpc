@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.test.baggage;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
 import com.alipay.sofa.rpc.core.request.RequestBase;
 import com.alipay.sofa.rpc.message.bolt.BoltSendableResponseCallback;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -34,7 +34,7 @@ public class BAsyncChainSampleServiceImpl implements SampleService {
 
     private SampleService sampleServiceD;
 
-    private String        reqBaggage;
+    private String reqBaggage;
 
     public BAsyncChainSampleServiceImpl(SampleService sampleServiceC, SampleService sampleServiceD) {
         this.sampleServiceC = sampleServiceC;

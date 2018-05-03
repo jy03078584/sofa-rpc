@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.alipay.sofa.rpc.client.ProviderInfo;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
 
 /**
  *
@@ -59,7 +60,7 @@ public class RandomLoadBalancerTest extends BaseLoadBalancerTest {
             for (int i = 0; i < size; i++) {
                 //System.out.println(cnt.get(9000 + i));
                 Assert.assertTrue(avg * 0.9 < cnt.get(9000 + i)
-                    && avg * 1.1 > cnt.get(9000 + i)); // 随机偏差不会太大，应该不超过10%
+                        && avg * 1.1 > cnt.get(9000 + i)); // 随机偏差不会太大，应该不超过10%
             }
         }
 
@@ -88,7 +89,7 @@ public class RandomLoadBalancerTest extends BaseLoadBalancerTest {
             for (int i = 1; i < size; i++) {
                 //System.out.println(cnt.get(9000 + i));
                 Assert.assertTrue(per * i * 0.85 < cnt.get(9000 + i)
-                    && per * i * 1.15 > cnt.get(9000 + i)); // 随机偏差不会太大，应该不超过15%
+                        && per * i * 1.15 > cnt.get(9000 + i)); // 随机偏差不会太大，应该不超过15%
             }
         }
     }

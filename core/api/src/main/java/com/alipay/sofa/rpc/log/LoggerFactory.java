@@ -38,7 +38,7 @@ public class LoggerFactory {
             return (Logger) ClassUtils.forName(implClass).getConstructor(String.class).newInstance(name);
         } catch (Exception e) {
             throw new SofaRpcRuntimeException("Error when getLogger of " + name
-                + ", implement is " + implClass + "", e);
+                    + ", implement is " + implClass + "", e);
         }
     }
 
@@ -47,7 +47,7 @@ public class LoggerFactory {
             return (Logger) ClassUtils.forName(implClass).getConstructor(Class.class).newInstance(clazz);
         } catch (Exception e) {
             throw new SofaRpcRuntimeException("Error when getLogger of " + clazz.getName()
-                + ", implement is " + implClass + "", e);
+                    + ", implement is " + implClass + "", e);
         }
     }
 }

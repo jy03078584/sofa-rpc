@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.rpc.transport;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
-import com.alipay.sofa.rpc.common.utils.NetUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.alipay.sofa.rpc.client.ProviderInfo;
+import com.alipay.sofa.rpc.common.utils.NetUtils;
 
 /**
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
@@ -30,20 +31,20 @@ public class ClientTransportFactoryTest {
     public void doReuseTest() {
         ClientTransportConfig config = new ClientTransportConfig();
         config.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12222))
-            .setContainer("test");
+                .setContainer("test");
 
         TestClientTransport clientTransport = (TestClientTransport) ClientTransportFactory.getClientTransport(config);
 
         ClientTransportConfig config2 = new ClientTransportConfig();
         config2.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12222))
-            .setContainer("test");
+                .setContainer("test");
         TestClientTransport clientTransport2 = (TestClientTransport) ClientTransportFactory.getClientTransport(config2);
 
         Assert.assertTrue(clientTransport == clientTransport2);
 
         ClientTransportConfig config3 = new ClientTransportConfig();
         config3.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12223))
-            .setContainer("test");
+                .setContainer("test");
         TestClientTransport clientTransport3 = (TestClientTransport) ClientTransportFactory.getClientTransport(config3);
         Assert.assertFalse(clientTransport == clientTransport3);
 
@@ -66,13 +67,13 @@ public class ClientTransportFactoryTest {
     public void testReverseClientTransport() {
         ClientTransportConfig config = new ClientTransportConfig();
         config.setProviderInfo(new ProviderInfo().setHost("127.0.0.1").setPort(12222))
-            .setContainer("test");
+                .setContainer("test");
         TestClientTransport clientTransport = (TestClientTransport) ClientTransportFactory.getClientTransport(config);
 
         TestChannel serverChannel = new TestChannel(clientTransport.localAddress(), clientTransport.remoteAddress());
 
         TestClientTransport clientTransport2 = (TestClientTransport) ClientTransportFactory.
-            getReverseClientTransport("test", serverChannel);
+                getReverseClientTransport("test", serverChannel);
 
         Assert.assertEquals(serverChannel, clientTransport2.getChannel());
 

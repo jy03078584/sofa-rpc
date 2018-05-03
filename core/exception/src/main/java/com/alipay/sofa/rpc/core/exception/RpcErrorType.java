@@ -23,7 +23,7 @@ package com.alipay.sofa.rpc.core.exception;
  */
 public class RpcErrorType {
 
-    public static final int UNKNOWN                  = 0;
+    public static final int UNKNOWN = 0;
 
     // ==== 服务端异常码 100-199 =======
 
@@ -51,50 +51,50 @@ public class RpcErrorType {
     /**
      * 服务端网络异常（服务端往回发的时候）
      */
-    public static final int SERVER_NETWORK           = 150;
+    public static final int SERVER_NETWORK = 150;
 
     /**
      * 服务端过滤器异常
      */
-    public static final int SERVER_FILTER            = 170;
+    public static final int SERVER_FILTER = 170;
 
     /**
      * 服务端未定义异常，注意：对于客户端来说，服务端异常只分为业务异常和服务端异常，不知道服务端异常的明细
      */
-    public static final int SERVER_UNDECLARED_ERROR  = 199;
+    public static final int SERVER_UNDECLARED_ERROR = 199;
 
     // ==== 客户端异常码 200-299 ======
     /**
      * 客户端超时异常
      */
-    public static final int CLIENT_TIMEOUT           = 200;
+    public static final int CLIENT_TIMEOUT = 200;
 
     /**
      * 客户端路由寻址异常
      */
-    public static final int CLIENT_ROUTER            = 210;
+    public static final int CLIENT_ROUTER = 210;
 
     /**
      * 客户端序列化异常
      */
-    public static final int CLIENT_SERIALIZE         = 220;
+    public static final int CLIENT_SERIALIZE   = 220;
     /**
      * 客户端反序列化异常
      */
-    public static final int CLIENT_DESERIALIZE       = 230;
+    public static final int CLIENT_DESERIALIZE = 230;
 
     /**
      * 客户端网络异常（客户端往外发的时候）
      */
-    public static final int CLIENT_NETWORK           = 250;
+    public static final int CLIENT_NETWORK = 250;
 
     /**
      * 客户端过滤器异常
      */
-    public static final int CLIENT_FILTER            = 270;
+    public static final int CLIENT_FILTER = 270;
 
     /**
      * 客户端未定义异常
      */
-    public static final int CLIENT_UNDECLARED_ERROR  = 299;
+    public static final int CLIENT_UNDECLARED_ERROR = 299;
 }

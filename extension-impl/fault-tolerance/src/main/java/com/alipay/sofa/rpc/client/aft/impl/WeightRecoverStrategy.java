@@ -63,20 +63,20 @@ public class WeightRecoverStrategy implements RecoverStrategy {
             ProviderInfoWeightManager.recoverOriginWeight(providerInfo, originWeight);
             if (LOGGER.isInfoEnabled(appName)) {
                 LOGGER.infoWithApp(appName, "the weight was recovered to origin value. serviceUniqueName:["
-                    + statDimension.getService() + "],ip:["
-                    + statDimension.getIp() + "],origin weight:["
-                    + currentWeight + "],recover weight:["
-                    + originWeight + "].");
+                        + statDimension.getService() + "],ip:["
+                        + statDimension.getIp() + "],origin weight:["
+                        + currentWeight + "],recover weight:["
+                        + originWeight + "].");
             }
         } else {
             measureResultDetail.setRecoveredOriginWeight(false);
             boolean success = ProviderInfoWeightManager.recoverWeight(providerInfo, recoverWeight);
             if (success && LOGGER.isInfoEnabled(appName)) {
                 LOGGER.infoWithApp(appName, "the weight was recovered. serviceUniqueName:["
-                    + statDimension.getService() + "],ip:["
-                    + statDimension.getIp() + "],origin weight:["
-                    + currentWeight + "],recover weight:["
-                    + recoverWeight + "].");
+                        + statDimension.getService() + "],ip:["
+                        + statDimension.getIp() + "],origin weight:["
+                        + currentWeight + "],recover weight:["
+                        + recoverWeight + "].");
             }
         }
     }

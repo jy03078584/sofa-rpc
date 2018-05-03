@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.rpc.listener;
 
-import com.alipay.sofa.rpc.client.ProviderGroup;
-
 import java.util.List;
+
+import com.alipay.sofa.rpc.client.ProviderGroup;
 
 /**
  * Listener of provider info

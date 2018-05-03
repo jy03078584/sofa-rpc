@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.rpc.message;
 
+import java.lang.reflect.Method;
+
 import com.alipay.sofa.rpc.common.utils.ClassTypeUtils;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
-
-import java.lang.reflect.Method;
 
 /**
  * Build of message

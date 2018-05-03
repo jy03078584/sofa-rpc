@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.client.aft.impl.ServiceExceptionInvocationStat;
 import com.alipay.sofa.rpc.common.struct.ConcurrentHashSet;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 调控入口类
@@ -40,7 +40,7 @@ public class InvocationStatFactory {
     /**
      * Listeners of InvocationStat
      */
-    static final ConcurrentHashSet<InvocationStatListener>                  LISTENERS = new ConcurrentHashSet<InvocationStatListener>();
+    static final ConcurrentHashSet<InvocationStatListener> LISTENERS = new ConcurrentHashSet<InvocationStatListener>();
 
     /**
      * 得到调用统计器
@@ -136,6 +136,24 @@ public class InvocationStatFactory {
     }
 
     /**
+     * Add InvocationStatListener implement
+     *
+     * @param listener InvocationStatListener
+     */
+    public static void addListener(InvocationStatListener listener) {
+        LISTENERS.add(listener);
+    }
+
+    /**
+     * Remove InvocationStatListener implement
+     *
+     * @param listener InvocationStatListener
+     */
+    public static void removeListener(InvocationStatListener listener) {
+        LISTENERS.remove(listener);
+    }
+
+    /**
      * Listener of invocation stat
      */
     public interface InvocationStatListener {
@@ -153,23 +171,5 @@ public class InvocationStatFactory {
          * @param invocationStat InvocationStat
          */
         public void onRemoveInvocationStat(InvocationStat invocationStat);
-    }
-
-    /**
-     * Add InvocationStatListener implement
-     *
-     * @param listener InvocationStatListener
-     */
-    public static void addListener(InvocationStatListener listener) {
-        LISTENERS.add(listener);
-    }
-
-    /**
-     * Remove InvocationStatListener implement
-     *
-     * @param listener InvocationStatListener
-     */
-    public static void removeListener(InvocationStatListener listener) {
-        LISTENERS.remove(listener);
     }
 }

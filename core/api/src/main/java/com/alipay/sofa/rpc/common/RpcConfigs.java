@@ -16,14 +16,6 @@
  */
 package com.alipay.sofa.rpc.common;
 
-import com.alipay.sofa.rpc.base.Sortable;
-import com.alipay.sofa.rpc.common.json.JSON;
-import com.alipay.sofa.rpc.common.struct.OrderedComparator;
-import com.alipay.sofa.rpc.common.utils.ClassLoaderUtils;
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-import com.alipay.sofa.rpc.common.utils.FileUtils;
-import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,6 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.rpc.base.Sortable;
+import com.alipay.sofa.rpc.common.json.JSON;
+import com.alipay.sofa.rpc.common.struct.OrderedComparator;
+import com.alipay.sofa.rpc.common.utils.ClassLoaderUtils;
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
+import com.alipay.sofa.rpc.common.utils.FileUtils;
+import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
 
 /**
  * 配置加载器和操作入口
@@ -83,7 +83,7 @@ public class RpcConfigs {
     private static void loadCustom(String fileName) throws IOException {
         ClassLoader classLoader = ClassLoaderUtils.getClassLoader(RpcConfigs.class);
         Enumeration<URL> urls = classLoader != null ? classLoader.getResources(fileName)
-            : ClassLoader.getSystemResources(fileName);
+                : ClassLoader.getSystemResources(fileName);
         if (urls != null) { // 可能存在多个文件
             List<CfgFile> allFile = new ArrayList<CfgFile>();
             while (urls.hasMoreElements()) {
@@ -326,8 +326,23 @@ public class RpcConfigs {
      */
     protected static boolean changed(Object oldObj, Object newObj) {
         return oldObj == null ?
-            newObj != null :
-            !oldObj.equals(newObj);
+                newObj != null :
+                !oldObj.equals(newObj);
+    }
+
+    /**
+     * 配置变更会拿到通知
+     *
+     * @param <T> the type parameter
+     */
+    public interface RpcConfigListener<T> {
+        /**
+         * On change.
+         *
+         * @param oldValue the old value
+         * @param newValue the new value
+         */
+        public void onChange(T oldValue, T newValue);
     }
 
     /**
@@ -373,20 +388,5 @@ public class RpcConfigs {
         public Map getMap() {
             return map;
         }
-    }
-
-    /**
-     * 配置变更会拿到通知
-     *
-     * @param <T> the type parameter
-     */
-    public interface RpcConfigListener<T> {
-        /**
-         * On change.
-         *
-         * @param oldValue the old value
-         * @param newValue the new value
-         */
-        public void onChange(T oldValue, T newValue);
     }
 }

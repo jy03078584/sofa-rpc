@@ -16,17 +16,17 @@
  */
 package com.alipay.sofa.rpc.transport;
 
+import static com.alipay.sofa.rpc.common.RpcConfigs.*;
+import static com.alipay.sofa.rpc.common.RpcOptions.*;
+
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.utils.NetUtils;
 import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-
-import java.util.concurrent.ConcurrentHashMap;
-
-import static com.alipay.sofa.rpc.common.RpcConfigs.getBooleanValue;
-import static com.alipay.sofa.rpc.common.RpcOptions.TRANSPORT_CONNECTION_REUSE;
 
 /**
  * Factory of ClientTransport
@@ -37,19 +37,26 @@ public class ClientTransportFactory {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger                LOGGER                  = LoggerFactory
-                                                                           .getLogger(ClientTransportFactory.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ClientTransportFactory.class);
 
     /**
      * 是否长连接复用
      */
-    private final static boolean               CHANNEL_REUSE           = getBooleanValue(TRANSPORT_CONNECTION_REUSE);
+    private final static boolean CHANNEL_REUSE = getBooleanValue(TRANSPORT_CONNECTION_REUSE);
 
     /**
      * 长连接过滤器
      */
-    private final static ClientTransportHolder CLIENT_TRANSPORT_HOLDER = CHANNEL_REUSE ? new ReusableClientTransportHolder()
-                                                                           : new NotReusableClientTransportHolder();
+    private final static ClientTransportHolder CLIENT_TRANSPORT_HOLDER = CHANNEL_REUSE ?
+            new ReusableClientTransportHolder()
+            :
+            new NotReusableClientTransportHolder();
+    /**
+     * 反向虚拟的长连接对象, 缓存一个长连接一个<br>
+     * {"127.0.0.1:22000<->127.0.0.1:54321": ClientTransport}
+     */
+    private volatile static ConcurrentHashMap<String, ClientTransport> REVERSE_CLIENT_TRANSPORT_MAP = null;
 
     /**
      * 通过配置获取长连接
@@ -80,10 +87,10 @@ public class ClientTransportFactory {
                     long start = RpcRuntimeContext.now();
                     if (LOGGER.isInfoEnabled()) {
                         LOGGER.info("There are {} outstanding call in transport, wait {}ms to end",
-                            count, disconnectTimeout);
+                                count, disconnectTimeout);
                     }
                     while (clientTransport.currentRequests() > 0
-                        && RpcRuntimeContext.now() - start < disconnectTimeout) { // 等待返回结果
+                            && RpcRuntimeContext.now() - start < disconnectTimeout) { // 等待返回结果
                         try {
                             Thread.sleep(10);
                         } catch (InterruptedException ignore) {
@@ -126,12 +133,6 @@ public class ClientTransportFactory {
     }
 
     /**
-     * 反向虚拟的长连接对象, 缓存一个长连接一个<br>
-     * {"127.0.0.1:22000<->127.0.0.1:54321": ClientTransport}
-     */
-    private volatile static ConcurrentHashMap<String, ClientTransport> REVERSE_CLIENT_TRANSPORT_MAP = null;
-
-    /**
      * 构建反向的（服务端到客户端）虚拟长连接
      *
      * @param container Container of client transport
@@ -153,13 +154,13 @@ public class ClientTransportFactory {
                 transport = REVERSE_CLIENT_TRANSPORT_MAP.get(key);
                 if (transport == null) {
                     ClientTransportConfig config = new ClientTransportConfig()
-                        .setProviderInfo(new ProviderInfo().setHost(channel.remoteAddress().getHostName())
-                            .setPort(channel.remoteAddress().getPort()))
-                        .setContainer(container);
+                            .setProviderInfo(new ProviderInfo().setHost(channel.remoteAddress().getHostName())
+                                    .setPort(channel.remoteAddress().getPort()))
+                            .setContainer(container);
                     transport = ExtensionLoaderFactory.getExtensionLoader(ClientTransport.class)
-                        .getExtension(config.getContainer(),
-                            new Class[] { ClientTransportConfig.class },
-                            new Object[] { config });
+                            .getExtension(config.getContainer(),
+                                    new Class[] { ClientTransportConfig.class },
+                                    new Object[] { config });
                     transport.setChannel(channel);
                     REVERSE_CLIENT_TRANSPORT_MAP.put(key, transport); // 保存唯一长连接
                 }
@@ -178,7 +179,7 @@ public class ClientTransportFactory {
      */
     public static ClientTransport getReverseClientTransport(String channelKey) {
         return REVERSE_CLIENT_TRANSPORT_MAP != null ?
-            REVERSE_CLIENT_TRANSPORT_MAP.get(channelKey) : null;
+                REVERSE_CLIENT_TRANSPORT_MAP.get(channelKey) : null;
     }
 
     /**

@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.server.bolt;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
@@ -32,9 +32,9 @@ public class SofaRejectedExecutionHandlerTest {
     public void rejectedExecution() throws Exception {
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1,
-            0L, TimeUnit.MILLISECONDS,
-            new SynchronousQueue(),
-            new SofaRejectedExecutionHandler());
+                0L, TimeUnit.MILLISECONDS,
+                new SynchronousQueue(),
+                new SofaRejectedExecutionHandler());
         boolean error = false;
         try {
             executor.execute(new MockTask());

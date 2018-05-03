@@ -16,6 +16,18 @@
  */
 package com.alipay.sofa.rpc.registry.local;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.client.ProviderInfoAttrs;
@@ -34,18 +46,6 @@ import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * Util method of local registry.
  *
@@ -57,6 +57,7 @@ public class LocalRegistryHelper {
      * 日志
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalRegistryHelper.class);
+    private static String SEPARATORSTR = "\t";
 
     /**
      * Check file's lastmodified.
@@ -80,11 +81,11 @@ public class LocalRegistryHelper {
      */
     public static ProviderInfo convertProviderToProviderInfo(ProviderConfig config, ServerConfig server) {
         ProviderInfo providerInfo = new ProviderInfo()
-            .setPort(server.getPort())
-            .setWeight(config.getWeight())
-            .setSerializationType(config.getSerialization())
-            .setProtocolType(server.getProtocol())
-            .setPath(server.getContextPath());
+                .setPort(server.getPort())
+                .setWeight(config.getWeight())
+                .setSerializationType(config.getSerialization())
+                .setProtocolType(server.getProtocol())
+                .setPath(server.getContextPath());
         String host = server.getHost();
         if (NetUtils.isLocalHost(host) || NetUtils.isAnyHost(host)) {
             host = SystemInfo.getLocalHost();
@@ -199,15 +200,13 @@ public class LocalRegistryHelper {
                 if (!deleted) {
                     if (LOGGER.isWarnEnabled()) {
                         LOGGER.warn("Lock file create by this thread, but failed to delete it," +
-                            " may be the elapsed time of this backup is too long");
+                                " may be the elapsed time of this backup is too long");
                     }
                 }
             }
         }
         return true;
     }
-
-    private static String SEPARATORSTR = "\t";
 
     private static String marshalCache(Map<String, ProviderGroup> memoryCache) {
         StringBuilder sb = new StringBuilder();
@@ -261,7 +260,7 @@ public class LocalRegistryHelper {
      */
     static String buildListDataId(AbstractInterfaceConfig config, String protocol) {
         if (RpcConstants.PROTOCOL_TYPE_BOLT.equals(protocol)
-            || RpcConstants.PROTOCOL_TYPE_TR.equals(protocol)) {
+                || RpcConstants.PROTOCOL_TYPE_TR.equals(protocol)) {
             return ConfigUniqueNameGenerator.getUniqueName(config) + "@DEFAULT";
         } else {
             return ConfigUniqueNameGenerator.getUniqueName(config) + "@" + protocol;

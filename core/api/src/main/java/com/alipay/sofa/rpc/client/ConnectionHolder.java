@@ -16,17 +16,18 @@
  */
 package com.alipay.sofa.rpc.client;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.alipay.sofa.rpc.base.Destroyable;
 import com.alipay.sofa.rpc.base.Initializable;
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.ext.Extensible;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
 import com.alipay.sofa.rpc.transport.ClientTransport;
-
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ConnectionHolder SPI

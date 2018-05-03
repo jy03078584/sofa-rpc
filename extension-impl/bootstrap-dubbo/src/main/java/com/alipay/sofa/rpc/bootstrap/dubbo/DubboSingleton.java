@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.rpc.bootstrap.dubbo;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Save singleton object of dubbo
@@ -33,7 +33,7 @@ public class DubboSingleton {
     /**
      * sofa.SeverConfig --> dubbo.ProtocolConfig
      */
-    final static ConcurrentHashMap<ServerConfig, ProtocolConfig>                            SERVER_MAP   = new ConcurrentHashMap<ServerConfig, ProtocolConfig>();
+    final static ConcurrentHashMap<ServerConfig, ProtocolConfig> SERVER_MAP = new ConcurrentHashMap<ServerConfig, ProtocolConfig>();
 
     /**
      * sofa.RegistryConfig --> dubbo.RegistryConfig

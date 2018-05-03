@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.rpc.client.aft;
 
+import org.junit.After;
+import org.junit.Before;
+
 import com.alipay.sofa.rpc.client.aft.bean.FaultHelloService;
 import com.alipay.sofa.rpc.client.aft.bean.HelloServiceTimeOutImpl;
 import com.alipay.sofa.rpc.context.RpcInternalContext;
 import com.alipay.sofa.rpc.context.RpcInvokeContext;
-import org.junit.After;
-import org.junit.Before;
 
 /**
  * @author bystander

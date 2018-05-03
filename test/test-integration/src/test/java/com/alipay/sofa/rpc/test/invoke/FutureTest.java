@@ -16,6 +16,15 @@
  */
 package com.alipay.sofa.rpc.test.invoke;
 
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.remoting.rpc.exception.InvokeTimeoutException;
 import com.alipay.sofa.rpc.api.future.SofaResponseFuture;
 import com.alipay.sofa.rpc.common.RpcConstants;
@@ -28,14 +37,6 @@ import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -48,24 +49,24 @@ public class FutureTest extends ActivelyDestroyTest {
     public void testAll() {
 
         ServerConfig serverConfig2 = new ServerConfig()
-            .setPort(22222)
-            .setDaemon(false);
+                .setPort(22222)
+                .setDaemon(false);
 
         // 服务端
         ProviderConfig<HelloService> CProvider = new ProviderConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(1000))
-            .setServer(serverConfig2);
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(1000))
+                .setServer(serverConfig2);
         CProvider.export();
 
         Filter filter = new TestAsyncFilter();
         // 客户端
         ConsumerConfig<HelloService> BConsumer = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE)
-            .setTimeout(5000)
-            .setFilterRef(Arrays.asList(filter))
-            .setDirectUrl("bolt://127.0.0.1:22222");
+                .setInterfaceId(HelloService.class.getName())
+                .setInvokeType(RpcConstants.INVOKER_TYPE_FUTURE)
+                .setTimeout(5000)
+                .setFilterRef(Arrays.asList(filter))
+                .setDirectUrl("bolt://127.0.0.1:22222");
         HelloService helloService = BConsumer.refer();
 
         // 正常

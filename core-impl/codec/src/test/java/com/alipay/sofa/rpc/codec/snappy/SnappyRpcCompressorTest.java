@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.codec.snappy;
 
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  *

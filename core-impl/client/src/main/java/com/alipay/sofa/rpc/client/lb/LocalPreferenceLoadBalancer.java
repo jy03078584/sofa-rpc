@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.common.SystemInfo;
@@ -23,9 +26,6 @@ import com.alipay.sofa.rpc.common.utils.CommonUtils;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.ext.Extension;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 本机优先的随机算法

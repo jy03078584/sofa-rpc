@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.rpc.test.bootstrap.bolt;
 
+import java.util.Collections;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.rpc.client.Cluster;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -27,10 +32,6 @@ import com.alipay.sofa.rpc.proxy.jdk.JDKProxy;
 import com.alipay.sofa.rpc.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.test.HelloService;
 import com.alipay.sofa.rpc.test.HelloServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Collections;
 
 /**
  *
@@ -43,24 +44,24 @@ public class BoltProviderBootstrapTest extends ActivelyDestroyTest {
 
         // 发布一个服务，每个请求要执行2秒
         ServerConfig serverConfig = new ServerConfig()
-            .setStopTimeout(0)
-            .setPort(22223)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(5).setMaxThreads(5);
+                .setStopTimeout(0)
+                .setPort(22223)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(5).setMaxThreads(5);
         ProviderConfig<HelloService> providerConfig0 = new ProviderConfig<HelloService>()
-            .setId("p-0")
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setId("p-0")
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig)
+                .setRegister(false);
         providerConfig0.export();
 
         ProviderConfig<HelloService> providerConfig1 = new ProviderConfig<HelloService>()
-            .setId("p-1")
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig)
-            .setRegister(false);
+                .setId("p-1")
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig)
+                .setRegister(false);
         try {
             providerConfig1.export();
         } catch (Exception e) {
@@ -68,21 +69,21 @@ public class BoltProviderBootstrapTest extends ActivelyDestroyTest {
         }
 
         ProviderConfig<HelloService> providerConfig2 = new ProviderConfig<HelloService>()
-            .setId("p-2")
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig)
-            .setRepeatedExportLimit(3)
-            .setRegister(false);
+                .setId("p-2")
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig)
+                .setRepeatedExportLimit(3)
+                .setRegister(false);
         providerConfig2.export();
 
         ProviderConfig<HelloService> providerConfig3 = new ProviderConfig<HelloService>()
-            .setId("p-3")
-            .setInterfaceId(HelloService.class.getName())
-            .setRef(new HelloServiceImpl(2000))
-            .setServer(serverConfig)
-            .setRepeatedExportLimit(3)
-            .setRegister(false);
+                .setId("p-3")
+                .setInterfaceId(HelloService.class.getName())
+                .setRef(new HelloServiceImpl(2000))
+                .setServer(serverConfig)
+                .setRepeatedExportLimit(3)
+                .setRegister(false);
         try {
             providerConfig3.export();
         } catch (Exception e) {
@@ -94,25 +95,25 @@ public class BoltProviderBootstrapTest extends ActivelyDestroyTest {
     public void testAttrUpdate() {
         // 发布一个服务
         ServerConfig serverConfig0 = new ServerConfig()
-            .setStopTimeout(0)
-            .setPort(22224)
-            .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
-            .setQueues(100).setCoreThreads(5).setMaxThreads(5);
+                .setStopTimeout(0)
+                .setPort(22224)
+                .setProtocol(RpcConstants.PROTOCOL_TYPE_BOLT)
+                .setQueues(100).setCoreThreads(5).setMaxThreads(5);
         ProviderConfig<HelloService> providerConfig0 = new ProviderConfig<HelloService>()
-            .setId("p-0")
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("attr")
-            .setRef(new HelloServiceImpl())
-            .setServer(serverConfig0)
-            .setRepeatedExportLimit(5);
+                .setId("p-0")
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("attr")
+                .setRef(new HelloServiceImpl())
+                .setServer(serverConfig0)
+                .setRepeatedExportLimit(5);
         providerConfig0.export();
 
         ConsumerConfig<HelloService> consumerConfig0 = new ConsumerConfig<HelloService>()
-            .setInterfaceId(HelloService.class.getName())
-            .setUniqueId("attr")
-            .setProxy("jdk")
-            .setDirectUrl("bolt://127.0.0.1:22224")
-            .setTimeout(500);
+                .setInterfaceId(HelloService.class.getName())
+                .setUniqueId("attr")
+                .setProxy("jdk")
+                .setDirectUrl("bolt://127.0.0.1:22224")
+                .setTimeout(500);
         HelloService proxy = consumerConfig0.refer();
         Invoker invoker = JDKProxy.parseInvoker(proxy);
         Cluster cluster = consumerConfig0.getConsumerBootstrap().getCluster();

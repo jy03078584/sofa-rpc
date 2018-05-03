@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.codec.anthessian;
 
-import com.alipay.sofa.rpc.log.Logger;
-import com.alipay.sofa.rpc.log.LoggerFactory;
-import com.caucho.hessian.io.Deserializer;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import com.alipay.sofa.rpc.log.Logger;
+import com.alipay.sofa.rpc.log.LoggerFactory;
+import com.caucho.hessian.io.Deserializer;
 
 /**
  * 适配多ClassLoader环境，可切换业务的ClassLoader
@@ -34,8 +34,8 @@ public class MultipleClassLoaderSofaSerializerFactory extends SingleClassLoaderS
     /**
      * logger for this class 
      */
-    private static final Logger                                                   LOGGER                    = LoggerFactory
-                                                                                                                .getLogger(MultipleClassLoaderSofaSerializerFactory.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(MultipleClassLoaderSofaSerializerFactory.class);
 
     private final ConcurrentMap<String, ConcurrentMap<ClassLoader, Deserializer>> cachedTypeDeserializerMap = new ConcurrentHashMap<String, ConcurrentMap<ClassLoader, Deserializer>>();
 
@@ -53,7 +53,7 @@ public class MultipleClassLoaderSofaSerializerFactory extends SingleClassLoaderS
     protected void putDeserializerToCachedType(String type, Deserializer deserializer) {
 
         ConcurrentMap<ClassLoader, Deserializer> concurrentMap = cachedTypeDeserializerMap
-            .get(type);
+                .get(type);
 
         if (concurrentMap == null) {
             ConcurrentMap<ClassLoader, Deserializer> newMap = new ConcurrentHashMap<ClassLoader, Deserializer>();

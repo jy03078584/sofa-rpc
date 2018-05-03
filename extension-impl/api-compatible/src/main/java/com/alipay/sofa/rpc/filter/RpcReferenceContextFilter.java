@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.rpc.filter;
 
+import java.net.InetSocketAddress;
+
 import com.alipay.sofa.rpc.api.context.RpcReferenceContext;
 import com.alipay.sofa.rpc.client.ProviderInfo;
 import com.alipay.sofa.rpc.client.ProviderInfoAttrs;
@@ -29,8 +31,6 @@ import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.ext.Extension;
-
-import java.net.InetSocketAddress;
 
 /**
  * Filter for build RpcReferenceContext

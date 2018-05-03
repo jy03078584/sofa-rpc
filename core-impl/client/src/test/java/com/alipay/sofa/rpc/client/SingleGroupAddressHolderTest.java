@@ -16,9 +16,7 @@
  */
 package com.alipay.sofa.rpc.client;
 
-import com.alipay.sofa.rpc.common.utils.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.alipay.sofa.rpc.common.RpcConstants.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +27,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.alipay.sofa.rpc.common.RpcConstants.ADDRESS_DEFAULT_GROUP;
-import static com.alipay.sofa.rpc.common.RpcConstants.ADDRESS_DIRECT_GROUP;
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.alipay.sofa.rpc.common.utils.StringUtils;
 
 /**
  *
@@ -88,14 +88,14 @@ public class SingleGroupAddressHolderTest {
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 0);
 
         addressHolder.addProvider(new ProviderGroup("xxx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 2);
 
         addressHolder.addProvider(new ProviderGroup(ADDRESS_DIRECT_GROUP, new ArrayList<ProviderInfo>()));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 0);
 
         addressHolder.addProvider(new ProviderGroup(ADDRESS_DIRECT_GROUP,
-            Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"), ProviderInfo.valueOf("127.0.0.1:12201"))));
+                Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"), ProviderInfo.valueOf("127.0.0.1:12201"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 2);
     }
 
@@ -103,35 +103,35 @@ public class SingleGroupAddressHolderTest {
     public void removeProvider() throws Exception {
         SingleGroupAddressHolder addressHolder = new SingleGroupAddressHolder(null);
         addressHolder.addProvider(new ProviderGroup("xxx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 3);
 
         addressHolder.removeProvider(new ProviderGroup("xxx", new ArrayList<ProviderInfo>()));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 3);
 
         addressHolder.removeProvider(new ProviderGroup("xxx", Collections.singletonList(ProviderInfo
-            .valueOf("127.0.0.1:12200"))));
+                .valueOf("127.0.0.1:12200"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 2);
 
         addressHolder.removeProvider(new ProviderGroup("xxx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12201"),
-            ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12202"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 0);
 
         addressHolder.addProvider(new ProviderGroup(ADDRESS_DIRECT_GROUP, Arrays.asList(
-            ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12200"),
+                ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 3);
 
         addressHolder.removeProvider(new ProviderGroup(ADDRESS_DIRECT_GROUP, new ArrayList<ProviderInfo>()));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 3);
 
         addressHolder.removeProvider(new ProviderGroup(ADDRESS_DIRECT_GROUP, Collections.singletonList(ProviderInfo
-            .valueOf("127.0.0.1:12200"))));
+                .valueOf("127.0.0.1:12200"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 2);
 
         addressHolder.removeProvider(new ProviderGroup(ADDRESS_DIRECT_GROUP, Arrays.asList(
-            ProviderInfo.valueOf("127.0.0.1:12201"),
-            ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"),
+                ProviderInfo.valueOf("127.0.0.1:12202"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 0);
 
     }
@@ -141,15 +141,15 @@ public class SingleGroupAddressHolderTest {
         SingleGroupAddressHolder addressHolder = new SingleGroupAddressHolder(null);
 
         addressHolder.updateProviders(new ProviderGroup("xxx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 3);
 
         addressHolder.updateProviders(new ProviderGroup("xxx", new ArrayList<ProviderInfo>()));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DEFAULT_GROUP).size() == 0);
 
         addressHolder.updateProviders(new ProviderGroup(ADDRESS_DIRECT_GROUP, Arrays.asList(
-            ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12200"),
+                ProviderInfo.valueOf("127.0.0.1:12201"), ProviderInfo.valueOf("127.0.0.1:12202"))));
         Assert.assertTrue(addressHolder.getProviderGroup(ADDRESS_DIRECT_GROUP).size() == 3);
 
         addressHolder.updateProviders(new ProviderGroup(ADDRESS_DIRECT_GROUP, new ArrayList<ProviderInfo>()));
@@ -163,7 +163,7 @@ public class SingleGroupAddressHolderTest {
         // 更新为单个
         List<ProviderGroup> ps0 = new ArrayList<ProviderGroup>();
         ps0.add(new ProviderGroup("xx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"))));
         ps0.add(new ProviderGroup(ADDRESS_DIRECT_GROUP, Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12203"))));
         addressHolder.updateAllProviders(ps0);
 
@@ -177,9 +177,9 @@ public class SingleGroupAddressHolderTest {
         // 增加
         List<ProviderGroup> ps1 = new ArrayList<ProviderGroup>();
         ps1.add(new ProviderGroup("xx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"))));
         ps1.add(new ProviderGroup("yy", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12202"),
-            ProviderInfo.valueOf("127.0.0.1:12203"))));
+                ProviderInfo.valueOf("127.0.0.1:12203"))));
         addressHolder.updateAllProviders(ps1);
 
         current = addressHolder.getProviderGroups();
@@ -201,9 +201,9 @@ public class SingleGroupAddressHolderTest {
         // 更新为多个，有交叉
         List<ProviderGroup> ps3 = new ArrayList<ProviderGroup>();
         ps3.add(new ProviderGroup("xx", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12200"),
-            ProviderInfo.valueOf("127.0.0.1:12201"))));
+                ProviderInfo.valueOf("127.0.0.1:12201"))));
         ps3.add(new ProviderGroup("yy", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12201"),
-            ProviderInfo.valueOf("127.0.0.1:12202"))));
+                ProviderInfo.valueOf("127.0.0.1:12202"))));
         addressHolder.updateAllProviders(ps3);
 
         current = addressHolder.getProviderGroups();
@@ -215,7 +215,7 @@ public class SingleGroupAddressHolderTest {
         // 减少
         List<ProviderGroup> ps4 = new ArrayList<ProviderGroup>();
         ps4.add(new ProviderGroup("yy", Arrays.asList(ProviderInfo.valueOf("127.0.0.1:12203"),
-            ProviderInfo.valueOf("127.0.0.1:12204"))));
+                ProviderInfo.valueOf("127.0.0.1:12204"))));
         addressHolder.updateAllProviders(ps4);
 
         current = addressHolder.getProviderGroups();
@@ -253,10 +253,10 @@ public class SingleGroupAddressHolderTest {
                     try {
                         // 不停的变更
                         addressHolder.updateAllProviders(Arrays.asList(
-                            new ProviderGroup("xxx",
-                                Arrays.asList(ProviderInfo.valueOf("127.0.0.1:" + random.nextInt(65535)))),
-                            new ProviderGroup(ADDRESS_DIRECT_GROUP,
-                                Arrays.asList(ProviderInfo.valueOf("127.0.0.1:" + random.nextInt(65535))))));
+                                new ProviderGroup("xxx",
+                                        Arrays.asList(ProviderInfo.valueOf("127.0.0.1:" + random.nextInt(65535)))),
+                                new ProviderGroup(ADDRESS_DIRECT_GROUP,
+                                        Arrays.asList(ProviderInfo.valueOf("127.0.0.1:" + random.nextInt(65535))))));
                     } catch (Exception e) {
                         error.set(true);
                         latch.countDown();

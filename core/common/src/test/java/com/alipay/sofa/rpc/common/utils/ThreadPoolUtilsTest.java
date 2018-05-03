@@ -16,10 +16,6 @@
  */
 package com.alipay.sofa.rpc.common.utils;
 
-import com.alipay.sofa.rpc.common.struct.NamedThreadFactory;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -28,6 +24,11 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.alipay.sofa.rpc.common.struct.NamedThreadFactory;
 
 /**
  *

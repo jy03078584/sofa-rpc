@@ -76,8 +76,8 @@ public class MapDifference<K, V> {
                     onBoth.put(leftKey, leftValue);
                 } else {
                     differences.put(leftKey,
-                        switched ? new ValueDifference<V>(rightValue, leftValue) :
-                            new ValueDifference<V>(leftValue, rightValue));
+                            switched ? new ValueDifference<V>(rightValue, leftValue) :
+                                    new ValueDifference<V>(leftValue, rightValue));
                 }
             } else {
                 onlyOnLeft.put(leftKey, leftValue);

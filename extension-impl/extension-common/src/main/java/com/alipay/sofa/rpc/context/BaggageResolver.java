@@ -16,14 +16,14 @@
  */
 package com.alipay.sofa.rpc.context;
 
+import java.util.Map;
+
 import com.alipay.sofa.rpc.common.RemotingConstants;
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
 import com.alipay.sofa.rpc.core.request.SofaRequest;
 import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * 透传数据解析器
@@ -65,7 +65,7 @@ public class BaggageResolver {
         }
         // 解析请求 
         Map<String, String> requestBaggage = (Map<String, String>) request
-            .getRequestProp(RemotingConstants.RPC_REQUEST_BAGGAGE);
+                .getRequestProp(RemotingConstants.RPC_REQUEST_BAGGAGE);
         if (CommonUtils.isNotEmpty(requestBaggage)) {
             if (context == null) {
                 context = RpcInvokeContext.getContext();
@@ -122,7 +122,7 @@ public class BaggageResolver {
                         context = RpcInvokeContext.getContext();
                     }
                     context.putResponseBaggage(entry.getKey().substring(prefix.length()),
-                        entry.getValue());
+                            entry.getValue());
                 }
             }
         }

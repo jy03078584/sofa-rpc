@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.rpc.client.lb;
 
-import com.alipay.sofa.rpc.client.ProviderInfo;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.alipay.sofa.rpc.client.ProviderInfo;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
 
 /**
  *
@@ -31,6 +32,30 @@ import java.util.Map;
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
  */
 public class RoundRobinLoadBalancerTest extends BaseLoadBalancerTest {
+    public static void main(String[] args) {
+        int x, y, temp;
+        int a[] = { 12, 60, 160, 64, 80 };
+        temp = a[0];
+        for (int i = 0; i < a.length - 1; i++) {
+            x = temp;
+            y = a[i + 1];
+            temp = gcd(x, y);
+        }
+        System.out.println(temp);
+    }
+
+    public static int gcd(int a, int b) {
+        int temp;
+        while (b != 0) {
+            temp = a % b;
+            a = b;
+            b = temp;
+            System.out.println("gcd(" + a + ", " + b + ")=");
+        }
+        System.out.println(a);
+        return a;
+    }
+
     @Test
     public void doSelect() throws Exception {
 
@@ -83,29 +108,5 @@ public class RoundRobinLoadBalancerTest extends BaseLoadBalancerTest {
             }
         }
 
-    }
-
-    public static void main(String[] args) {
-        int x, y, temp;
-        int a[] = { 12, 60, 160, 64, 80 };
-        temp = a[0];
-        for (int i = 0; i < a.length - 1; i++) {
-            x = temp;
-            y = a[i + 1];
-            temp = gcd(x, y);
-        }
-        System.out.println(temp);
-    }
-
-    public static int gcd(int a, int b) {
-        int temp;
-        while (b != 0) {
-            temp = a % b;
-            a = b;
-            b = temp;
-            System.out.println("gcd(" + a + ", " + b + ")=");
-        }
-        System.out.println(a);
-        return a;
     }
 }

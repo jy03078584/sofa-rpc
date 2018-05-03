@@ -35,7 +35,7 @@ public class ConfigUniqueNameGenerator {
         // 加上 1.0 是为了兼容之前的版本
         String uniqueId = interfaceConfig.getUniqueId();
         return interfaceConfig.getInterfaceId() + ":" + interfaceConfig.getVersion()
-            + (StringUtils.isEmpty(uniqueId) ? "" : ":" + uniqueId);
+                + (StringUtils.isEmpty(uniqueId) ? "" : ":" + uniqueId);
     }
 
     /**

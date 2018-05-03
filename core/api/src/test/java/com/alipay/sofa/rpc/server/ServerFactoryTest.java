@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.rpc.server;
 
-import com.alipay.sofa.rpc.config.ServerConfig;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.alipay.sofa.rpc.config.ServerConfig;
 
 /**
  *

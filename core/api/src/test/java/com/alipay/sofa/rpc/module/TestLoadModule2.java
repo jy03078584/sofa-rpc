@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.rpc.module;
 
-import com.alipay.sofa.rpc.ext.Extension;
+import static com.alipay.sofa.rpc.module.TestModules.*;
 
-import static com.alipay.sofa.rpc.module.TestModules.error;
+import com.alipay.sofa.rpc.ext.Extension;
 
 /**
  *

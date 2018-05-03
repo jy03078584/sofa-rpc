@@ -16,9 +16,6 @@
  */
 package com.alipay.sofa.rpc.common.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -26,10 +23,22 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  *
  */
 public class ClassUtilsTest {
+
+    private static ClassLoader loader;
+
+    private static Class getClass(Class clazz) throws ClassNotFoundException {
+        if (loader != null) {
+            return loader.loadClass(clazz.getCanonicalName());
+        }
+        return clazz;
+    }
 
     @Test
     public void forName1() throws Exception {
@@ -143,13 +152,13 @@ public class ClassUtilsTest {
     public void testNewInstanceWithArgs() throws Exception {
         Assert.assertNotNull(ClassUtils.newInstanceWithArgs(TestMemberClass3.class, null, null));
         Assert.assertNotNull(ClassUtils.newInstanceWithArgs(TestMemberClass3.class,
-            new Class[] { String.class }, new Object[] { "2222" }));
+                new Class[] { String.class }, new Object[] { "2222" }));
         Assert.assertNotNull(ClassUtils.newInstanceWithArgs(TestMemberClass6.class, null, null));
         Assert.assertNotNull(ClassUtils.newInstanceWithArgs(TestMemberClass6.class,
-            new Class[] { int.class }, new Object[] { 222 }));
+                new Class[] { int.class }, new Object[] { 222 }));
         Assert.assertNotNull(ClassUtils.newInstanceWithArgs(TestClass3.class, null, null));
         Assert.assertNotNull(ClassUtils.newInstanceWithArgs(TestClass3.class,
-            new Class[] { String.class, int.class }, new Object[] { "xxx", 222 }));
+                new Class[] { String.class, int.class }, new Object[] { "xxx", 222 }));
     }
 
     @Test
@@ -180,6 +189,42 @@ public class ClassUtilsTest {
         Assert.assertEquals(null, ClassUtils.getDefaultArg(Void.class));
         Assert.assertEquals(null, ClassUtils.getDefaultArg(void.class));
         Assert.assertEquals(null, ClassUtils.getDefaultArg(String.class));
+    }
+
+    @Test
+    public void testIsAssignableFrom() throws MalformedURLException, ClassNotFoundException {
+        // single class loader
+        testIsAssignableFrom0();
+
+        // over different class loader
+        String codebase = ReflectUtils.getCodeBase(ClassUtilsTest.class);
+        String url = "file://" + codebase;
+        loader = new URLClassLoader(new URL[] { new URL(url) }, null);
+        try {
+            testIsAssignableFrom0();
+        } finally {
+            loader = null;
+        }
+    }
+
+    private void testIsAssignableFrom0() throws ClassNotFoundException {
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk0.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk1.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk2.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk3.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk4.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk5.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk6.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk7.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk8.class)));
+        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk9.class)));
+
+        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk.class)));
+        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk0.class)));
+        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk1.class)));
+        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk2.class)));
+        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk3.class)));
     }
 
     private static class TestMemberClass1 {
@@ -220,50 +265,5 @@ public class ClassUtilsTest {
         private TestMemberClass6(String s, int i) {
             System.out.println("init TestMemberClass6 with 2 arg");
         }
-    }
-
-    @Test
-    public void testIsAssignableFrom() throws MalformedURLException, ClassNotFoundException {
-        // single class loader
-        testIsAssignableFrom0();
-
-        // over different class loader
-        String codebase = ReflectUtils.getCodeBase(ClassUtilsTest.class);
-        String url = "file://" + codebase;
-        loader = new URLClassLoader(new URL[] { new URL(url) }, null);
-        try {
-            testIsAssignableFrom0();
-        } finally {
-            loader = null;
-        }
-    }
-
-    private void testIsAssignableFrom0() throws ClassNotFoundException {
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk0.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk1.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk2.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk3.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk4.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk5.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk6.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk7.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk8.class)));
-        Assert.assertTrue(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignOk9.class)));
-
-        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk.class)));
-        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk0.class)));
-        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk1.class)));
-        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk2.class)));
-        Assert.assertFalse(ClassUtils.isAssignableFrom(TestAssignOk.class, getClass(TestAssignNotOk3.class)));
-    }
-
-    private static ClassLoader loader;
-
-    private static Class getClass(Class clazz) throws ClassNotFoundException {
-        if (loader != null) {
-            return loader.loadClass(clazz.getCanonicalName());
-        }
-        return clazz;
     }
 }

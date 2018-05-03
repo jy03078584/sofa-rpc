@@ -16,6 +16,15 @@
  */
 package com.alipay.sofa.rpc.proxy.javassist;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.common.utils.ClassLoaderUtils;
 import com.alipay.sofa.rpc.common.utils.ClassTypeUtils;
 import com.alipay.sofa.rpc.core.exception.RpcErrorType;
@@ -36,15 +45,6 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.LoaderClassPath;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Proxy implement base on javassist
  *
@@ -54,16 +54,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class JavassistProxy implements Proxy {
 
     /**
-     * Logger for this class
-     */
-    private static final Logger              LOGGER          = LoggerFactory.getLogger(JavassistProxy.class);
-
-    private static AtomicInteger             counter         = new AtomicInteger();
-
-    /**
      * 原始类和代理类的映射
      */
     protected final static Map<Class, Class> PROXY_CLASS_MAP = new ConcurrentHashMap<Class, Class>();
+    /**
+     * Logger for this class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(JavassistProxy.class);
+    private static AtomicInteger counter = new AtomicInteger();
+
+    /**
+     * Parse proxy invoker from proxy object
+     *
+     * @param proxyObject Proxy object
+     * @return proxy invoker
+     */
+    public static Invoker parseInvoker(Object proxyObject) {
+        Field field;
+        try {
+            field = proxyObject.getClass().getField("proxyInvoker");
+            if (field != null) {
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                return (Invoker) field.get(proxyObject);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -90,7 +111,7 @@ public class JavassistProxy implements Proxy {
                 mCtc.addConstructor(constructor);
 
                 mCtc.addField(CtField.make("public " + Invoker.class.getCanonicalName() + " proxyInvoker = null;",
-                    mCtc));
+                        mCtc));
                 StringBuilder sb = null;
                 if (LOGGER.isDebugEnabled()) {
                     sb = new StringBuilder();
@@ -104,7 +125,7 @@ public class JavassistProxy implements Proxy {
                 }
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("javassist proxy of interface: {} \r\n{}", interfaceClass,
-                        sb != null ? sb.toString() : "");
+                            sb != null ? sb.toString() : "");
                 }
                 clazz = mCtc.toClass();
                 PROXY_CLASS_MAP.put(interfaceClass, clazz);
@@ -129,7 +150,7 @@ public class JavassistProxy implements Proxy {
             Class<?> returnType = m.getReturnType();
 
             sb.append(Modifier.toString(m.getModifiers()).replace("abstract", "") + " " +
-                ClassTypeUtils.getTypeStr(returnType) + " " + m.getName() + "( ");
+                    ClassTypeUtils.getTypeStr(returnType) + " " + m.getName() + "( ");
             int c = 0;
 
             for (Class<?> mp : mType) {
@@ -158,14 +179,14 @@ public class JavassistProxy implements Proxy {
             }
 
             sb.append(SofaRequest.class.getCanonicalName() + " request = " +
-                MessageBuilder.class.getCanonicalName() +
-                ".buildSofaRequest(clazz, methodName, paramTypes, paramValues);");
+                    MessageBuilder.class.getCanonicalName() +
+                    ".buildSofaRequest(clazz, methodName, paramTypes, paramValues);");
             sb.append(SofaResponse.class.getCanonicalName() + " response = " +
-                "proxyInvoker.invoke(request);");
+                    "proxyInvoker.invoke(request);");
             sb.append("if(response.isError()){");
             sb.append("  throw new " + SofaRpcException.class.getName() + "(" + RpcErrorType.class.getName() +
-                ".SERVER_UNDECLARED_ERROR," +
-                " response.getErrorMsg());");
+                    ".SERVER_UNDECLARED_ERROR," +
+                    " response.getErrorMsg());");
             sb.append("}");
 
             if (returnType.equals(void.class)) {
@@ -199,7 +220,7 @@ public class JavassistProxy implements Proxy {
         sb.delete(0, sb.length());
         sb.append("public boolean equals(Object obj) {");
         sb.append("  return this == obj || (getClass().isInstance($1) " +
-            "&& proxyInvoker.equals(" + JavassistProxy.class.getName() + ".parseInvoker($1)));");
+                "&& proxyInvoker.equals(" + JavassistProxy.class.getName() + ".parseInvoker($1)));");
         sb.append("}");
         resultList.add(sb.toString());
         return resultList;
@@ -239,28 +260,5 @@ public class JavassistProxy implements Proxy {
     @Override
     public Invoker getInvoker(Object proxyObject) {
         return parseInvoker(proxyObject);
-    }
-
-    /**
-     * Parse proxy invoker from proxy object
-     *
-     * @param proxyObject Proxy object
-     * @return proxy invoker
-     */
-    public static Invoker parseInvoker(Object proxyObject) {
-        Field field;
-        try {
-            field = proxyObject.getClass().getField("proxyInvoker");
-            if (field != null) {
-                if (!field.isAccessible()) {
-                    field.setAccessible(true);
-                }
-                return (Invoker) field.get(proxyObject);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

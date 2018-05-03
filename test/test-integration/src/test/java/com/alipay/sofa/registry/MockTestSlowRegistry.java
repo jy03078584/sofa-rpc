@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.registry;
 
+import java.util.List;
+
 import com.alipay.sofa.rpc.client.ProviderGroup;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.listener.ProviderInfoListener;
-
-import java.util.List;
 
 /**
  *
