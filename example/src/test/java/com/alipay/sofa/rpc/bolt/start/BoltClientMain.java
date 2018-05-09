@@ -62,7 +62,7 @@ public class BoltClientMain {
         while (true) {
             try {
                 String s = helloService.sayHello("xxx", 22);
-                LOGGER.warn("{}", s);
+                LOGGER.warn("BoltExample{}", s);
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }
